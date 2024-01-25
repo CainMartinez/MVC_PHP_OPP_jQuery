@@ -3,8 +3,8 @@
 	include($path . "/model/connect.php");
     
 	class DAOHome {
-		function select_brand() {
-			$sql= "SELECT * FROM `brand` ORDER BY name_brand ASC LIMIT 30;";
+		function select_type() {
+			$sql= "SELECT * FROM `type` ORDER BY id_type ASC LIMIT 30;";
 
 			$conexion = connect::con();
 			$res = mysqli_query($conexion, $sql);
@@ -35,8 +35,23 @@
 			return $retrArray;
 		}
 
-		function select_type_motor() {
-			$sql= "SELECT *FROM type_motor ORDER BY cod_tmotor DESC";
+		function select_operation() {
+			$sql= "SELECT *FROM operation ORDER BY id_operation DESC";
+
+			$conexion = connect::con();
+			$res = mysqli_query($conexion, $sql);
+			connect::close($conexion);
+
+			$retrArray = array();
+			if (mysqli_num_rows($res) > 0) {
+				while ($row = mysqli_fetch_assoc($res)) {
+					$retrArray[] = $row;
+				}
+			}
+			return $retrArray;
+		}
+		function select_city() {
+			$sql= "SELECT *FROM city ORDER BY id_city DESC";
 
 			$conexion = connect::con();
 			$res = mysqli_query($conexion, $sql);

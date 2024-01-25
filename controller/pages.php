@@ -6,7 +6,7 @@
 	}
 	switch($page){
 		case "homepage";
-			include("index.html");
+			include("module/home/view/home.html");
 			break;
 		case "controller_property";
 			include("module/property/controller/".$_GET['page'].".php");
@@ -27,7 +27,7 @@
 			include("views/inc/error".$_GET['page'].".html");
 			break;
 		default;
-			include("index.html");
+			include("module/home/view/home.html");
 			break;
 	}
 ?>

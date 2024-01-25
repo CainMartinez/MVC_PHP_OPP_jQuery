@@ -1,5 +1,5 @@
 function carousel_Brands() {
-    ajaxPromise('GET', 'JSON','module/home/controller/controller_home.php?op=Carrousel_Brand')
+    ajaxPromise('GET', 'JSON','module/home/controller/controller_home.php?op=Carrousel_Type')
     .then(function(data) {
             for (row in data) {
                 $('<div></div>').attr('class', "carousel__elements").attr('id', data[row].name_brand).appendTo(".carousel__list")
@@ -23,7 +23,7 @@ function carousel_Brands() {
 }
 
 function loadCategories() {
-    ajaxPromise('module/home/ctrl/ctrl_home.php?op=homePageCategory','GET', 'JSON')
+    ajaxPromise('GET', 'JSON','module/home/ctrl/ctrl_home.php?op=homePageCategory')
     .then(function(data) {
         for (row in data) {
             $('<div></div>').attr('class', "div_cate").attr({ 'id': data[row].name_cat }).appendTo('#containerCategories')
