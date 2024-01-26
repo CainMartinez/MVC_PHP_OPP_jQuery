@@ -1,15 +1,15 @@
-CREATE DATABASE IF NOT EXISTS property_houses;
-
-USE property_houses;
-
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-01-2024 a las 14:05:23
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 26-01-2024 a las 17:51:01
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
+
+CREATE DATABASE IF NOT EXISTS property_houses;
+
+USE property_houses;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -99,6 +99,37 @@ INSERT INTO `exceptions` (`type_error`, `spot`, `current_date_time`) VALUES
 (503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
 (503, 'Function load_like_user SHOP', '2024-01-25 02:17:43'),
 (503, 'Function load_like_user SHOP', '2024-01-25 02:17:43');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `extras`
+--
+
+CREATE TABLE `extras` (
+  `id_extras` int(10) NOT NULL,
+  `name_extras` varchar(50) NOT NULL,
+  `creation_date` varchar(100) NOT NULL,
+  `update_date` varchar(100) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `image_extras` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `extras`
+--
+
+INSERT INTO `extras` (`id_extras`, `name_extras`, `creation_date`, `update_date`, `is_active`, `image_extras`) VALUES
+(1, 'Heating', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra1.jpg'),
+(2, 'Beachfront', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra2.jpg'),
+(3, 'Rustic', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra3.jpg'),
+(4, 'Mountain', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra4.jpg'),
+(5, 'Balcony', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra5.jpg'),
+(6, 'Elevator', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra6.jpg'),
+(7, 'Gym', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra7.jpg'),
+(8, 'Sauna', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra8.jpg'),
+(9, 'Fireplace', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra9.jpg'),
+(10, 'Air Conditioning', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra10.jpg');
 
 -- --------------------------------------------------------
 
@@ -216,6 +247,17 @@ CREATE TABLE `property_category` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `property_extras`
+--
+
+CREATE TABLE `property_extras` (
+  `id_property` int(10) NOT NULL,
+  `id_extras` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `property_operation`
 --
 
@@ -278,6 +320,12 @@ ALTER TABLE `city`
   ADD PRIMARY KEY (`id_city`);
 
 --
+-- Indices de la tabla `extras`
+--
+ALTER TABLE `extras`
+  ADD PRIMARY KEY (`id_extras`);
+
+--
 -- Indices de la tabla `images`
 --
 ALTER TABLE `images`
@@ -303,6 +351,13 @@ ALTER TABLE `property`
 ALTER TABLE `property_category`
   ADD PRIMARY KEY (`id_property`,`id_category`),
   ADD KEY `id_category` (`id_category`);
+
+--
+-- Indices de la tabla `property_extras`
+--
+ALTER TABLE `property_extras`
+  ADD PRIMARY KEY (`id_property`,`id_extras`),
+  ADD KEY `id_extras` (`id_extras`);
 
 --
 -- Indices de la tabla `property_operation`
@@ -339,6 +394,12 @@ ALTER TABLE `category`
 --
 ALTER TABLE `city`
   MODIFY `id_city` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `extras`
+--
+ALTER TABLE `extras`
+  MODIFY `id_extras` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `images`
@@ -386,6 +447,13 @@ ALTER TABLE `property`
 ALTER TABLE `property_category`
   ADD CONSTRAINT `property_category_ibfk_1` FOREIGN KEY (`id_property`) REFERENCES `property` (`id_property`),
   ADD CONSTRAINT `property_category_ibfk_2` FOREIGN KEY (`id_category`) REFERENCES `category` (`id_category`);
+
+--
+-- Filtros para la tabla `property_extras`
+--
+ALTER TABLE `property_extras`
+  ADD CONSTRAINT `property_extras_ibfk_1` FOREIGN KEY (`id_property`) REFERENCES `property` (`id_property`),
+  ADD CONSTRAINT `property_extras_ibfk_2` FOREIGN KEY (`id_extras`) REFERENCES `extras` (`id_extras`);
 
 --
 -- Filtros para la tabla `property_operation`
