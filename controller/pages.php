@@ -8,8 +8,8 @@
 		case "homepage";
 			include("module/home/view/home.html");
 			break;
-		case "controller_property";
-			include("module/property/controller/".$_GET['page'].".php");
+		case "controller_home";
+			include("module/home/controller/".$_GET['page'].".php");
 			break;
 		case "typography";
 			include("typography.html");

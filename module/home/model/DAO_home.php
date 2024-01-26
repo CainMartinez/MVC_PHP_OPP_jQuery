@@ -1,5 +1,5 @@
 <?php
-	$path = $_SERVER['DOCUMENT_ROOT'] . '/CONCESIONARIO';
+	$path = $_SERVER['DOCUMENT_ROOT'];
 	include($path . "/model/connect.php");
     
 	class DAOHome {
@@ -20,7 +20,7 @@
 		}
 
 		function select_categories() {
-			$sql= "SELECT *FROM category";
+			$sql= "SELECT * FROM category";
 
 			$conexion = connect::con();
 			$res = mysqli_query($conexion, $sql);
@@ -36,7 +36,7 @@
 		}
 
 		function select_operation() {
-			$sql= "SELECT *FROM operation ORDER BY id_operation DESC";
+			$sql= "SELECT * FROM operation ORDER BY id_operation DESC";
 
 			$conexion = connect::con();
 			$res = mysqli_query($conexion, $sql);
@@ -51,7 +51,7 @@
 			return $retrArray;
 		}
 		function select_city() {
-			$sql= "SELECT *FROM city ORDER BY id_city DESC";
+			$sql= "SELECT * FROM city ORDER BY id_city DESC";
 
 			$conexion = connect::con();
 			$res = mysqli_query($conexion, $sql);

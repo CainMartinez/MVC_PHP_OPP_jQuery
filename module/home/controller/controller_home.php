@@ -23,7 +23,7 @@
             }
         break;
 
-        case 'homePageCategory';
+        case 'Category';
             try{
                 $daohome = new DAOHome();
                 $SelectCategory = $daohome->select_categories();
@@ -39,7 +39,7 @@
             }
         break;
 
-        case 'homePageOperation';
+        case 'Operation';
             try{
                 $daohome = new DAOHome();
                 $SelectOperation = $daohome->select_operation();
@@ -55,7 +55,7 @@
             }
         break;
 
-        case 'homePageCity';
+        case 'City';
             try{
                 $daohome = new DAOHome();
                 $SelectCity = $daohome->select_city();
@@ -72,7 +72,7 @@
         break;
 
         default;
-            include("views/images/error404.html");
+            include("views/inc/error404.html");
         break;
     }
 ?>
