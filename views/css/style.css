@@ -8,6 +8,11 @@
 	max-width: 15%;
 	margin: 1%;
 }
+.swiper-button-next, .swiper-button-prev {
+    color: #000; /* Cambia el color de las flechas */
+    background: #fff; /* Cambia el fondo de las flechas */
+    /* Añade cualquier otro estilo que quieras */
+}
 .propertyImage {
 	width: 100%; /* Ajusta el ancho al 100% del contenedor padre */
 	height: 200px; /* Ajusta la altura a un valor fijo */

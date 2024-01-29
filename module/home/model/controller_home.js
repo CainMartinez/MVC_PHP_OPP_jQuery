@@ -1,77 +1,51 @@
 function carousel_type() {
-    var swiper;
     ajaxPromise('GET', 'JSON','module/home/controller/controller_home.php?op=Carrousel_Type')
     .then(function(data) {
-        var swiperContainer = $('<section></section>').attr('class', "section swiper-container swiper-slider swiper-slider-minimal")
-            .attr('data-loop', "true")
-            .attr('data-slide-effect', "fade")
-            .attr('data-autoplay', "4759")
-            .attr('data-simulate-touch', "true");
-
-        var swiperWrapper = $('<div></div>').attr('class', "swiper-wrapper");
-
+        let html = '';
         for (row in data) {
-            var swiperSlide = $('<div></div>').attr('class', "swiper-slide")
-                .attr('data-slide-bg', data[row].image_type);
-
-            var container = $('<div></div>').attr('class', "container");
-
-            var jumbotronContent = $("<div></div>").attr('class', "jumbotron-classic-content")
-                .html(
-                    "<div class='wow-outer'>" +
-                    "<div class='title-docor-text font-weight-bold title-decorated text-uppercase wow slideInLeft text-white'>" + data[row].name_type + "</div>" +
-                    "</div>" +
-                    "<h1 class='text-uppercase text-white font-weight-bold wow-outer'><span class='wow slideInDown' data-wow-delay='.2s'>Properties</span></h1>" +
-                    "<p class='text-white wow-outer'><span class='wow slideInDown' data-wow-delay='.35s'>inHouse provides you with lots of great properties throughout the USA so that you could easily choose your dream property.</span></p>" +
-                    "<div class='wow-outer button-outer'><a class='button button-md button-primary button-winona wow slideInDown' href='#' data-wow-delay='.4s'>View Properties</a></div>"
-                );
-
-            container.append(jumbotronContent);
-            swiperSlide.append(container);
-            swiperWrapper.append(swiperSlide);
+            html += `
+                <div class="swiper-slide" style="background-image: url('${data[row].image_type}');">
+                    <div class="container">
+                        <div class="jumbotron-classic-content">
+                            <h1 class="text-uppercase text-white font-weight-bold wow-outer">
+                                <span class="wow slideInDown" data-wow-delay=".2s">${data[row].name_type}</span>
+                            </h1>
+                            <div class="wow-outer button-outer">
+                                <a class="button button-md button-primary button-winona wow slideInDown" href="#" data-wow-delay=".4s">View properties</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
+        $('.swiper-wrapper').html(html);
+        var swiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            
+            loop: true,
+            effect: 'fade',
+            autoplay: {
+                delay: 5000,
+            },
+            speed: 3000,
+            parallax: true,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+                clickable: true,
+            },
+            
 
-        var swiperPaginationOuter = $('<div></div>').attr('class', "swiper-pagination-outer container");
-        var swiperPagination = $('<div></div>').attr('class', "swiper-pagination swiper-pagination-modern swiper-pagination-marked")
-            .attr('data-index-bullet', "true");
-
-        swiperPaginationOuter.append(swiperPagination);
-        swiperContainer.append(swiperWrapper).append(swiperPaginationOuter);
-
-        $('#carousel_container').append(swiperContainer);
-
-        setTimeout(function() {
-            swiper = new Swiper('.swiper-container', {
-                loop: true,
-                effect: 'fade',
-                autoplay: false, // Desactiva el autoplay de Swiper
-                simulateTouch: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-            });
-
-            var delay = 5000; // Configura el delay en milisegundos
-            var slideIndex = 0;
-
-            setInterval(function() {
-                if (swiper && swiper.slides) {
-                    slideIndex++;
-                    if (slideIndex >= swiper.slides.length) {
-                        slideIndex = 0;
-                    }
-                    swiper.slideTo(slideIndex);
-                }
-            }, delay);
-        }, 0);
-    })
-    .catch(function() {
-        console.log("Error Carrousel_Type");
-        // window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Carrusel_Type HOME";
+        });
+    }).catch(function(error) {
+        console.error(error);
+        window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Carrousel Type HOME";
     });
 }
-
 function loadCategories() {
     ajaxPromise('GET', 'JSON','module/home/controller/controller_home.php?op=Category')
     .then(function(data) {
@@ -94,7 +68,6 @@ function loadCategories() {
         window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Categories HOME";
     });
 }
-
 function loadOperation() {
     ajaxPromise('GET', 'JSON','module/home/controller/controller_home.php?op=Operation')
     .then(function(data) {
@@ -120,16 +93,55 @@ function loadCity() {
     .then(function(data) {
         let html = '';
         for (row in data) {
-            html += '<div class="col-md-6 wow-outer"><article class="post-modern wow slideInLeft"><a class="post-modern-media" href="#"><img class="propertyImage" src="' + data[row].image_city + '" alt="" width="571" height="353" /></a><h4 class="post-modern-title title-city"><a class="post-modern-title" href="#">' + data[row].name_city + '</a></h4><ul class="post-modern-meta"></ul></p></article></div>';        }
+            html += `
+                <div class="col-md-6 wow-outer">
+                    <article class="post-modern wow slideInLeft">
+                        <a class="post-modern-media" href="#">
+                            <img class="propertyImage" src="${data[row].image_city}" alt="" width="571" height="353" />
+                        </a>
+                        <h4 class="post-modern-title title-city">
+                            <a class="post-modern-title" href="#">${data[row].name_city}</a>
+                        </h4>
+                        <ul class="post-modern-meta"></ul>
+                    </article>
+                </div>
+            `;}
         $('#propertyContainer').html(html);
     }).catch(function() {
         window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=City HOME";
     });
 }
-
+function loadExtras() {
+    ajaxPromise('GET', 'JSON','module/home/controller/controller_home.php?op=Extras')
+    .then(function(data) {
+        let html = '';
+        for (row in data) {
+            html += `
+                <div class="col-md-10 col-lg-6 wow-outer">
+                    <article class="profile-creative wow slideInLeft">
+                        <figure class="profile-creative-figure">
+                            <img class="profile-creative-image" src="${data[row].image_extras}" alt="" width="270" height="273" />
+                        </figure>
+                        <div class="profile-creative-main">
+                            <h5 class="profile-creative-title">
+                                <a href="#">${data[row].name_extras}</a>
+                            </h5>
+                            <p class="profile-creative-position"></p>
+                        </div>
+                    </article>
+                </div>
+            `;
+        }
+        $('.row-lg-50.row-35.row-xxl-70').html(html);
+    }).catch(function(error) {
+        console.error(error);
+        // window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Operation HOME";
+    });
+}
 $(document).ready(function() {
-    // carousel_type();
+    carousel_type();
     loadCategories();
     loadOperation();
     loadCity();
+    loadExtras();
 });

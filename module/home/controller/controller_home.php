@@ -74,6 +74,23 @@
             }
         break;
 
+        case 'Extras'; 
+
+            try{
+                $daohome = new DAOHome();
+                $SelectExtras = $daohome->select_extras();
+            } catch(Exception $e){
+                echo json_encode("error");
+            }
+            
+            if(!empty($SelectExtras)){
+                echo json_encode($SelectExtras); 
+            }
+            else{
+                echo json_encode("error");
+            }
+        break;
+
         default;
             include("views/inc/error404.html");
         break;
