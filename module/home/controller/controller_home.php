@@ -8,7 +8,6 @@
         break;
 
         case 'Carrousel_Type';
-        echo "<script>console.log('Carrousel_Type');</script>";
 
             try{
                 $daohome = new DAOHome();
@@ -26,7 +25,6 @@
         break;
 
         case 'Category';
-        echo "<script>console.log('Category');</script>";
 
             try{
                 $daohome = new DAOHome();
@@ -43,9 +41,7 @@
             }
         break;
 
-        case 'Operation';
-            echo "<script>console.log('Operation');</script>";
-            
+        case 'Operation';            
             try{
                 $daohome = new DAOHome();
                 $SelectOperation = $daohome->select_operation();
@@ -62,7 +58,6 @@
         break;
 
         case 'City'; 
-        echo "<script>console.log('City');</script>";
 
             try{
                 $daohome = new DAOHome();
@@ -71,8 +66,8 @@
                 echo json_encode("error");
             }
             
-            if(!empty($SelectType)){
-                echo json_encode($SelectType); 
+            if(!empty($SelectCity)){
+                echo json_encode($SelectCity); 
             }
             else{
                 echo json_encode("error");

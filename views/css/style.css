@@ -2,6 +2,65 @@
 /*
 * Trunk version 2.0.0
 */
+/* CSS */
+.col-custom-5 {
+	flex: 0 0 20%;
+	max-width: 15%;
+	margin: 1%;
+}
+.propertyImage {
+	width: 100%; /* Ajusta el ancho al 100% del contenedor padre */
+	height: 200px; /* Ajusta la altura a un valor fijo */
+	object-fit: cover; /* Asegura que la imagen cubra todo el espacio disponible, recortándola si es necesario */
+}
+.link-operation:hover {
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+.link-operation:hover h4 {
+	color: #007bff;
+}
+.link-operation{
+	padding: 3%;
+}
+.box-chloe__icon {
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+}
+@media (min-width: 576px) {
+	.col-custom-5 {
+		flex: 0 0 20%;
+		max-width: 15%;
+	}
+}
+
+@media (max-width: 575px) {
+	.col-custom-5 {
+		flex: 0 0 100%;
+		max-width: 80%;
+	}
+}
+.title-category{
+	text-align: center;
+}
+.title-city {
+	text-align: center;
+}
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	margin-right: -15px;
+	margin-left: -15px;
+	flex-direction: row;
+	align-content: center;
+	justify-content: space-around;
+	align-items: flex-end;
+}
+.center-divs {
+	display: flex;
+	justify-content: center;
+	margin: 0;
+}
 .large-icon {
     font-size: 2em; /* Ajusta este valor a tu gusto */
 }
