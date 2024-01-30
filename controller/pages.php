@@ -14,6 +14,9 @@
 		case "typography";
 			include("typography.html");
 			break;
+		case "index";
+			include("index.html");
+			break;
 		case "aboutus";
 			include("about-us.html");
 			break;
