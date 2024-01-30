@@ -39,9 +39,10 @@ function carousel_type() {
 function loadCategories() {
     ajaxPromise('GET', 'JSON', 'module/home/controller/controller_home.php?op=Category')
         .then(function (data) {
-            var rowContainer = $('<div></div>').attr('class', "row glide__slides center-divs");
+            var rowContainer = $('<div></div>').attr('class', "owl-carousel owl-theme");
             for (row in data) {
-                $('<div></div>').attr('class', "col-custom-5 glide__slide").appendTo(rowContainer)
+                $('<div></div>').attr('class', "item")
+                    .appendTo(rowContainer)
                     .html(
                         "<article class='thumbnail-light'>" +
                         "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" + data[row].image_category + "' alt='' width='270' height='300' /></a>" +
@@ -51,8 +52,22 @@ function loadCategories() {
             }
             $('#category_html').append(rowContainer);
 
-            $('<div></div>').attr('class', "col-md-12 wow-outer").appendTo('#category_html')
-                .html("<br><a class='button button-primary button-winona button-md' href='#'>view all properties</a>");
+            $('.owl-carousel').owlCarousel({
+                loop:true,
+                margin:50,
+                nav:true,
+                responsive:{
+                    0:{
+                        items:1
+                    },
+                    600:{
+                        items:3
+                    },
+                    1000:{
+                        items:5
+                    }
+                }
+            });
 
         }).catch(function () {
             window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Categories HOME";
@@ -128,10 +143,40 @@ function loadExtras() {
             window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Operation HOME";
         });
 }
+function loadRecomendation() {
+    ajaxPromise('GET', 'JSON', 'module/home/controller/controller_home.php?op=Recomendation')
+        .then(function (data) {
+            let html = '';
+            for (row in data) {
+                html += `
+                <div class="col-md-6 wow-outer">
+                    <article class="post-modern wow slideInLeft">
+                        <a class="post-modern-media" href="#">
+                            <img src="${data[row].path_images}" alt="" width="571" height="353"/>
+                        </a>
+                        <h4 class="post-modern-title">
+                            <a class="post-modern-title" href="#">${data[row].cadastral_reference}</a>
+                        </h4>
+                        <ul class="post-modern-meta">
+                            <li><a class="button-winona" href="#">$${data[row].price}/mon</a></li>
+                            <li>${data[row].square_meters} Sq. Ft.</li>
+                            <li>${data[row].number_of_rooms} Rooms</li>
+                        </ul>
+                        <p>${data[row].description}</p>
+                    </article>
+                </div>
+                `;
+            }
+            $('#propertyRecomendation').html(html);
+        }).catch(function () {
+            window.location.href = "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
+        });
+}
 $(document).ready(function () {
     carousel_type();
     loadCategories();
     loadOperation();
     loadCity();
     loadExtras();
+    loadRecomendation();
 });

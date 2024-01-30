@@ -24,6 +24,22 @@
             }
         break;
 
+        case 'Recomendation';
+            try{
+                $daohome = new DAOHome();
+                $SelectRecomendation = $daohome->select_recomendation();
+            } catch(Exception $e){
+                echo json_encode("error");
+            }
+            
+            if(!empty($SelectRecomendation)){
+                echo json_encode($SelectRecomendation); 
+            }
+            else{
+                echo json_encode("error");
+            }
+        break;
+        
         case 'Category';
 
             try{
