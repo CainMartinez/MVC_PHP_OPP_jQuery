@@ -6,7 +6,7 @@ session_start();
 
 include("views/inc/header.html");
 
-include("controller/pages.php");
+include("routes/pages.php");
 
 include("views/inc/footer.html");
 

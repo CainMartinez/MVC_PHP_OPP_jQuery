@@ -8,6 +8,9 @@
 		case "homepage";
 			include("module/home/view/home.html");
 			break;
+		case "shop";
+			include("module/shop/view/shop.html");
+			break;
 		case "controller_shop";
 			include("module/shop/controller/".$_GET['page'].".php");
 			break;
