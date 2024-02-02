@@ -1,57 +1,52 @@
-function loadProperties(total_prod = 0, items_page = 4) {
-    ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties', total_prod, items_page);
+function loadProperties() {
+    ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
 }
 
-function ajaxForSearch(url, total_prod = 0, items_page) {
-    ajaxPromise('POST', 'JSON', url,{ 'total_prod': total_prod, 'items_page': items_page })
+function ajaxForSearch(url) {
+    ajaxPromise('POST', 'JSON', url)
         .then(function(data) {
-            // console.log(data);
-            $('#content_shop_cars').empty();
-            $('.date_car' && '.date_img').empty();
+            $('#properties_shop').empty();
 
-            //Mejora para que cuando no hayan resultados en los filtros aplicados
             if (data == "error") {
-                $('<div></div>').appendTo('#content_shop_cars')
+                $('<div></div>').appendTo('#properties_shop')
                     .html(
-                        '<h3>¡No se encuentarn resultados con los filtros aplicados!</h3>'
+                        '<h3>¡No se encuentran resultados con los filtros aplicados!</h3>'
                     )
             } else {
                 for (row in data) {
-                    $('<div></div>').attr({ 'id': data[row].id_property, 'class': 'list_content_shop' }).appendTo('#content_shop_cars')
+                    $('<div></div>').attr({ 'class': 'col-md-6 wow-outer' }).appendTo('.row-lg-50')
                         .html(`
-                            <div class='list_product'>
-                                <div class='img-container'>
-                                    <img src= '${data[row].image_path}'</img>
+                            <article class='post-modern wow slideInLeft'>
+                                <a class='post-modern-media' href='#'>
+                                    <img src='${data[row].path_images}' alt='' width='571' height='353'/>
+                                </a>
+                                <h4 class='post-modern-title'>
+                                    <a class='post-modern-title' href='#'>${data[row].cadastral_reference} ${data[row].id_property}</a>
+                                </h4>
+                                <ul class='post-modern-meta'>
+                                    <li><a class='button-winona' href='#'>${data[row].price} €</a></li>
+                                    <li>City: ${data[row].name_city}</li>
+                                    <li>Square meters: ${data[row].square_meters}</li>
+                                </ul>
+                                <p>${data[row].description}</p><br>
+                                <div class='buttons'>
+                                    <table id='table-shop'> 
+                                        <tr>
+                                            <td>
+                                                <button id='${data[row].id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+                                            </td>
+                                            <td>
+                                                <button class='button button-primary-white' style='border: 1px solid;'>Buy</button>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
-                                <div class='product-info'>
-                                    <div class='product-content'>
-                                        <h1>
-                                            <b>${data[row].id_brand} ${data[row].name_property}
-                                                <a class='list__heart' id='${data[row].id_property}'>
-                                                    <i id= ${data[row].id_property} class='fa-solid fa-heart fa-lg'></i>
-                                                </a>
-                                            </b>
-                                        </h1>
-                                        <p>Up-to-date maintenance and revisions</p>
-                                        <ul>
-                                            <li> <i id='col-ico' class='fa-solid fa-road fa-xl'></i>&nbsp;&nbsp;${data[row].name_type}</li>
-                                            <li> <i id='col-ico' class='fa-solid fa-person fa-xl'></i>&nbsp;&nbsp;&nbsp;${data[row].name_category}</li>
-                                            <li> <i id='col-ico' class='fa-solid fa-palette fa-xl'></i>&nbsp;${data[row].name_operation}</li>
-                                        </ul> 
-                                        <div class='buttons'>
-                                            <button id='${data[row].id_property}' class='more_info_list button add'>More Info</button>
-                                            <button class='button buy'>Buy</button> 
-                                            <span class='button' id='price'>${data[row].price} $</span> 
-                                        </div> 
-                                    </div>
-                                </div> 
-                            </div>`
-                        )
+                            </article>
+                        `)
                 }
             }
         }).catch(function(error) {
             system.error(error);
-            // window.location.href = "index.php?pages=503";
         });
 }
 
@@ -65,49 +60,34 @@ function clicks() {
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON','module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
     .then(function(data) {
-        $('#content_shop_cars').empty();
-        $('.date_img_dentro').empty();
-        $('.date_car_dentro').empty();
+        console.log(data);
+        // $('#images_properties .container').empty();
 
-        for (row in data[1][0]) {
-            $('<div></div>').attr({ 'id': data[1][0].id_images, class: 'date_img_dentro' }).appendTo('.date_img')
-                .html(
-                    "<div class='content-img-details'>" +
-                    "<img src= '" + data[1][0][row].image_path + "'" + "</img>" +
-                    "</div>"
-                )
-        }
+        // $('<h2></h2>').addClass('post-modern-title').text(data[0].description).appendTo('#images_properties .container');
+        // $('<hr>').appendTo('#images_properties .container');
+        // $('<br><br>').appendTo('#images_properties .container');
 
-        $('<div></div>').attr({ 'id': data[0].id_property, class: 'date_car_dentro' }).appendTo('.date_car')
-            .html(
-                "<div class='list_product_details'>" +
-                "<div class='product-info_details'>" +
-                "<div class='product-content_details'>" +
-                "<h1><b>" + data[0].description + " " + data[0].cadastral_reference + "</b></h1>" +
-                "<hr class=hr-shop>" +
-                "<table id='table-shop'> <tr>" +
-                "<td> <i id='col-ico' class='fa-solid fa-road fa-2xl'></i> &nbsp;" + data[0].square_meters + "</td>" +
-                "<td> <i id='col-ico' class='fa-solid fa-person fa-2xl'></i> &nbsp;" + data[0].number_of_rooms + "</td>  </tr>" +
-                "<td> <i id='col-ico' class='fa-solid fa-car fa-2xl'></i> &nbsp;" + data[0].name_category + "</td>" +
-                "<td> <i id='col-ico' class='fa-solid fa-door-open fa-2xl'></i> &nbsp;" + data[0].name_type + "</td>  </tr>" +
-                "<td> <i id='col-ico' class='fa-solid fa-gas-pump fa-2xl'></i> &nbsp;" + data[0].name_operation + "</td>" +
-                "<td> <i id='col-ico' class='fa-solid fa-calendar-days fa-2xl'></i> &nbsp;" + data[0].name_extras + "</td>  </tr>" +
-                "<td> <i class='fa-solid fa-location-dot fa-2xl'></i> &nbsp;" + data[0].name_city + "</td> </tr>" +
-                "</table>" +
-                "<hr class=hr-shop>" +
-                "<h3><b>" + "More Information:" + "</b></h3>" +
-                "<p>This vehicle has a 2-year warranty and reviews during the first 6 months from its acquisition.</p>" +
-                "<div class='buttons_details'>" +
-                "<a class='button add' href='#'>Add to Cart</a>" +
-                "<a class='button buy' href='#'>Buy</a>" +
-                "<span class='button' id='price_details'>" + data[0].price + "<i class='fa-solid fa-euro-sign'></i> </span>" +
-                "<a class='details__heart' id='" + data[0].id_property + "'><i id=" + data[0].id_property + " class='fa-solid fa-heart fa-lg'></i></a>" +
-                "</div>" +
-                "</div>" +
-                "</div>" +
-                "</div>"
-            )
+        // var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties .container');
+        // var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme').appendTo(rowDiv);
 
+        // for (row in data[1][0]) {
+        //     $('<div></div>').addClass('item').html("<img src='" + data[1][0][row].image_path + "' alt='Image " + (parseInt(row) + 1) + "' />").appendTo(owlCarouselDiv);
+        // }
+
+        // var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
+        // $('<div></div>').addClass('property-type').text('Type: ' + data[0].name_type).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('property-category').text('Category: ' + data[0].name_category).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('icon-bathroom').html('<i class="fas fa-bath"></i> ' + data[0].number_of_bathrooms).appendTo(propertyDetailsDiv)+"bathrooms";
+        // $('<div></div>').addClass('icon-bedroom').html('<i class="fas fa-bed"></i> ' + data[0].number_of_rooms).appendTo(propertyDetailsDiv)+"badrooms";
+        // $('<div></div>').addClass('property-operation').text('Operation: ' + data[0].name_operation).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('property-extras').text('Extras: ' + data[0].name_extras).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('property-city').text('City: ' + data[0].name_city).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('property-cadastral-reference').text('Cadastral Reference: ' + data[0].cadastral_reference).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('property-square-meters').text('Square Meters: ' + data[0].square_meters).appendTo(propertyDetailsDiv);
+        // $('<div></div>').addClass('property-price').text('Price: ' + data[0].price).appendTo(propertyDetailsDiv);
+
+        // var propertyDescriptionDiv = $('<div></div>').addClass('property-description').appendTo(rowDiv);
+        // $('<p></p>').text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.').appendTo(propertyDescriptionDiv);
         
     }).catch(function(error) {
         system.error(error);

@@ -3,17 +3,19 @@ $path = $_SERVER['DOCUMENT_ROOT'];
 include($path . "/model/connect.php");
 
 class DAOShop{
-	function select_all_properties($total_prod,$items_page){
+	function select_all_properties(){
 		// $sql = "SELECT * 
 		// FROM property p, property_type t, property_category c
 		// WHERE t.id_property = p.id_property
 		// AND c.id_property = p.id_property
 		// ORDER BY p.id_property DESC
 		// LIMIT $total_prod, $items_page";
-		$sql = "SELECT *
-		FROM property p
-		ORDER BY p.id_property DESC
-		LIMIT $total_prod, $items_page";
+		$sql = "SELECT DISTINCT p.*,c.*,i.*
+		FROM property p, city c,images i 
+		WHERE p.id_city = c.id_city
+		AND i.id_property = p.id_property
+        GROUP BY p.id_property
+		ORDER BY p.id_property DESC";
 		
 
 		$conexion = connect::con();

@@ -8,11 +8,9 @@ switch ($_GET['op']) {
         break;
 
     case 'all_properties':
-        $prod = $_POST['total_prod'];
-        $items = $_POST['items_page'];
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_all_properties($prod, $items);
+            $Dates_Properties = $daoshop->select_all_properties();
         } catch (Exception $e) {
             echo json_encode("error");
         }
