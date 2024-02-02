@@ -34,9 +34,9 @@ function ajaxForSearch(url, total_prod = 0, items_page) {
                                         </h1>
                                         <p>Up-to-date maintenance and revisions</p>
                                         <ul>
-                                            <li> <i id='col-ico' class='fa-solid fa-road fa-xl'></i>&nbsp;&nbsp;${data[row].extras}</li>
-                                            <li> <i id='col-ico' class='fa-solid fa-person fa-xl'></i>&nbsp;&nbsp;&nbsp;${data[row].categories}</li>
-                                            <li> <i id='col-ico' class='fa-solid fa-palette fa-xl'></i>&nbsp;${data[row].types}</li>
+                                            <li> <i id='col-ico' class='fa-solid fa-road fa-xl'></i>&nbsp;&nbsp;${data[row].name_type}</li>
+                                            <li> <i id='col-ico' class='fa-solid fa-person fa-xl'></i>&nbsp;&nbsp;&nbsp;${data[row].name_category}</li>
+                                            <li> <i id='col-ico' class='fa-solid fa-palette fa-xl'></i>&nbsp;${data[row].name_operation}</li>
                                         </ul> 
                                         <div class='buttons'>
                                             <button id='${data[row].id_property}' class='more_info_list button add'>More Info</button>
@@ -73,7 +73,7 @@ function loadDetails(id_property) {
             $('<div></div>').attr({ 'id': data[1][0].id_images, class: 'date_img_dentro' }).appendTo('.date_img')
                 .html(
                     "<div class='content-img-details'>" +
-                    "<img src= '" + data[1][0][row].path_images + "'" + "</img>" +
+                    "<img src= '" + data[1][0][row].image_path + "'" + "</img>" +
                     "</div>"
                 )
         }
@@ -88,10 +88,10 @@ function loadDetails(id_property) {
                 "<table id='table-shop'> <tr>" +
                 "<td> <i id='col-ico' class='fa-solid fa-road fa-2xl'></i> &nbsp;" + data[0].square_meters + "</td>" +
                 "<td> <i id='col-ico' class='fa-solid fa-person fa-2xl'></i> &nbsp;" + data[0].number_of_rooms + "</td>  </tr>" +
-                "<td> <i id='col-ico' class='fa-solid fa-car fa-2xl'></i> &nbsp;" + data[0].categories + "</td>" +
-                "<td> <i id='col-ico' class='fa-solid fa-door-open fa-2xl'></i> &nbsp;" + data[0].types + "</td>  </tr>" +
-                "<td> <i id='col-ico' class='fa-solid fa-gas-pump fa-2xl'></i> &nbsp;" + data[0].operations + "</td>" +
-                "<td> <i id='col-ico' class='fa-solid fa-calendar-days fa-2xl'></i> &nbsp;" + data[0].extras + "</td>  </tr>" +
+                "<td> <i id='col-ico' class='fa-solid fa-car fa-2xl'></i> &nbsp;" + data[0].name_category + "</td>" +
+                "<td> <i id='col-ico' class='fa-solid fa-door-open fa-2xl'></i> &nbsp;" + data[0].name_type + "</td>  </tr>" +
+                "<td> <i id='col-ico' class='fa-solid fa-gas-pump fa-2xl'></i> &nbsp;" + data[0].name_operation + "</td>" +
+                "<td> <i id='col-ico' class='fa-solid fa-calendar-days fa-2xl'></i> &nbsp;" + data[0].name_extras + "</td>  </tr>" +
                 "<td> <i class='fa-solid fa-location-dot fa-2xl'></i> &nbsp;" + data[0].name_city + "</td> </tr>" +
                 "</table>" +
                 "<hr class=hr-shop>" +
@@ -108,14 +108,7 @@ function loadDetails(id_property) {
                 "</div>"
             )
 
-        $('.date_img').slick({
-            infinite: true,
-            speed: 300,
-            slidesToShow: 1,
-            adaptiveHeight: true,
-            autoplay: true,
-            autoplaySpeed: 1500
-        });
+        
     }).catch(function(error) {
         system.error(error);
 

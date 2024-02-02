@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-01-2024 a las 16:50:03
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Tiempo de generación: 02-02-2024 a las 14:07:25
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,11 +41,11 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id_category`, `name_category`, `is_active`, `creation_date`, `update_date`, `image_category`) VALUES
-(1, 'New Building', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/New-Building.jpg'),
-(2, 'Pool', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Pool.jpg'),
-(3, 'Beach', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Beach.jpg'),
-(4, 'Garden', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Garden.jpg'),
-(5, 'Garage', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Garage.jpg');
+(1, 'New Building', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/New-Building.webp'),
+(2, 'Pool', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Pool.webp'),
+(3, 'Beach', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Beach.webp'),
+(4, 'Garden', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Garden.webp'),
+(5, 'Garage', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Garage.webp');
 
 -- --------------------------------------------------------
 
@@ -67,11 +67,11 @@ CREATE TABLE `city` (
 --
 
 INSERT INTO `city` (`id_city`, `name_city`, `is_active`, `creation_date`, `update_date`, `image_city`) VALUES
-(1, 'Ontinyent', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Ontinyent.jpg'),
-(2, 'Gandia', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Gandia.jpg'),
-(3, 'Albaida', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Albaida.jpg'),
-(4, 'Alcoi', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Alcoi.jpg'),
-(5, 'Xativa', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Xativa.jpg');
+(1, 'Ontinyent', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Ontinyent.webp'),
+(2, 'Gandia', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Gandia.webp'),
+(3, 'Albaida', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Albaida.webp'),
+(4, 'Alcoi', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Alcoi.webp'),
+(5, 'Xativa', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/Xativa.webp');
 
 -- --------------------------------------------------------
 
@@ -90,11 +90,6 @@ CREATE TABLE `exceptions` (
 --
 
 INSERT INTO `exceptions` (`type_error`, `spot`, `current_date_time`) VALUES
-(503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
-(503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
-(503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
-(503, 'Function load_like_user SHOP', '2024-01-25 02:17:43'),
-(503, 'Function load_like_user SHOP', '2024-01-25 02:17:43'),
 (503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
 (503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
 (503, 'Carrusel_Brands HOME', '2024-01-25 02:17:43'),
@@ -121,11 +116,11 @@ CREATE TABLE `extras` (
 --
 
 INSERT INTO `extras` (`id_extras`, `name_extras`, `creation_date`, `update_date`, `is_active`, `image_extras`) VALUES
-(1, 'Heating', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra1.jpg'),
-(2, 'Air Conditioning', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra3.jpg'),
-(3, 'Fireplace', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra4.jpg'),
-(4, 'Elevator', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra6.jpg'),
-(5, 'Sauna', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra8.jpg');
+(1, 'Heating', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra1.webp'),
+(2, 'Air Conditioning', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra3.webp'),
+(3, 'Fireplace', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra4.webp'),
+(4, 'Elevator', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra6.webp'),
+(5, 'Sauna', '2024-01-26 17:49:03', '2024-01-26 17:49:03', 1, 'views/images/extra8.webp');
 
 -- --------------------------------------------------------
 
@@ -147,31 +142,31 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`id_images`, `path_images`, `is_active`, `creation_date`, `update_date`, `id_property`) VALUES
-(1, 'views/images/property1.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(2, 'views/images/property1.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(3, 'views/images/property1.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(4, 'views/images/property1.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(5, 'views/images/property1.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(6, 'views/images/property2.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(7, 'views/images/property2.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(8, 'views/images/property2.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(9, 'views/images/property2.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(10, 'views/images/property2.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(11, 'views/images/property3.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(12, 'views/images/property3.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(13, 'views/images/property3.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(14, 'views/images/property3.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(15, 'views/images/property3.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(16, 'views/images/property4.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(17, 'views/images/property4.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(18, 'views/images/property4.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(19, 'views/images/property4.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(20, 'views/images/property4.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(21, 'views/images/property5.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(22, 'views/images/property5.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(23, 'views/images/property5.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(24, 'views/images/property5.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(25, 'views/images/property5.jpg', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
+(1, 'views/images/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(2, 'views/images/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(3, 'views/images/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(4, 'views/images/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(5, 'views/images/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(6, 'views/images/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(7, 'views/images/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(8, 'views/images/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(9, 'views/images/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(10, 'views/images/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(11, 'views/images/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(12, 'views/images/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(13, 'views/images/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(14, 'views/images/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(15, 'views/images/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(16, 'views/images/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(17, 'views/images/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(18, 'views/images/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(19, 'views/images/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(20, 'views/images/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(21, 'views/images/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(22, 'views/images/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(23, 'views/images/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(24, 'views/images/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(25, 'views/images/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
 
 -- --------------------------------------------------------
 
@@ -193,10 +188,10 @@ CREATE TABLE `operation` (
 --
 
 INSERT INTO `operation` (`id_operation`, `name_operation`, `is_active`, `creation_date`, `update_date`, `image_operation`) VALUES
-(1, 'Sale', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image3.png'),
-(2, 'Rent', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image1.png'),
-(3, 'Share', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image2.png'),
-(4, 'Rent to own', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image4.jpg');
+(1, 'Sale', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image9.webp'),
+(2, 'Rent', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image10.webp'),
+(3, 'Share', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image20.webp'),
+(4, 'Rent to own', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image4.webp');
 
 -- --------------------------------------------------------
 
@@ -238,6 +233,14 @@ CREATE TABLE `property_category` (
   `id_property` int(10) NOT NULL,
   `id_category` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `property_category`
+--
+
+INSERT INTO `property_category` (`id_property`, `id_category`) VALUES
+(1, 1),
+(1, 2);
 
 -- --------------------------------------------------------
 
@@ -292,11 +295,11 @@ CREATE TABLE `type` (
 --
 
 INSERT INTO `type` (`id_type`, `name_type`, `is_active`, `creation_date`, `update_date`, `image_type`) VALUES
-(1, 'Apartment', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'image1.jpg'),
-(2, 'House', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'image2.jpg'),
-(3, 'Townhouse', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'image3.jpg'),
-(4, 'Duplex', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'image4.jpg'),
-(5, 'Office', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'image5.jpg');
+(1, 'Apartment', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image1.webp'),
+(2, 'House', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image2.webp'),
+(3, 'Townhouse', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image3.webp'),
+(4, 'Duplex', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image7.webp'),
+(5, 'Office', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/image5.webp');
 
 --
 -- Índices para tablas volcadas
