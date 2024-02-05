@@ -1,9 +1,9 @@
 <?php
-if ($page === 'home') {
+if ((isset($_GET['page'])) && ($_GET['page']==="homepage") ){
     include("views/inc/top_page_home.html");
-} elseif ($page === 'shop') {
+}else if ((isset($_GET['page'])) && ($_GET['page']==="shop") ){
     include("views/inc/top_page_shop.html");
-}else {
+}else{
     include("views/inc/top_page.html");
 }
 session_start();

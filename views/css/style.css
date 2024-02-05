@@ -14851,10 +14851,12 @@ yx-axis
 .owl-prev,
 .owl-next {
 	position: absolute;
-	top: 50%;
+	top: 40%;
 	transform: translateY(-50%);
-	font: 400 46px/50px 'FontAwesome';
+	font: 115px 'FontAwesome';
 	color: #aeb1be;
+	background: transparent;
+	border:#000;
 }
 
 .owl-prev:hover,
@@ -14866,17 +14868,17 @@ yx-axis
 	left: 0;
 }
 
-.owl-prev::before {
+/* .owl-prev::before {
 	content: '\f104';
-}
+} */
 
 .owl-next {
 	right: 0;
 }
 
-.owl-next::before {
+/* .owl-next::before {
 	content: '\f105';
-}
+} */
 
 /*
  * Owl Pagination

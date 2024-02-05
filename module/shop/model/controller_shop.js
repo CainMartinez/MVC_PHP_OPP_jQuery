@@ -6,6 +6,7 @@ function ajaxForSearch(url) {
     ajaxPromise('POST', 'JSON', url)
         .then(function(data) {
             $('#properties_shop').empty();
+            $('#images_properties').empty();
 
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
@@ -14,7 +15,7 @@ function ajaxForSearch(url) {
                     )
             } else {
                 for (row in data) {
-                    $('<div></div>').attr({ 'class': 'col-md-6 wow-outer' }).appendTo('.row-lg-50')
+                    $('<div></div>').attr({ 'class': 'col-md-6 wow-outer' }).appendTo('#properties_shop')
                         .html(`
                             <article class='post-modern wow slideInLeft'>
                                 <a class='post-modern-media' href='#'>
@@ -60,34 +61,31 @@ function clicks() {
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON','module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
     .then(function(data) {
-        console.log(data);
-        // $('#images_properties .container').empty();
+        $('#properties_shop').empty();
+        $('#images_properties').empty();
 
-        // $('<h2></h2>').addClass('post-modern-title').text(data[0].description).appendTo('#images_properties .container');
-        // $('<hr>').appendTo('#images_properties .container');
-        // $('<br><br>').appendTo('#images_properties .container');
+        $('<h2></h2>').addClass('post-modern-title').text(data[0].description).appendTo('#images_properties');
+        $('<hr>').appendTo('#images_properties');
+        $('<br><br>').appendTo('#images_properties');
 
-        // var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties .container');
-        // var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme').appendTo(rowDiv);
-
-        // for (row in data[1][0]) {
-        //     $('<div></div>').addClass('item').html("<img src='" + data[1][0][row].image_path + "' alt='Image " + (parseInt(row) + 1) + "' />").appendTo(owlCarouselDiv);
-        // }
-
-        // var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
-        // $('<div></div>').addClass('property-type').text('Type: ' + data[0].name_type).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('property-category').text('Category: ' + data[0].name_category).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('icon-bathroom').html('<i class="fas fa-bath"></i> ' + data[0].number_of_bathrooms).appendTo(propertyDetailsDiv)+"bathrooms";
-        // $('<div></div>').addClass('icon-bedroom').html('<i class="fas fa-bed"></i> ' + data[0].number_of_rooms).appendTo(propertyDetailsDiv)+"badrooms";
-        // $('<div></div>').addClass('property-operation').text('Operation: ' + data[0].name_operation).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('property-extras').text('Extras: ' + data[0].name_extras).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('property-city').text('City: ' + data[0].name_city).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('property-cadastral-reference').text('Cadastral Reference: ' + data[0].cadastral_reference).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('property-square-meters').text('Square Meters: ' + data[0].square_meters).appendTo(propertyDetailsDiv);
-        // $('<div></div>').addClass('property-price').text('Price: ' + data[0].price).appendTo(propertyDetailsDiv);
-
-        // var propertyDescriptionDiv = $('<div></div>').addClass('property-description').appendTo(rowDiv);
-        // $('<p></p>').text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.').appendTo(propertyDescriptionDiv);
+        var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties');
+        var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
+        var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme').appendTo(propertyDetailsDiv);
+        for (row in data[1][0]) {
+            $('<div></div>').addClass('item').html("<img src='" + data[1][0][row].path_images + "' alt='Image " + (parseInt(row) + 1) + "' />").appendTo(owlCarouselDiv);
+        }
+        $('<div></div>').addClass('property-type').text('Type: ' + data[0].name_type).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-category').text('Category: ' + data[0].name_category).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('icon-bathroom').html('<i class="fas fa-bath"></i> 3 bathrooms').appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('icon-bedroom').html('<i class="fas fa-bed"></i> ' + data[0].number_of_rooms+" rooms").appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-operation').text('Operation: ' + data[0].name_operation).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-extras').text('Extras: ' + data[0].name_extras).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-city').text('City: ' + data[0].name_city).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-cadastral-reference').text('Cadastral Reference: ' + data[0].cadastral_reference).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-square-meters').text('Square Meters: ' + data[0].square_meters).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-price').text('Price: ' + data[0].price).appendTo(propertyDetailsDiv);
+        var propertyDescriptionDiv = $('<div></div>').addClass('property-description').appendTo(rowDiv);
+        $('<p></p>').text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.').appendTo(propertyDescriptionDiv);
         
     }).catch(function(error) {
         system.error(error);

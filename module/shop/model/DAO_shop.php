@@ -4,12 +4,6 @@ include($path . "/model/connect.php");
 
 class DAOShop{
 	function select_all_properties(){
-		// $sql = "SELECT * 
-		// FROM property p, property_type t, property_category c
-		// WHERE t.id_property = p.id_property
-		// AND c.id_property = p.id_property
-		// ORDER BY p.id_property DESC
-		// LIMIT $total_prod, $items_page";
 		$sql = "SELECT DISTINCT p.*,c.*,i.*
 		FROM property p, city c,images i 
 		WHERE p.id_city = c.id_city
@@ -57,17 +51,6 @@ class DAOShop{
 	LEFT JOIN category cat ON pc.id_category = cat.id_category
 	GROUP BY i.id_property;
 	";
-	
-		// $sql = "SELECT p.*,	c.name_city,
-		// (SELECT GROUP_CONCAT(DISTINCT t.name_type) FROM property_type pt JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as types,
-		// (SELECT GROUP_CONCAT(DISTINCT e.name_extras) FROM property_extras pe JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras,
-		// (SELECT GROUP_CONCAT(DISTINCT cat.name_category) FROM property_category pc JOIN category cat ON pc.id_category = cat.id_category WHERE pc.id_property = p.id_property) as categories,
-		// (SELECT GROUP_CONCAT(DISTINCT o.name_operation) FROM property_operation po JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operations
-		// FROM property p
-		// LEFT JOIN city c ON p.id_city = c.id_city
-		// WHERE p.id_property = '$id'";
-		
-
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql)->fetch_object();
 		connect::close($conexion);
