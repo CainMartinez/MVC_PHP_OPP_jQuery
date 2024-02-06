@@ -14840,17 +14840,16 @@ yx-axis
 	position: relative;
 	z-index: 1;
 }
-#properties_shop{
-	margin-right: 35%;
-
-}
 /*
  * Owl Navigation
  */
 .owl-nav.disabled {
 	display: none !important;
 }
-
+.carrousel_details{
+	width: 70%;
+    margin: 0 auto;
+}
 .owl-prev,
 .owl-next {
 	position: absolute;

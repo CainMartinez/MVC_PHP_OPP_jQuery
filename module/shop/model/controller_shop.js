@@ -70,10 +70,29 @@ function loadDetails(id_property) {
 
         var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties');
         var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
-        var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme').appendTo(propertyDetailsDiv);
+        var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo('#properties_shop');
         for (row in data[1][0]) {
-            $('<div></div>').addClass('item').html("<img src='" + data[1][0][row].path_images + "' alt='Image " + (parseInt(row) + 1) + "' />").appendTo(owlCarouselDiv);
+            $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+                "<article class='thumbnail-light'>" +
+                "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+                data[1][0][row].path_images +
+                "' alt='Image " + (parseInt(row) + 1) + "' width='270' height='300' /></a>" +
+                "<h4 class='thumbnail-light-title title-category'><a href='#'>" +
+                "Image " + (parseInt(row) + 1) +
+                "</a></h4>" +
+                "</article>"
+            );
         }
+        owlCarouselDiv.owlCarousel({
+            loop:true,
+            margin:100,
+            nav:true,
+            responsive:{
+                0:{
+                    items:1
+                },
+            }
+        });
         $('<div></div>').addClass('property-type').text('Type: ' + data[0].name_type).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('property-category').text('Category: ' + data[0].name_category).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('icon-bathroom').html('<i class="fas fa-bath"></i> 3 bathrooms').appendTo(propertyDetailsDiv);

@@ -49,8 +49,7 @@ class DAOShop{
 	LEFT JOIN extras e ON pe.id_extras = e.id_extras
 	LEFT JOIN property_category pc ON p.id_property = pc.id_property
 	LEFT JOIN category cat ON pc.id_category = cat.id_category
-	GROUP BY i.id_property;
-	";
+	WHERE p.id_property = '$id' AND i.id_property = '$id' GROUP BY i.id_property";
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql)->fetch_object();
 		connect::close($conexion);
