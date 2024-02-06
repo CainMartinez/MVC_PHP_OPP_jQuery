@@ -14840,7 +14840,10 @@ yx-axis
 	position: relative;
 	z-index: 1;
 }
+#properties_shop{
+	margin-right: 35%;
 
+}
 /*
  * Owl Navigation
  */
