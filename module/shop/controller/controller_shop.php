@@ -11,13 +11,20 @@ switch ($_GET['op']) {
         try {
             $daoshop = new DAOShop();
             $Dates_Properties = $daoshop->select_all_properties();
-        } catch (Exception $e) {
-            echo json_encode("error");
-        }
+            $Date_images = $daoshop->select_images_property();
 
-        if (!empty($Dates_Properties)) {
-            echo json_encode($Dates_Properties);
-        } else {
+            foreach ($Dates_Properties as $key => $property) {
+                $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function($image) use ($property) {
+                    return $image['id_property'] == $property['id_property'];
+                }));
+            }
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
             echo json_encode("error");
         }
         break;
@@ -26,12 +33,11 @@ switch ($_GET['op']) {
         try {
             $daoshop = new DAOShop();
             $Date_property = $daoshop->select_one_property($_GET['id']);
-        } catch (Exception $e) {
-            echo json_encode("error");
-        }
-        try {
-            $daoshop_img = new DAOShop();
-            $Date_images = $daoshop_img->select_imgs_property($_GET['id']);
+            $Date_images = $daoshop->select_imgs_property($_GET['id']);
+            $Date_type = $daoshop->select_type_property($_GET['id']);
+            $Date_operation = $daoshop->select_operation_property($_GET['id']);
+            $Date_category = $daoshop->select_category_property($_GET['id']);
+            $Date_extras = $daoshop->select_extras_property($_GET['id']);
         } catch (Exception $e) {
             echo json_encode("error");
         }
@@ -40,6 +46,10 @@ switch ($_GET['op']) {
             $rdo = array();
             $rdo[0] = $Date_property;
             $rdo[1][] = $Date_images;
+            $rdo[2] = $Date_type;
+            $rdo[3] = $Date_operation;
+            $rdo[4] = $Date_category;
+            $rdo[5] = $Date_extras;
             echo json_encode($rdo);
         } else {
             echo json_encode("error");

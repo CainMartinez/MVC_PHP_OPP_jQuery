@@ -1,13 +1,12 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-02-2024 a las 19:11:52
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
-CREATE DATABASE IF NOT EXISTS `property_houses` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `property_houses`;
+-- Tiempo de generación: 08-02-2024 a las 13:53:22
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -146,31 +145,31 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`id_images`, `path_images`, `is_active`, `creation_date`, `update_date`, `id_property`) VALUES
-(1, 'views/images/property/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(2, 'views/images/property/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(3, 'views/images/property/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(4, 'views/images/property/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(5, 'views/images/property/property1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(6, 'views/images/property/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(7, 'views/images/property/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(8, 'views/images/property/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(9, 'views/images/property/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(10, 'views/images/property/property2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(11, 'views/images/property/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(12, 'views/images/property/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(13, 'views/images/property/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(14, 'views/images/property/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(15, 'views/images/property/property3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(16, 'views/images/property/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(17, 'views/images/property/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(18, 'views/images/property/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(19, 'views/images/property/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(20, 'views/images/property/property4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(21, 'views/images/property/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(22, 'views/images/property/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(23, 'views/images/property/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(24, 'views/images/property/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
-(25, 'views/images/property/property5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
+(1, 'views/images/property/property1-1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(2, 'views/images/property/property1-2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(3, 'views/images/property/property1-3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(4, 'views/images/property/property1-4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(5, 'views/images/property/property1-5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(6, 'views/images/property/property2-1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(7, 'views/images/property/property2-2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(8, 'views/images/property/property2-3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(9, 'views/images/property/property2-4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(10, 'views/images/property/property2-5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(11, 'views/images/property/property3-1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(12, 'views/images/property/property3-2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(13, 'views/images/property/property3-3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(14, 'views/images/property/property3-4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(15, 'views/images/property/property3-5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(16, 'views/images/property/property4-1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(17, 'views/images/property/property4-2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(18, 'views/images/property/property4-3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(19, 'views/images/property/property4-4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(20, 'views/images/property/property4-5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(21, 'views/images/property/property5-1.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(22, 'views/images/property/property5-2.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(23, 'views/images/property/property5-3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(24, 'views/images/property/property5-4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
+(25, 'views/images/property/property5-5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
 
 -- --------------------------------------------------------
 
@@ -205,6 +204,7 @@ INSERT INTO `operation` (`id_operation`, `name_operation`, `is_active`, `creatio
 
 CREATE TABLE `property` (
   `id_property` int(10) NOT NULL,
+  `property_name` varchar(50) NOT NULL,
   `cadastral_reference` varchar(50) DEFAULT NULL,
   `square_meters` int(10) DEFAULT NULL,
   `number_of_rooms` int(2) DEFAULT NULL,
@@ -220,12 +220,12 @@ CREATE TABLE `property` (
 -- Volcado de datos para la tabla `property`
 --
 
-INSERT INTO `property` (`id_property`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `is_active`, `creation_date`, `update_date`, `id_city`) VALUES
-(1, '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(2, '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(3, '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(4, '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(5, '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
+INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `is_active`, `creation_date`, `update_date`, `id_city`) VALUES
+(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
 
 -- --------------------------------------------------------
 
@@ -244,7 +244,19 @@ CREATE TABLE `property_category` (
 
 INSERT INTO `property_category` (`id_property`, `id_category`) VALUES
 (1, 1),
-(1, 2);
+(1, 2),
+(2, 4),
+(2, 5),
+(3, 1),
+(3, 3),
+(3, 4),
+(3, 5),
+(4, 1),
+(4, 2),
+(4, 4),
+(4, 5),
+(5, 1),
+(5, 2);
 
 -- --------------------------------------------------------
 
@@ -257,6 +269,26 @@ CREATE TABLE `property_extras` (
   `id_extras` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Volcado de datos para la tabla `property_extras`
+--
+
+INSERT INTO `property_extras` (`id_property`, `id_extras`) VALUES
+(1, 1),
+(1, 2),
+(2, 4),
+(2, 5),
+(3, 1),
+(3, 3),
+(3, 4),
+(3, 5),
+(4, 1),
+(4, 2),
+(4, 4),
+(4, 5),
+(5, 1),
+(5, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -268,6 +300,23 @@ CREATE TABLE `property_operation` (
   `id_operation` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Volcado de datos para la tabla `property_operation`
+--
+
+INSERT INTO `property_operation` (`id_property`, `id_operation`) VALUES
+(1, 1),
+(1, 2),
+(2, 4),
+(3, 1),
+(3, 3),
+(3, 4),
+(4, 1),
+(4, 2),
+(4, 4),
+(5, 1),
+(5, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -278,6 +327,26 @@ CREATE TABLE `property_type` (
   `id_property` int(10) NOT NULL,
   `id_type` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `property_type`
+--
+
+INSERT INTO `property_type` (`id_property`, `id_type`) VALUES
+(1, 1),
+(1, 2),
+(2, 4),
+(2, 5),
+(3, 1),
+(3, 3),
+(3, 4),
+(3, 5),
+(4, 1),
+(4, 2),
+(4, 4),
+(4, 5),
+(5, 1),
+(5, 2);
 
 -- --------------------------------------------------------
 

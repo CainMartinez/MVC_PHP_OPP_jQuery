@@ -5,6 +5,7 @@ function loadProperties() {
 function ajaxForSearch(url) {
     ajaxPromise('POST', 'JSON', url)
         .then(function(data) {
+            console.log(data);
             $('#properties_shop').empty();
             $('#images_properties').empty();
 
@@ -14,27 +15,50 @@ function ajaxForSearch(url) {
                         '<h3>¡No se encuentran resultados con los filtros aplicados!</h3>'
                     )
             } else {
-                for (row in data) {
-                    $('<div></div>').attr({ 'class': 'col-md-6 wow-outer' }).appendTo('#properties_shop')
-                        .html(`
-                            <article class='post-modern wow slideInLeft'>
-                                <a class='post-modern-media' href='#'>
-                                    <img src='${data[row].path_images}' alt='' width='571' height='353'/>
-                                </a>
+                for (let row in data) {
+                    let property = data[row];
+                    // console.log(property.images);
+
+                    let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+                    let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+
+                    for (let image of property.images) {
+                        $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+                            "<article class='thumbnail-light'>" +
+                            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+                            image.path_images +
+                            "' alt='Image " + (parseInt(row) + 1) + "' width='270' height='300' /></a>" +
+                            "</article>"
+                        );
+                    }
+
+                    owlCarouselDiv.owlCarousel({
+                        loop:true,
+                        margin:100,
+                        nav:true,
+                        responsive:{
+                            0:{
+                                items:1
+                            },
+                        }
+                    });
+
+                    propertyDiv.append(`
+                            <article class='post-modern wow slideInLeft '><br>
                                 <h4 class='post-modern-title'>
-                                    <a class='post-modern-title' href='#'>${data[row].cadastral_reference} ${data[row].id_property}</a>
+                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
                                 </h4>
                                 <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${data[row].price} €</a></li>
-                                    <li>City: ${data[row].name_city}</li>
-                                    <li>Square meters: ${data[row].square_meters}</li>
+                                    <li><a class='button-winona' href='#'>${property.price} €</a></li>
+                                    <li>City: ${property.name_city}</li>
+                                    <li>Square meters: ${property.square_meters}</li>
                                 </ul>
-                                <p>${data[row].description}</p><br>
+                                <p>${property.description}</p><br>
                                 <div class='buttons'>
                                     <table id='table-shop'> 
                                         <tr>
                                             <td>
-                                                <button id='${data[row].id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
                                             </td>
                                             <td>
                                                 <button class='button button-primary-white' style='border: 1px solid;'>Buy</button>
@@ -47,7 +71,7 @@ function ajaxForSearch(url) {
                 }
             }
         }).catch(function(error) {
-            system.error(error);
+            console.error(error);
         });
 }
 
@@ -61,12 +85,16 @@ function clicks() {
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON','module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
     .then(function(data) {
+
         $('#properties_shop').empty();
         $('#images_properties').empty();
-
-        $('<h2></h2>').addClass('post-modern-title').text(data[0].description).appendTo('#images_properties');
+    
+        var type = data[2][0].type_concat;
+        var operation = data[3][0].operation_concat;
+        var category = data[4][0].category_concat;
+        var extras = data[5][0].extras_concat;
+        $('<h3></h3>').addClass('post-modern-title').text(data[0].property_name).appendTo('#images_properties');
         $('<hr>').appendTo('#images_properties');
-        $('<br><br>').appendTo('#images_properties');
 
         var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties');
         var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
@@ -93,21 +121,19 @@ function loadDetails(id_property) {
                 },
             }
         });
-        $('<div></div>').addClass('property-type').text('Type: ' + data[0].name_type).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-category').text('Category: ' + data[0].name_category).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('icon-bathroom').html('<i class="fas fa-bath"></i> 3 bathrooms').appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-type').text('Type: ' + type).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-category').text('Category: ' + category).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('icon-bedroom').html('<i class="fas fa-bed"></i> ' + data[0].number_of_rooms+" rooms").appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-operation').text('Operation: ' + data[0].name_operation).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-extras').text('Extras: ' + data[0].name_extras).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-operation').text('Operation: ' + operation).appendTo(propertyDetailsDiv);
+        $('<div></div>').addClass('property-extras').text('Extras: ' + extras).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('property-city').text('City: ' + data[0].name_city).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('property-cadastral-reference').text('Cadastral Reference: ' + data[0].cadastral_reference).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('property-square-meters').text('Square Meters: ' + data[0].square_meters).appendTo(propertyDetailsDiv);
         $('<div></div>').addClass('property-price').text('Price: ' + data[0].price).appendTo(propertyDetailsDiv);
-        var propertyDescriptionDiv = $('<div></div>').addClass('property-description').appendTo(rowDiv);
-        $('<p></p>').text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.').appendTo(propertyDescriptionDiv);
+        $('<div></div>').text('Description: '+ data[0].description).appendTo(propertyDetailsDiv);
         
     }).catch(function(error) {
-        system.error(error);
+        console.error(error);
 
         // window.location.href = "index.php?pages=503;
     });

@@ -53,6 +53,7 @@
 			$sql= "SELECT * ,i.path_images
 			FROM property p, images i
 			WHERE p.id_property = i.id_property
+            AND i.path_images LIKE '%-1%'
             GROUP BY i.path_images
 			LIMIT 4";
 

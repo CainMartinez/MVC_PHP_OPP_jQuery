@@ -199,11 +199,11 @@ function loadRecomendation() {
                             <img src="${data[row].path_images}" alt="" width="571" height="353"/>
                         </a>
                         <h4 class="post-modern-title">
-                            <a class="post-modern-title" href="#">${data[row].cadastral_reference}</a>
+                            <a class="post-modern-title" href="#">${data[row].property_name}</a>
                         </h4>
                         <ul class="post-modern-meta">
-                            <li><a class="button-winona" href="#">$${data[row].price}/mon</a></li>
-                            <li>${data[row].square_meters} Sq. Ft.</li>
+                            <li><a class="button-winona" href="#">${data[row].price} €</a></li>
+                            <li>${data[row].square_meters} Sq. Meters</li>
                             <li>${data[row].number_of_rooms} Rooms</li>
                         </ul>
                         <p>${data[row].description}</p>
