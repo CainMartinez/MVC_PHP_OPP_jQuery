@@ -100,16 +100,16 @@ function loadDetails(id_property) {
         var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
         var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo('#properties_shop');
         for (row in data[1][0]) {
-            $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-                "<article class='thumbnail-light'>" +
-                "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-                data[1][0][row].path_images +
-                "' alt='Image " + (parseInt(row) + 1) + "' width='270' height='300' /></a>" +
-                "<h4 class='thumbnail-light-title title-category'><a href='#'>" +
-                "Image " + (parseInt(row) + 1) +
-                "</a></h4>" +
-                "</article>"
-            );
+            var itemDiv = $("<div></div>").addClass("item").appendTo(owlCarouselDiv);
+            var articleContent = "<article class='thumbnail-light'>" +
+            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+            data[1][0][row].path_images +
+            "' alt='Image " + (parseInt(row) + 1) + "' width='270' height='300' /></a>" +
+            "<h4 class='thumbnail-light-title title-category'><a href='#'>" +
+            "Image " + (parseInt(row) + 1) +
+            "</a></h4>" +
+            "</article>";
+            itemDiv.append(articleContent);
         }
         owlCarouselDiv.owlCarousel({
             loop:true,
@@ -121,21 +121,82 @@ function loadDetails(id_property) {
                 },
             }
         });
-        $('<div></div>').addClass('property-type').text('Type: ' + type).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-category').text('Category: ' + category).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('icon-bedroom').html('<i class="fas fa-bed"></i> ' + data[0].number_of_rooms+" rooms").appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-operation').text('Operation: ' + operation).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-extras').text('Extras: ' + extras).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-city').text('City: ' + data[0].name_city).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-cadastral-reference').text('Cadastral Reference: ' + data[0].cadastral_reference).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-square-meters').text('Square Meters: ' + data[0].square_meters).appendTo(propertyDetailsDiv);
-        $('<div></div>').addClass('property-price').text('Price: ' + data[0].price).appendTo(propertyDetailsDiv);
-        $('<div></div>').text('Description: '+ data[0].description).appendTo(propertyDetailsDiv);
-        
-    }).catch(function(error) {
-        console.error(error);
+        var table = $("<table></table>");
+        var row1 = $("<tr></tr>").appendTo(table);
+        $('<td></td>').addClass('property-type').css('text-align', 'left').html('<i class="fas fa-home" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Type: ' + type + '</span><hr>').appendTo(row1);
+        $('<td></td>').appendTo(row1);
+        $('<td></td>').addClass('property-category').css('text-align', 'left').html('<i class="fas fa-tags" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Category: ' + category + '</span><hr>').appendTo(row1);
 
-        // window.location.href = "index.php?pages=503;
+        var row2 = $("<tr></tr>").appendTo(table);
+        $('<td></td>').addClass('property-extras').css('text-align', 'left').html('<i class="fas fa-star" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Extras: ' + extras + '</span><hr>').appendTo(row2);
+        $('<td></td>').appendTo(row2);
+        $('<td></td>').addClass('property-city').css('text-align', 'left').html('<i class="fa-solid fa-city" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">City: ' + data[0].name_city + '</span><hr>').appendTo(row2);
+
+        var row3 = $("<tr></tr>").appendTo(table);
+        $('<td></td>').addClass('property-cadastral-reference').css('text-align', 'left').html('<i class="fas fa-map-marked-alt" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Cadastral Reference: ' + data[0].cadastral_reference + '</span><hr>').appendTo(row3);
+        $('<td></td>').appendTo(row3);
+        $('<td></td>').addClass('property-square-meters').css('text-align', 'left').html('<i class="fas fa-ruler-combined" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Square Meters: ' + data[0].square_meters + '</span><hr>').appendTo(row3);
+
+        var row6 = $("<tr></tr>").appendTo(table);
+        $('<td></td>').addClass('icon-bedroom').css('text-align', 'left').html('<i class="fas fa-bed" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">' + data[0].number_of_rooms+" rooms</span><hr>").appendTo(row6);
+        $('<td></td>').appendTo(row6);
+        $('<td></td>').addClass('property-operation').css('text-align', 'left').html('<i class="fas fa-handshake" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Operation: ' + operation + '</span><hr>').appendTo(row6);
+
+        var row4 = $("<tr></tr>").appendTo(table);
+        $('<td></td>').attr('colspan', 3).addClass('property-description').css('text-align', 'center').html('<i class="fas fa-align-left" style="font-size: 1.5em;"></i> <span style="font-size: 1.5em;">Description: ' + data[0].description + '</span><hr>').appendTo(row4);
+        
+        var row5 = $("<tr></tr>").appendTo(table);
+        $('<td></td>').addClass('property-price').html('<i class="fas fa-euro-sign" style="font-size: 2em;"></i> <span style="font-size: 2em;">Price: ' + data[0].price + '</span><hr>').appendTo(row5);
+        $('<td></td>').appendTo(row5);
+        var td1=$('<td></td>').addClass('property-buy').appendTo(row5);
+        $('<button></button>').addClass('button button-primary button-winona button-md')
+        .html('<i class="fas fa-shopping-cart"></i> Buy').appendTo(td1); 
+        
+        propertyDetailsDiv.append(table);
+        var table = $("<table></table>");
+        var row = $("<tr></tr>").appendTo(table);
+        var cell1 = $("<td></td>").appendTo(row);
+        var cell2 = $("<td></td>").appendTo(row);
+
+        var likeButton = $("<button></button>")
+            .addClass("like-button")
+            .html("<i class='fas fa-heart'></i> Like")
+            .css({
+                'background-color': 'red',
+                'border-radius': '25px',
+                'border': 'none',
+                'padding': '10px 20px',
+                'color': 'white',
+                'cursor': 'pointer',
+                'height': '50px',
+                'text-align': 'center'
+            })
+            .hover(
+                function() {
+                    $(this).css('background-color', 'green');
+                }, 
+                function() {
+                    $(this).css('background-color', 'red');
+                }
+            );
+                
+            var backButton = $('<a></a>')
+            .addClass('button button-primary-white')
+            .attr('href', 'index.php?page=shop')
+            .html('<i class="fas fa-arrow-left"></i> Back')
+            .css({
+                'margin-left': '10px',
+                'height': '50px',
+                'text-align': 'center'
+            });
+            
+        cell1.append(likeButton);
+        cell2.append(backButton);
+
+        propertyDetailsDiv.append(table);
+        
+    }).catch(function() {
+        window.location.href = "index.php?pages=503";
     });
 }
 

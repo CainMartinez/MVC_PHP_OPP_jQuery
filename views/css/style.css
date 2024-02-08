@@ -14835,7 +14835,6 @@ yx-axis
 	background-size: contain;
 	transition: opacity 400ms ease;
 }
-
 .owl-carousel .owl-video-frame {
 	position: relative;
 	z-index: 1;
@@ -14855,7 +14854,7 @@ yx-axis
 	position: absolute;
 	top: 40%;
 	transform: translateY(-50%);
-	font: 115px 'FontAwesome';
+	font: 115px '';
 	color: #aeb1be;
 	background: transparent;
 	border:#000;
