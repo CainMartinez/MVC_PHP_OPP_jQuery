@@ -12,7 +12,7 @@ function ajaxForSearch(url) {
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
                     .html(
-                        '<h3>¡No se encuentran resultados con los filtros aplicados!</h3>'
+                        '<h3>¡No results are found with the applied filters!</h3>'
                     )
             } else {
                 for (let row in data) {
@@ -27,7 +27,7 @@ function ajaxForSearch(url) {
                             "<article class='thumbnail-light'>" +
                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
                             image.path_images +
-                            "' alt='Image " + (parseInt(row) + 1) + "' width='270' height='300' /></a>" +
+                            "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
                             "</article>"
                         );
                     }
@@ -60,9 +60,6 @@ function ajaxForSearch(url) {
                                             <td>
                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
                                             </td>
-                                            <td>
-                                                <button class='button button-primary-white' style='border: 1px solid;'>Buy</button>
-                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -93,7 +90,7 @@ function loadDetails(id_property) {
         var operation = data[3][0].operation_concat;
         var category = data[4][0].category_concat;
         var extras = data[5][0].extras_concat;
-        $('<h3></h3>').addClass('post-modern-title').text(data[0].property_name).appendTo('#images_properties');
+        $('<h2></h2>').addClass('post-modern-title').text(data[0].property_name).appendTo('#shop_div');
         $('<hr>').appendTo('#images_properties');
 
         var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties');
@@ -146,11 +143,8 @@ function loadDetails(id_property) {
         $('<td></td>').attr('colspan', 3).addClass('property-description').css('text-align', 'center').html('<i class="fas fa-align-left" style="font-size: 1.5em;"></i> <span style="font-size: 1.5em;">Description: ' + data[0].description + '</span><hr>').appendTo(row4);
         
         var row5 = $("<tr></tr>").appendTo(table);
-        $('<td></td>').addClass('property-price').html('<i class="fas fa-euro-sign" style="font-size: 2em;"></i> <span style="font-size: 2em;">Price: ' + data[0].price + '</span><hr>').appendTo(row5);
-        $('<td></td>').appendTo(row5);
-        var td1=$('<td></td>').addClass('property-buy').appendTo(row5);
-        $('<button></button>').addClass('button button-primary button-winona button-md')
-        .html('<i class="fas fa-shopping-cart"></i> Buy').appendTo(td1); 
+        $('<td></td>').attr('colspan', 3).addClass('property-price').html('<i class="fas fa-euro-sign" style="font-size: 2em;"></i> <span style="font-size: 2em;">Price: ' + data[0].price + '</span><hr>').appendTo(row5);
+        $('<br>').appendTo(table);
         
         propertyDetailsDiv.append(table);
         var table = $("<table></table>");
@@ -192,6 +186,7 @@ function loadDetails(id_property) {
             
         cell1.append(likeButton);
         cell2.append(backButton);
+        $('<br>').appendTo(table);
 
         propertyDetailsDiv.append(table);
         

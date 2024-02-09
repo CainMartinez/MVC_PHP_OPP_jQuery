@@ -2,7 +2,7 @@
 	if (isset($_GET['page'])) {
 		$page = $_GET['page'];
 	} else {
-		$page = 'homepage';
+		$page = 'index';
 	}
 	switch($page){
 		case "homepage";
@@ -36,7 +36,7 @@
 			include("views/inc/error".$_GET['page'].".html");
 			break;
 		default;
-			include("module/home/view/home.html");
+			include("index.html");
 			break;
 	}
 ?>
