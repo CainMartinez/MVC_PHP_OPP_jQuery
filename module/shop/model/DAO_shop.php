@@ -62,6 +62,12 @@ class DAOShop{
 		WHERE p.id_property = '$id'
 		GROUP BY p.id_property";
 
+		// $sql = "SELECT p.id_property, t.name_type
+		// FROM property p
+		// INNER JOIN property_type pt ON p.id_property = pt.id_property
+		// INNER JOIN type t ON pt.id_type = t.id_type
+		// WHERE p.id_property = '$id'";
+
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		$result = array();
