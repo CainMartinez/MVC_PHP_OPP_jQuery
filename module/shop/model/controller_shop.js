@@ -5,7 +5,7 @@ function loadProperties() {
 function ajaxForSearch(url) {
     ajaxPromise('POST', 'JSON', url)
         .then(function(data) {
-            console.log(data);
+            // console.log(data);
             $('#properties_shop').empty();
             $('#images_properties').empty();
 
