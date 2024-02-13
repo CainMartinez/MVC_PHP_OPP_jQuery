@@ -218,6 +218,27 @@ function loadRecomendation() {
         "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
     });
 }
+// function clicks() {
+//   $(document).on("click",'img.services__img', function (){
+//     var filters = [];
+//     filters.push({"type":[this.getAttribute('id')]});
+//     localStorage.removeItem('filters')
+//     localStorage.setItem('filters', JSON.stringify(filters)); 
+//       setTimeout(function(){ 
+//         window.location.href = 'index.php?page=controller_shop&op=view';
+//       }, 1000);  
+//   });
+//   $(document).on("click",'img.city__img', function (){
+//     var filters = [];
+//     filters.push({"city":[this.getAttribute('id')]});
+//     localStorage.removeItem('filters')
+//     localStorage.setItem('filters', JSON.stringify(filters)); 
+//       setTimeout(function(){ 
+//         window.location.href = 'index.php?page=controller_shop&op=view';
+//       }, 1000);  
+//   });
+//
+// }
 $(document).ready(function () {
   carousel_type();
   loadCategories();
@@ -225,4 +246,5 @@ $(document).ready(function () {
   loadCity();
   loadExtras();
   loadRecomendation();
+  clicks();
 });
