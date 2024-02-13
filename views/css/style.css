@@ -1,22 +1,17 @@
 @charset "UTF-8";
-/*
-* Trunk version 2.0.0
-*/
-/* CSS */
 .col-custom-5 {
 	flex: 0 0 20%;
 	max-width: 15%;
 	margin: 1%;
 }
 .swiper-button-next, .swiper-button-prev {
-    color: #000; /* Cambia el color de las flechas */
-    background: #fff; /* Cambia el fondo de las flechas */
-    /* Añade cualquier otro estilo que quieras */
+    color: #000;
+    background: #fff;
 }
 .propertyImage {
-	width: 100%; /* Ajusta el ancho al 100% del contenedor padre */
-	height: 200px; /* Ajusta la altura a un valor fijo */
-	object-fit: cover; /* Asegura que la imagen cubra todo el espacio disponible, recortándola si es necesario */
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
 }
 .link-operation:hover {
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
@@ -67,7 +62,7 @@
 	margin: 0;
 }
 .large-icon {
-    font-size: 2em; /* Ajusta este valor a tu gusto */
+    font-size: 2em;
 }
 .table-style {
 	width: 100%;
@@ -79,45 +74,45 @@
 	text-align: center;
 }
 .form-select {
-	appearance: none; /* Elimina los estilos predeterminados del navegador */
-	-webkit-appearance: none; /* Para Safari */
-	-moz-appearance: none; /* Para Firefox */
-	background: #fff url('dropdown-arrow.png') no-repeat right center; /* Añade una imagen de flecha personalizada */
-	padding-right: 15px; /* Asegúrate de que el texto no se superponga con la flecha */
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background: #fff url('dropdown-arrow.png') no-repeat right center; 
+	padding-right: 15px;
 }
 a.Button_green:hover i, a.Button_red:hover i {
-	color: white !important; /* Esto hará que los iconos mantengan su color original al pasar el ratón sobre ellos */
+	color: white !important;
 }
 table {
-	width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
-	border-collapse: collapse; /* Combina las fronteras de las celdas adyacentes */
+	width: 100%;
+	border-collapse: collapse;
 }
 
 table th {
-	background-color: #f0f0f0; /* Un tono de gris claro para los encabezados */
-	padding: 10px; /* Añade un poco de espacio alrededor del texto */
-	text-align: center; /* Centra el texto horizontalmente */
+	background-color: #f0f0f0;
+	padding: 10px;
+	text-align: center; 
 	color: #000000;
 }
 td {
-	padding: 10px; /* Añade un poco de espacio alrededor del texto */
-	text-align: center; /* Centra el texto horizontalmente */
+	padding: 10px; 
+	text-align: center;
 }
 table th:nth-child(odd) {
-	background-color: #d9d9d9; /* Un tono de gris un poco más oscuro para los encabezados impares */
+	background-color: #d9d9d9; 
 }
 
 table th a {
-	color: #333; /* Un tono de gris oscuro para el texto de los enlaces */
-	text-decoration: none; /* Elimina el subrayado de los enlaces */
+	color: #333; 
+	text-decoration: none;
 }
 
 table th a:hover {
-	color: #666; /* Un tono de gris un poco más claro para el texto de los enlaces al pasar el ratón */
+	color: #666; 
 }
 
 table th i {
-	margin-right: 5px; /* Añade un poco de espacio a la derecha de los iconos */
+	margin-right: 5px; 
 }
 .Button_blue {
     background-color: #447aa6;
