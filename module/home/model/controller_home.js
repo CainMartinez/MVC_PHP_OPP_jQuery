@@ -8,7 +8,7 @@ function carousel_type() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="swiper-slide swiper-slide_video" style="background-image: url('${data[row].image_type}')">
+                <div class="swiper-slide swiper-slide_video carrousel_home" style="background-image: url('${data[row].image_type}')">
                     <div class="container">
                         <div class="jumbotron-classic-content">
                             <div class="wow-outer">
@@ -131,7 +131,7 @@ function loadCity() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="col-md-6 wow-outer">
+                <div class="col-md-6 wow-outer city_home">
                     <article class="post-modern wow slideInLeft">
                         <a class="post-modern-media" href="#">
                             <img class="propertyImage" src="${data[row].image_city}" alt="" width="571" height="353"/>
@@ -161,7 +161,7 @@ function loadExtras() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="col-md-10 col-lg-6 wow-outer">
+                <div class="col-md-10 col-lg-6 wow-outer extras_home">
                     <article class="profile-creative wow slideInLeft">
                         <figure class="profile-creative-figure">
                             <img class="profile-creative-image" src="${data[row].image_extras}" alt="" width="270" height="273" />
@@ -218,27 +218,61 @@ function loadRecomendation() {
         "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
     });
 }
-// function clicks() {
-//   $(document).on("click",'img.services__img', function (){
-//     var filters = [];
-//     filters.push({"type":[this.getAttribute('id')]});
-//     localStorage.removeItem('filters')
-//     localStorage.setItem('filters', JSON.stringify(filters)); 
-//       setTimeout(function(){ 
-//         window.location.href = 'index.php?page=controller_shop&op=view';
-//       }, 1000);  
-//   });
-//   $(document).on("click",'img.city__img', function (){
-//     var filters = [];
-//     filters.push({"city":[this.getAttribute('id')]});
-//     localStorage.removeItem('filters')
-//     localStorage.setItem('filters', JSON.stringify(filters)); 
-//       setTimeout(function(){ 
-//         window.location.href = 'index.php?page=controller_shop&op=view';
-//       }, 1000);  
-//   });
-//
-// }
+function clicks() {
+  $(document).on("click",'article.thumbnail-light', function (){
+    console.log('click_OK_Category');
+    var filters_home = [];
+    filters_home.push({"category":[this.getAttribute('id')]});
+    localStorage.removeItem('filters_home');
+    localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
+      setTimeout(function(){ 
+        window.location.href = 'index.php?page=controller_shop&op=list';
+      }, 1000);  
+    return false;
+  });
+  $(document).on("click",'div.carrousel_home', function (){
+    console.log('click_OK_Carrousel');
+    var filters_home = [];
+    filters_home.push({"city":[this.getAttribute('id')]});
+    localStorage.removeItem('filters_home');
+    localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
+      setTimeout(function(){ 
+        window.location.href = 'index.php?page=controller_shop&op=list';
+      }, 1000);
+  });
+  $(document).on("click",'a.link-operation', function (){
+    console.log('click_OK_Operation');
+    var filters_home = [];
+    filters_home.push({"operation":[this.getAttribute('id')]});
+    localStorage.removeItem('filters_home');
+    localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
+      setTimeout(function(){ 
+        window.location.href = 'index.php?page=controller_shop&op=list';
+      }, 1000);
+  });
+  $(document).on("click",'div.city_home', function (){
+    console.log('click_OK_City');
+    var filters_home = [];
+    filters_home.push({"city":[this.getAttribute('id')]});
+    localStorage.removeItem('filters_home');
+    localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
+      setTimeout(function(){ 
+        window.location.href = 'index.php?page=controller_shop&op=list';
+      }, 1000);
+  });
+  $(document).on("click",'div.extras_home', function (){
+    console.log('click_OK_Extras');
+    var filters_home = [];
+    filters_home.push({"extras":[this.getAttribute('id')]});
+    localStorage.removeItem('filters_home');
+    localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
+      setTimeout(function(){ 
+        window.location.href = 'index.php?page=controller_shop&op=list';
+      }, 1000);
+  });
+  
+
+}
 $(document).ready(function () {
   carousel_type();
   loadCategories();
