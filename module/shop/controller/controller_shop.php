@@ -29,6 +29,37 @@ switch ($_GET['op']) {
         }
         break;
 
+    case 'filters':
+        try {
+            $daoFilter = new DAOShop();
+            $data_filter_property = $daoFilter->select_filter_property();
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+
+        if (!empty($data_filter_property)) {
+            echo json_encode($data_filter_property);
+            exit;
+        } else {
+            echo json_encode("error");
+        }
+        break;
+
+    case 'home_filter':
+        try {
+            $daoFilter = new DAOShop();
+            $data_filter_property = $daoFilter->select_filter_home();
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        if (!empty($data_filter_property)) {
+            echo json_encode($data_filter_property);
+            exit;
+        } else {
+            echo json_encode("error");
+        }
+        break;
+
     case 'details_property':
         try {
             $daoshop = new DAOShop();

@@ -153,5 +153,111 @@ class DAOShop{
 		}
 		return $imgArray;
 	}
+
+	function select_filter_property(){
+		$total_prod =  $_POST['total_prod'];
+		$items_page =  $_POST['items_page'];
+
+		// Recoger las variables de cada uno de los filtros que vienen parseadas de antes
+		$category = $_GET['category'];
+		$operation = $_GET['operation'];
+		$type = $_GET['type'];
+		$city = $_GET['city'];
+		$extras = $_GET['extras'];
+
+		// Guardaremos los filtros pulsados dependiendo de si están llenos o no
+		$filters = "";
+
+		if ($category != '*') {
+			$filters .= " AND category = '" . $category . "'";
+		}
+		if ($operation != '*') {
+			$filters .= " AND operation = '" . $operation . "'";
+		}
+		if ($type != '*') {
+			$filters .= " AND type = '" . $type . "'";
+		}
+		if ($city != '*') {
+			$filters .= " AND city = '" . $city . "'";
+		}
+		if ($extras != '*') {
+			$exp_extras = explode(",", $extras);
+			for ($i = 0; $i < sizeof($exp_extras); $i++) {
+				if ($i == 0) {
+					$filters .= " AND (extras ='" . $exp_extras[$i] . "'";
+				} else if ($i == (sizeof($exp_extras) - 1)) {
+					$filters .= " OR extras = '" . $exp_extras[$i] . "')";
+				} else {
+					$filters .= " OR extras = '" . $exp_extras[$i] . "'";
+				}
+				if (sizeof($exp_extras) == 1) {
+					$filters .= ")";
+				}
+			}
+		}
+
+		if ($category == '*' && $operation == '*' && $type == '*' && $city == '*' && $extras == '*') {
+			$sql = "SELECT p.*, c.name_city, t.name_type, o.name_operation, e.name_extras
+			FROM properties p, city c, type t, operation o, extras e
+			WHERE p.id_city = c.id_city 
+			AND p.id_type = t.id_type
+			AND p.id_operation = o.id_operation
+			AND p.id_extras = e.id_extras";		
+		} else {
+			$sql = "SELECT p.*, c.name_city, t.name_type, o.name_operation, e.name_extras
+			FROM properties p, city c, type t, operation o, extras e
+			WHERE p.id_city = c.id_city 
+			AND p.id_type = t.id_type
+			AND p.id_operation = o.id_operation
+			AND p.id_extras = e.id_extras
+			AND $filters";
+		}
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$filtArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$filtArray[] = $row;
+			}
+		}
+		return $filtArray;
+	}
+	function select_filter_home(){
+		$opc_filter = $_GET['opc'];
+		$filter = "";
+
+		if ($opc_filter == "brand") {
+			$brand = $_GET['brand'];
+			$filter = "m.id_brand = '" . $brand . "'";
+		} else if ($opc_filter == "cate") {
+			$category = $_GET['category'];
+			$filter = "ca.name_cat = '" . $category . "'";
+		} else {
+			$type_motor = $_GET['motor'];
+			$filter = "t.name_tmotor = '" . $type_motor . "'";
+		}
+
+		$sql = "SELECT c.*,m.id_brand, m.name_model, t.name_tmotor, ca.name_cat
+    	FROM car c, model m, type_motor t, category ca
+    	WHERE  c.model = m.id_model 
+    	AND c.category = ca.id_cat
+    	AND c.motor = t.cod_tmotor
+    	AND $filter";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$carArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			foreach ($res as $row) {
+				array_push($carArray, $row);
+			}
+		}
+		return $carArray;
+	}
 	
 }
