@@ -57,7 +57,7 @@ function filters_click(){
             $('.filter_extras').val(localStorage.getItem('filter_extras'));
         }
     });
-    $(document).on("click", ".filter_button", function() {
+    $(document).on("click", ".filters_click", function() {
         let filters = [];
         localStorage.removeItem('filters_home');
         localStorage.removeItem('details_home');
@@ -76,7 +76,7 @@ function filters_click(){
             filters.push(localStorage.getItem('filter_city'));
         }
         if (filters){
-            ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties', filters);
+            ajaxForSearch('module/shop/controller/controller_shop.php?op=filters', filters);
             pagination(filters);
         }
     });
