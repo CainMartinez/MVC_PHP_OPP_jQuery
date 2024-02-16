@@ -8,7 +8,7 @@ function carousel_type() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="swiper-slide swiper-slide_video carrousel_home" style="background-image: url('${data[row].image_type}')">
+                <div class="swiper-slide swiper-slide_video carrousel_home" id='${data[row].id_type}' style="background-image: url('${data[row].image_type}')">
                     <div class="container">
                         <div class="jumbotron-classic-content">
                             <div class="wow-outer">
@@ -57,7 +57,7 @@ function loadCategories() {
           .attr("class", "item")
           .appendTo(rowContainer)
           .html(
-            "<article class='thumbnail-light'>" +
+            "<article class='thumbnail-light' id= "+ data[row].id_category+">" +
               "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
               data[row].image_category +
               "' alt='' width='270' height='300' /></a>" +
@@ -99,7 +99,7 @@ function loadOperation() {
   )
     .then(function (data) {
       for (row in data) {
-        var a = $("<a></a>").attr("href", "#").attr("class", "link-operation");
+        var a = $("<a></a>").attr("href", "#").attr("class", "link-operation").attr("id", data[row].id_operation);
         var article = $("<article></article>").attr("class", "box-minimal");
         var imgIcon = $("<img>")
           .attr("src", data[row].image_operation)
@@ -131,7 +131,7 @@ function loadCity() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="col-md-6 wow-outer city_home">
+                <div class="col-md-6 wow-outer city_home" id='${data[row].id_city}'>
                     <article class="post-modern wow slideInLeft">
                         <a class="post-modern-media" href="#">
                             <img class="propertyImage" src="${data[row].image_city}" alt="" width="571" height="353"/>
@@ -161,7 +161,7 @@ function loadExtras() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="col-md-10 col-lg-6 wow-outer extras_home">
+                <div class="col-md-10 col-lg-6 wow-outer extras_home" id='${data[row].id_extras}'>
                     <article class="profile-creative wow slideInLeft">
                         <figure class="profile-creative-figure">
                             <img class="profile-creative-image" src="${data[row].image_extras}" alt="" width="270" height="273" />
@@ -221,22 +221,23 @@ function loadRecomendation() {
 function clicks() {
   $(document).on("click",'article.thumbnail-light', function (){
     console.log('click_OK_Category');
+    console.log(this.getAttribute('id'));
     var filters_home = [];
     filters_home.push({"category":[this.getAttribute('id')]});
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.carrousel_home', function (){
     console.log('click_OK_Carrousel');
     var filters_home = [];
-    filters_home.push({"city":[this.getAttribute('id')]});
+    filters_home.push({"type":[this.getAttribute('id')]});
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'a.link-operation', function (){
@@ -246,7 +247,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.city_home', function (){
@@ -256,7 +257,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.extras_home', function (){
@@ -266,7 +267,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   

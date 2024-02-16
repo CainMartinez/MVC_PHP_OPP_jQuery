@@ -29,35 +29,26 @@ switch ($_GET['op']) {
         }
         break;
 
-    case 'filters':
-        try {
-            $daoFilter = new DAOShop();
-            $data_filter_property = $daoFilter->select_filter_property();
-        } catch (Exception $e) {
-            echo json_encode("error");
-        }
-
-        if (!empty($data_filter_property)) {
-            echo json_encode($data_filter_property);
-            exit;
-        } else {
-            echo json_encode("error");
-        }
-        break;
-
     case 'home_filter':
-        try {
-            $daoFilter = new DAOShop();
-            $data_filter_property = $daoFilter->select_filter_home();
-        } catch (Exception $e) {
-            echo json_encode("error");
-        }
-        if (!empty($data_filter_property)) {
-            echo json_encode($data_filter_property);
-            exit;
-        } else {
-            echo json_encode("error");
-        }
+
+            echo json_encode("entra al controlador de home_filter php");
+            
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_filter_home();
+            $Date_images = $daoshop->select_images_property();
+
+            foreach ($Dates_Properties as $key => $property) {
+                $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function($image) use ($property) {
+                    return $image['id_property'] == $property['id_property'];
+                }));
+            }
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+
         break;
 
     case 'details_property':
