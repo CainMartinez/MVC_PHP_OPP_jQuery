@@ -218,7 +218,7 @@ function loadRecomendation() {
         "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
     });
 }
-function clicks() {
+function clicks_home() {
   $(document).on("click",'article.thumbnail-light', function (){
     console.log('click_OK_Category');
     console.log(this.getAttribute('id'));
@@ -227,7 +227,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=shop';
+        window.location.href = 'index.php?page=controller_shop&op=list';
       }, 1000);
   });
   $(document).on("click",'div.carrousel_home', function (){
@@ -237,7 +237,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=shop';
+        window.location.href = 'index.php?page=controller_shop&op=list';
       }, 1000);
   });
   $(document).on("click",'a.link-operation', function (){
@@ -247,7 +247,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=shop';
+        window.location.href = 'index.php?page=controller_shop&op=list';
       }, 1000);
   });
   $(document).on("click",'div.city_home', function (){
@@ -257,7 +257,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=shop';
+        window.location.href = 'index.php?page=controller_shop&op=list';
       }, 1000);
   });
   $(document).on("click",'div.extras_home', function (){
@@ -267,7 +267,7 @@ function clicks() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=shop';
+        window.location.href = 'index.php?page=controller_shop&op=list';
       }, 1000);
   });
   
@@ -280,5 +280,5 @@ $(document).ready(function () {
   loadCity();
   loadExtras();
   loadRecomendation();
-  clicks();
+  clicks_home();
 });

@@ -22,7 +22,7 @@ function ajaxForSearchFilterHome(url){
     console.log('entra en el ajaxForSearchFilterHome');
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
     localStorage.removeItem('filters_home');
-    ajaxPromise('POST', 'JSON', url, {filters_home})
+    ajaxPromise('POST', 'JSON', url, {'filters_home':filters_home})
         .then(function(data) {
             console.log(data);
             $('#properties_shop').empty();
@@ -165,7 +165,7 @@ function ajaxForSearch(url) {
         });
 }
 
-function clicks() {
+function clicks_shop() {
     $(document).on("click", ".more_info_list", function() {
         var id_property = this.getAttribute('id');
         loadDetails(id_property);
@@ -291,5 +291,5 @@ function loadDetails(id_property) {
 
 $(document).ready(function() {
     loadProperties();
-    clicks();
+    clicks_shop();
 });

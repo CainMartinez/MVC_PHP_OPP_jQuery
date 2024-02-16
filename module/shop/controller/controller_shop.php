@@ -31,10 +31,16 @@ switch ($_GET['op']) {
 
     case 'home_filter':
 
-            echo json_encode("entra al controlador de home_filter php");
-            
+            // echo json_encode("entra al controlador de home_filter php");
+            // break;
+
+            // echo json_encode($_POST['filters_home']);
+            // break;
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_filter_home();
+            $Dates_Properties = $daoshop->select_filter_home($_POST['filters_home']);
+            // echo json_encode($Dates_Properties);
+            // break;
+
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {

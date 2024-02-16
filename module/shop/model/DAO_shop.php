@@ -1,7 +1,5 @@
 <?php
 
-use function PHPSTORM_META\type;
-
 $path = $_SERVER['DOCUMENT_ROOT'];
 include($path . "/model/connect.php");
 
@@ -45,28 +43,34 @@ class DAOShop
 		}
 		return $imagesArray;
 	}
-	function select_filter_home(){
+	function select_filter_home($filters_home){
+		// return "hola";
+
+		// return $_POST['filters_home'];
+		// return "hola";
 			
 		$sql = "SELECT DISTINCT p.*,c.*
 			FROM property p, city c
 			WHERE p.id_city = c.id_city";
 
-		if (isset($filters_home[0]['type'])) {
-			$id = $filters_home[0]['type'(0)];
-			$sql .= " WHERE p.id_type = '$id';";
-		}else if (isset($filters_home[0]['operation'])) {
-			$id = $filters_home[0]['operation'(0)];
-			$sql .= " WHERE p.id_operation = '$id';";
-		}else if (isset($filters_home[0]['category'])) {
-			$id = $filters_home[0]['category'(0)];
-			$sql .= " WHERE p.id_category = '$id';";
-		}else if (isset($filters_home[0]['extras'])) {
-			$id = $filters_home[0]['extras'(0)];
-			$sql .= " WHERE p.id_extras = '$id';";
-		}else if (isset($filters_home[0]['city'])) {
-			$id = $filters_home[0]['city'(0)];
-			$sql .= " WHERE p.id_city = '$id';";
-		}
+		// return $filters_home[0]['type'];
+
+		// if (isset($filters_home[0]['type'])) {
+		// 	$id = $filters_home[0]['type'(0)];
+		// 	$sql .= " WHERE p.id_type = '$id';";
+		// }else if (isset($filters_home[0]['operation'])) {
+		// 	$id = $filters_home[0]['operation'(0)];
+		// 	$sql .= " WHERE p.id_operation = '$id';";
+		// }else if (isset($filters_home[0]['category'])) {
+		// 	$id = $filters_home[0]['category'(0)];
+		// 	$sql .= " WHERE p.id_category = '$id';";
+		// }else if (isset($filters_home[0]['extras'])) {
+		// 	$id = $filters_home[0]['extras'(0)];
+		// 	$sql .= " WHERE p.id_extras = '$id';";
+		// }else if (isset($filters_home[0]['city'])) {
+		// 	$id = $filters_home[0]['city'(0)];
+		// 	$sql .= " WHERE p.id_city = '$id';";
+		// }
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
