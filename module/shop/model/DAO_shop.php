@@ -47,7 +47,7 @@ class DAOShop
 		// return "hola";
 
 		// return $_POST['filters_home'];
-		// return "hola";
+		return "hola";
 			
 		$sql = "SELECT DISTINCT p.*,c.*
 			FROM property p, city c
