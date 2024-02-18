@@ -1,31 +1,32 @@
 function loadProperties() {
     var filters_home = localStorage.getItem('filters_home') || false;
-    // let details_home = localStorage.getItem('details_home') || false;
-    // let filters_search = localStorage.getItem('filters_search') || false;
-    // let filters_shop = localStorage.getItem('filters_shop') || false;
+    let details_home = localStorage.getItem('details_home') || false;
+    let filters_search = localStorage.getItem('filters_search') || false;
+    let filters_shop = localStorage.getItem('filters_shop') || false;
 
     if (filters_home !== false) {
-        console.log('entra en el if de filters_home');
+        console.log('Envio en la URL op=home_filter');
         ajaxForSearchFilterHome('module/shop/controller/controller_shop.php?op=home_filter');
-    // } 
-    // else if (details_home !== false) {
-    //     loadDetails(details_home);    
-    // } else if (filters_search !== false) {
-    //     // if para el filtro de la barra de busqueda
-    // } else if (filters_shop !== false) {
-    //     // if para el filtro del shop mediante botones
+    } 
+    else if (details_home !== false) {
+        loadDetails(details_home);    
+    } else if (filters_search !== false) {
+        // if para el filtro de la barra de busqueda
+    } else if (filters_shop !== false) {
+        // if para el filtro del shop mediante botones
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
     }
 }
 function ajaxForSearchFilterHome(url){
-    console.log('entra en el ajaxForSearchFilterHome');
+    
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
-    console.log(filters_home);
+    // console.log(filters_home);
     localStorage.removeItem('filters_home');
-    ajaxPromise('POST', 'JSON', url, {filters_home})
+    ajaxPromise('POST', 'JSON', url, {'filters_home': filters_home})
         .then(function(data) {
-            // console.log(data);
+            console.log(data);
+            console.log('entra en el then HOME_FILTER');
             $('#properties_shop').empty();
             $('#images_properties').empty();
 

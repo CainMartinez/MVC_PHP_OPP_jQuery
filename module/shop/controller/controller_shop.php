@@ -31,9 +31,7 @@ switch ($_GET['op']) {
 
     case 'home_filter':
 
-            // echo json_encode("entra al controlador de home_filter php");
-            // break;
-
+            // echo json_encode("Entra correcto al HOME_FILTER php");
             // echo json_encode($_POST['filters_home']);
             // break;
             $daoshop = new DAOShop();

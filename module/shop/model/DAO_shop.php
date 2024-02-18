@@ -43,47 +43,42 @@ class DAOShop
 		}
 		return $imagesArray;
 	}
-	function select_filter_home(){
-		// return "hola";
+	function select_filter_home($filters_home){
+		$sql = "SELECT *
+		FROM property p, city c, property_type pt, property_operation po, property_category pc, property_extras pe
+		WHERE p.id_city = c.id_city 
+		AND p.id_property = pt.id_property 
+		AND p.id_property = po.id_property 
+		AND p.id_property = pc.id_property 
+		AND p.id_property = pe.id_property";
 
-		// return $_POST['filters_home'];
-		return "hola";
-			
-			$opt_filter = $_POST['filter_home'];
-			$filter = "";
-
-			if ($opt_filter == "type") {
-				$type = $_POST['type'];
-				$filter = " pt.type_id = '" . $type . "'";
-			} else if ($opt_filter == "operation") {
-				$operation = $_POST['operation'];
-				$filter = " po.operation_id = '" . $operation . "'";
-			} else if ($opt_filter == "category") {
-				$category = $_POST['category'];
-				$filter = " pc.category_id = '" . $category . "'";
-			} else if ($opt_filter == "extras") {
-				$extras = $_POST['extras'];
-				$filter = " pe.extras_id = '" . $extras . "'";
-			} else if ($opt_filter == "city") {
-				$city = $_POST['city'];
-				$filter = " p.id_city = '" . $city . "'";
-			}
-
-			$sql = "SELECT DISTINCT p.*,c.*
-					FROM property p
-					JOIN city c ON p.id_city = c.id_city
-					LEFT JOIN property_type pt ON p.id = pt.property_id
-					LEFT JOIN property_operation po ON p.id = po.property_id
-					LEFT JOIN property_category pc ON p.id = pc.property_id
-					LEFT JOIN property_extras pe ON p.id = pe.property_id
-					WHERE $filter";
-		
+		if (isset($filters_home[0]['category'])){
+			$category = $filters_home[0]['category'][0];
+			$sql.= " AND pc.id_category = '$category'";
+		}
+		else if(isset($filters_home[0]['type'])) {
+			$type = $filters_home[0]['type'][0];
+			$sql.= " AND pt.id_type = '$type'";
+		}
+		else if(isset($filters_home[0]['operation'])) {
+			$operation = $filters_home[0]['operation'][0];
+			$sql.= " AND po.id_operation = '$operation'";
+		}
+		else if(isset($filters_home[0]['extras'])) {
+			$extras = $filters_home[0]['extras'][0];
+			$sql.= " AND pe.id_extras= '$extras'";
+		}
+		else if(isset($filters_home[0]['city'])) {
+			$city = $filters_home[0]['city'][0];
+			$sql.= " AND c.id_city = '$city'";
+		}
+		$sql .= " GROUP BY p.id_property;";
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
 
 		$retrArray = array();
-		if (mysqli_num_rows($res) > 0) {
+		if ($res -> num_rows > 0) {
 			while ($row = mysqli_fetch_assoc($res)) {
 				$retrArray[] = $row;
 			}
