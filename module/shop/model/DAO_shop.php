@@ -43,34 +43,41 @@ class DAOShop
 		}
 		return $imagesArray;
 	}
-	function select_filter_home($filters_home){
+	function select_filter_home(){
 		// return "hola";
 
 		// return $_POST['filters_home'];
 		// return "hola";
 			
-		$sql = "SELECT DISTINCT p.*,c.*
-			FROM property p, city c
-			WHERE p.id_city = c.id_city";
+			$opt_filter = $_POST['filter_home'];
+			$filter = "";
 
-		// return $filters_home[0]['type'];
+			if ($opt_filter == "type") {
+				$type = $_POST['type'];
+				$filter = " pt.type_id = '" . $type . "'";
+			} else if ($opt_filter == "operation") {
+				$operation = $_POST['operation'];
+				$filter = " po.operation_id = '" . $operation . "'";
+			} else if ($opt_filter == "category") {
+				$category = $_POST['category'];
+				$filter = " pc.category_id = '" . $category . "'";
+			} else if ($opt_filter == "extras") {
+				$extras = $_POST['extras'];
+				$filter = " pe.extras_id = '" . $extras . "'";
+			} else if ($opt_filter == "city") {
+				$city = $_POST['city'];
+				$filter = " p.id_city = '" . $city . "'";
+			}
 
-		// if (isset($filters_home[0]['type'])) {
-		// 	$id = $filters_home[0]['type'(0)];
-		// 	$sql .= " WHERE p.id_type = '$id';";
-		// }else if (isset($filters_home[0]['operation'])) {
-		// 	$id = $filters_home[0]['operation'(0)];
-		// 	$sql .= " WHERE p.id_operation = '$id';";
-		// }else if (isset($filters_home[0]['category'])) {
-		// 	$id = $filters_home[0]['category'(0)];
-		// 	$sql .= " WHERE p.id_category = '$id';";
-		// }else if (isset($filters_home[0]['extras'])) {
-		// 	$id = $filters_home[0]['extras'(0)];
-		// 	$sql .= " WHERE p.id_extras = '$id';";
-		// }else if (isset($filters_home[0]['city'])) {
-		// 	$id = $filters_home[0]['city'(0)];
-		// 	$sql .= " WHERE p.id_city = '$id';";
-		// }
+			$sql = "SELECT DISTINCT p.*,c.*
+					FROM property p
+					JOIN city c ON p.id_city = c.id_city
+					LEFT JOIN property_type pt ON p.id = pt.property_id
+					LEFT JOIN property_operation po ON p.id = po.property_id
+					LEFT JOIN property_category pc ON p.id = pc.property_id
+					LEFT JOIN property_extras pe ON p.id = pe.property_id
+					WHERE $filter";
+		
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
