@@ -227,7 +227,7 @@ function clicks_home() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.carrousel_home', function (){
@@ -237,7 +237,7 @@ function clicks_home() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'a.link-operation', function (){
@@ -247,7 +247,7 @@ function clicks_home() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.city_home', function (){
@@ -267,7 +267,7 @@ function clicks_home() {
     localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
-        window.location.href = 'index.php?page=controller_shop&op=list';
+        window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   

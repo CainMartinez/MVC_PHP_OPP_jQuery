@@ -47,7 +47,7 @@ class DAOShop
 		// return "hola";
 
 		// return $_POST['filters_home'];
-		// return "hola";
+		return "hola";
 			
 			$opt_filter = $_POST['filter_home'];
 			$filter = "";

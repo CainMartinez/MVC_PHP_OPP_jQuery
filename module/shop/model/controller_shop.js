@@ -21,10 +21,11 @@ function loadProperties() {
 function ajaxForSearchFilterHome(url){
     console.log('entra en el ajaxForSearchFilterHome');
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
+    console.log(filters_home);
     localStorage.removeItem('filters_home');
-    ajaxPromise('POST', 'JSON', url, {'filters_home':filters_home})
+    ajaxPromise('POST', 'JSON', url, {filters_home})
         .then(function(data) {
-            console.log(data);
+            // console.log(data);
             $('#properties_shop').empty();
             $('#images_properties').empty();
 
@@ -97,7 +98,7 @@ function ajaxForSearchFilterHome(url){
 function ajaxForSearch(url) {
     ajaxPromise('POST', 'JSON', url)
         .then(function(data) {
-            console.log(data);
+            // console.log(data);
             $('#properties_shop').empty();
             $('#images_properties').empty();
 
