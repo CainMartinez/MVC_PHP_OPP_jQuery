@@ -5,8 +5,8 @@ function loadProperties() {
     let filters_shop = localStorage.getItem('filters_shop') || false;
 
     if (filters_home !== false) {
-        console.log('Envio en la URL op=home_filter');
-        ajaxForSearchFilterHome('module/shop/controller/controller_shop.php?op=home_filter');
+        // console.log('Envio en la URL op=home_filter');
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
     } 
     else if (details_home !== false) {
         loadDetails(details_home);    
@@ -18,88 +18,15 @@ function loadProperties() {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
     }
 }
-function ajaxForSearchFilterHome(url){
+function ajaxForSearch(url){
     
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
     // console.log(filters_home);
     localStorage.removeItem('filters_home');
     ajaxPromise('POST', 'JSON', url, {'filters_home': filters_home})
         .then(function(data) {
-            console.log(data);
-            console.log('entra en el then HOME_FILTER');
-            $('#properties_shop').empty();
-            $('#images_properties').empty();
-
-            if (data == "error") {
-                $('<div></div>').appendTo('#properties_shop')
-                    .html(
-                        '<h3>¡No results are found with the applied filters!</h3>'
-                    )
-            } else {
-                for (let row in data) {
-                    let property = data[row];
-                    // console.log(property.images);
-
-                    let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-                    let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
-                    for (let image of property.images) {
-                        $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-                            "<article class='thumbnail-light'>" +
-                            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-                            image.path_images +
-                            "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-                            "</article>"
-                        );
-                    }
-
-                    owlCarouselDiv.owlCarousel({
-                        loop:true,
-                        margin:100,
-                        nav:true,
-                        responsive:{
-                            0:{
-                                items:1
-                            },
-                        }
-                    });
-
-                    propertyDiv.append(`
-                            <article class='post-modern wow slideInLeft '><br>
-                                <h4 class='post-modern-title'>
-                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
-                                </h4>
-                                <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${property.price} €</a></li>
-                                    <li>City: ${property.name_city}</li>
-                                    <li>Square meters: ${property.square_meters}</li>
-                                </ul>
-                                <p>${property.description}</p><br>
-                                <div class='buttons'>
-                                    <table id='table-shop'> 
-                                        <tr>
-                                            <td>
-                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </article>
-                        `)
-                }
-            }
-        }).catch(function(error) {
-            console.error(error);
-            // window.location.href = "index.php?page=503";
-        });
-
-
-}
-
-function ajaxForSearch(url) {
-    ajaxPromise('POST', 'JSON', url)
-        .then(function(data) {
             // console.log(data);
+            // console.log('entra en el then HOME_FILTER');
             $('#properties_shop').empty();
             $('#images_properties').empty();
 
@@ -163,8 +90,10 @@ function ajaxForSearch(url) {
             }
         }).catch(function(error) {
             console.error(error);
-            // window.location.href = "index.php?page=503";
+            window.location.href = "index.php?page=503";
         });
+
+
 }
 
 function clicks_shop() {

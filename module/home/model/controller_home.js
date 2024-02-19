@@ -193,16 +193,16 @@ function loadRecomendation() {
       let html = "";
       for (row in data) {
         html += `
-                <div class="col-md-6 wow-outer">
+                <div class="col-md-6 wow-outer property_recomendation" id="${data[row].id_property}">
                     <article class="post-modern wow slideInLeft">
-                        <a class="post-modern-media" href="#">
+                        <a class="post-modern-media">
                             <img src="${data[row].path_images}" alt="" width="571" height="353"/>
                         </a>
                         <h4 class="post-modern-title">
-                            <a class="post-modern-title" href="#">${data[row].property_name}</a>
+                            <a class="post-modern-title">${data[row].property_name}</a>
                         </h4>
                         <ul class="post-modern-meta">
-                            <li><a class="button-winona" href="#">${data[row].price} €</a></li>
+                            <li><a class="button-winona">${data[row].price} €</a></li>
                             <li>${data[row].square_meters} Sq. Meters</li>
                             <li>${data[row].number_of_rooms} Rooms</li>
                         </ul>
@@ -219,6 +219,17 @@ function loadRecomendation() {
     });
 }
 function clicks_home() {
+  $(document).on("click",'div.property_recomendation', function (){
+    console.log('click_OK_Recomendation');
+    console.log(this.getAttribute('id'));
+    localStorage.removeItem('details_home');
+    localStorage.setItem('details_home', this.getAttribute('id'));
+      setTimeout(function(){
+        window.location.href = 'index.php?page=shop';
+      }, 1000);
+  });
+
+
   $(document).on("click",'article.thumbnail-light', function (){
     console.log('click_OK_Category');
     console.log(this.getAttribute('id'));
