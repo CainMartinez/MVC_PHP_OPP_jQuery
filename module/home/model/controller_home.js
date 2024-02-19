@@ -220,69 +220,57 @@ function loadRecomendation() {
 }
 function clicks_home() {
   $(document).on("click",'div.property_recomendation', function (){
-    console.log('click_OK_Recomendation');
-    console.log(this.getAttribute('id'));
-    localStorage.removeItem('details_home');
+    // console.log('click_OK_Recomendation');
     localStorage.setItem('details_home', this.getAttribute('id'));
       setTimeout(function(){
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
-
-
   $(document).on("click",'article.thumbnail-light', function (){
-    console.log('click_OK_Category');
-    console.log(this.getAttribute('id'));
+    // console.log('click_OK_Category');
     var filters_home = [];
     filters_home.push({"category":[this.getAttribute('id')]});
-    localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.carrousel_home', function (){
-    console.log('click_OK_Carrousel');
+    // console.log('click_OK_Carrousel');
     var filters_home = [];
     filters_home.push({"type":[this.getAttribute('id')]});
-    localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'a.link-operation', function (){
-    console.log('click_OK_Operation');
+    // console.log('click_OK_Operation');
     var filters_home = [];
     filters_home.push({"operation":[this.getAttribute('id')]});
-    localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.city_home', function (){
-    console.log('click_OK_City');
+    // console.log('click_OK_City');
     var filters_home = [];
     filters_home.push({"city":[this.getAttribute('id')]});
-    localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
   $(document).on("click",'div.extras_home', function (){
-    console.log('click_OK_Extras');
+    // console.log('click_OK_Extras');
     var filters_home = [];
     filters_home.push({"extras":[this.getAttribute('id')]});
-    localStorage.removeItem('filters_home');
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
       setTimeout(function(){ 
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
-  
-
 }
 $(document).ready(function () {
   carousel_type();

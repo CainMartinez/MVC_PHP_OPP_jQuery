@@ -7,9 +7,10 @@ function loadProperties() {
     if (filters_home !== false) {
         // console.log('Envio en la URL op=home_filter');
         ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
-    } 
-    else if (details_home !== false) {
-        loadDetails(details_home);    
+        localStorage.removeItem('filters_home');
+    }else if (details_home !== false) {
+        loadDetails(details_home);
+        localStorage.removeItem('details_home');
     } else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
     } else if (filters_shop !== false) {
@@ -216,7 +217,7 @@ function loadDetails(id_property) {
         
     }).catch(function(e) {
         console.error(e);
-        // window.location.href = "index.php?page=503";
+        window.location.href = "index.php?page=503";
     });
 }
 
