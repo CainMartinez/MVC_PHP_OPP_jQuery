@@ -104,14 +104,16 @@ class DAOShop
 		return $imagesArray;
 	}
 
-	function select_one_property($id)
+	function select_details_property($id)
 	{
-		$sql = "SELECT DISTINCT p.*,c.name_city
-		FROM property p, city c
-		WHERE p.id_city = c.id_city
-		AND p.id_property = '$id' 
-		GROUP BY p.id_property
-		ORDER BY p.id_property DESC";
+		$sql = "SELECT p.*, c.name_city,
+				(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
+				(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
+				(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
+				(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
+				FROM property p
+				INNER JOIN city c ON p.id_city = c.id_city
+				WHERE p.id_property = '$id'";
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql)->fetch_object();
@@ -119,92 +121,6 @@ class DAOShop
 
 		return $res;
 	}
-	function select_type_property($id)
-	{
-		$sql = "SELECT p.id_property,GROUP_CONCAT(t.name_type)type_concat
-		FROM property p
-		INNER JOIN property_type pt ON p.id_property = pt.id_property
-		INNER JOIN type t ON pt.id_type = t.id_type
-		WHERE p.id_property = '$id'
-		GROUP BY p.id_property";
-
-		// $sql = "SELECT p.id_property, t.name_type
-		// FROM property p
-		// INNER JOIN property_type pt ON p.id_property = pt.id_property
-		// INNER JOIN type t ON pt.id_type = t.id_type
-		// WHERE p.id_property = '$id'";
-
-		$conexion = connect::con();
-		$res = mysqli_query($conexion, $sql);
-		$result = array();
-		while ($row = mysqli_fetch_assoc($res)) {
-			$result[] = $row;
-		}
-		connect::close($conexion);
-
-		return $result;
-	}
-
-	function select_operation_property($id)
-	{
-		$sql = "SELECT p.id_property,GROUP_CONCAT(o.name_operation)operation_concat
-		FROM property p
-		INNER JOIN property_operation po ON p.id_property = po.id_property
-		INNER JOIN operation o ON po.id_operation = o.id_operation
-		WHERE p.id_property = '$id'
-		GROUP BY p.id_property";
-
-		$conexion = connect::con();
-		$res = mysqli_query($conexion, $sql);
-		$result = array();
-		while ($row = mysqli_fetch_assoc($res)) {
-			$result[] = $row;
-		}
-		connect::close($conexion);
-
-		return $result;
-	}
-
-	function select_category_property($id)
-	{
-		$sql = "SELECT p.id_property,GROUP_CONCAT(c.name_category)category_concat
-		FROM property p
-		INNER JOIN property_category pc ON p.id_property = pc.id_property
-		INNER JOIN category c ON pc.id_category = c.id_category
-		WHERE p.id_property = '$id'
-		GROUP BY p.id_property";
-
-		$conexion = connect::con();
-		$res = mysqli_query($conexion, $sql);
-		$result = array();
-		while ($row = mysqli_fetch_assoc($res)) {
-			$result[] = $row;
-		}
-		connect::close($conexion);
-
-		return $result;
-	}
-
-	function select_extras_property($id)
-	{
-		$sql = "SELECT p.id_property,GROUP_CONCAT(e.name_extras)extras_concat
-		FROM property p
-		INNER JOIN property_extras pe ON p.id_property = pe.id_property
-		INNER JOIN extras e ON pe.id_extras = e.id_extras
-		WHERE p.id_property = '$id'
-		GROUP BY p.id_property";
-
-		$conexion = connect::con();
-		$res = mysqli_query($conexion, $sql);
-		$result = array();
-		while ($row = mysqli_fetch_assoc($res)) {
-			$result[] = $row;
-		}
-		connect::close($conexion);
-
-		return $result;
-	}
-
 	function select_imgs_property($id)	{
 		$sql = "SELECT *
 			    FROM images

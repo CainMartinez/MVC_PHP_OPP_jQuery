@@ -58,12 +58,8 @@ switch ($_GET['op']) {
     case 'details_property':
         try {
             $daoshop = new DAOShop();
-            $Date_property = $daoshop->select_one_property($_GET['id']);
+            $Date_property = $daoshop->select_details_property($_GET['id']);
             $Date_images = $daoshop->select_imgs_property($_GET['id']);
-            $Date_type = $daoshop->select_type_property($_GET['id']);
-            $Date_operation = $daoshop->select_operation_property($_GET['id']);
-            $Date_category = $daoshop->select_category_property($_GET['id']);
-            $Date_extras = $daoshop->select_extras_property($_GET['id']);
         } catch (Exception $e) {
             echo json_encode("error");
         }
@@ -72,10 +68,6 @@ switch ($_GET['op']) {
             $rdo = array();
             $rdo[0] = $Date_property;
             $rdo[1][] = $Date_images;
-            $rdo[2] = $Date_type;
-            $rdo[3] = $Date_operation;
-            $rdo[4] = $Date_category;
-            $rdo[5] = $Date_extras;
             echo json_encode($rdo);
         } else {
             echo json_encode("error");

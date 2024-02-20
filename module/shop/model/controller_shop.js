@@ -110,11 +110,12 @@ function loadDetails(id_property) {
 
         $('#properties_shop').empty();
         $('#images_properties').empty();
-    
-        var type = data[2][0].type_concat;
-        var operation = data[3][0].operation_concat;
-        var category = data[4][0].category_concat;
-        var extras = data[5][0].extras_concat;
+        // console.log(data);
+        console.log(data[0].type_concat);
+        var type = data[0].type_concat;
+        var operation = data[0].operation_concat;
+        var category = data[0].category_concat;
+        var extras = data[0].extras_concat;
         $('<h2></h2>').addClass('post-modern-title').text(data[0].property_name).appendTo('#shop_div');
         $('<hr>').appendTo('#images_properties');
 
@@ -217,7 +218,7 @@ function loadDetails(id_property) {
         
     }).catch(function(e) {
         console.error(e);
-        window.location.href = "index.php?page=503";
+        // window.location.href = "index.php?page=503";
     });
 }
 
