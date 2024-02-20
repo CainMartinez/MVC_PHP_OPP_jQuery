@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-02-2024 a las 13:53:22
+-- Tiempo de generación: 20-02-2024 a las 11:34:07
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -210,6 +210,7 @@ CREATE TABLE `property` (
   `number_of_rooms` int(2) DEFAULT NULL,
   `description` varchar(150) DEFAULT NULL,
   `price` int(10) DEFAULT NULL,
+  `large_person` varchar(50) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
   `creation_date` varchar(50) DEFAULT NULL,
   `update_date` varchar(50) DEFAULT NULL,
@@ -220,12 +221,12 @@ CREATE TABLE `property` (
 -- Volcado de datos para la tabla `property`
 --
 
-INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `is_active`, `creation_date`, `update_date`, `id_city`) VALUES
-(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
+INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `large_person`, `is_active`, `creation_date`, `update_date`, `id_city`) VALUES
+(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 'Yes', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 'No', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 'Yes', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 'Partially', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 'No', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
 
 -- --------------------------------------------------------
 
