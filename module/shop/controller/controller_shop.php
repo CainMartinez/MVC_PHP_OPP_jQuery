@@ -74,6 +74,17 @@ switch ($_GET['op']) {
         }
         break;
 
+    case 'filters_shop';
+        $homeQuery = new DAOshop();
+        $selSlide = $homeQuery -> filters($_POST['filter']);
+        if (!empty($selSlide)) {
+            echo json_encode($selSlide);
+        }
+        else {
+            echo "error";
+        }
+        break;
+
     default;
         include("views/inc/error404.html");
         break;
