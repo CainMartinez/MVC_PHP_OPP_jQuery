@@ -128,6 +128,7 @@ class DAOShop{
 		return $imgArray;
 	}
 	function filters_shop($filters_shop){
+		return $filters_shop;
 		$consulta = "SELECT p.*, c.name_city,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
@@ -135,15 +136,17 @@ class DAOShop{
 			(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
 			FROM property p
 			INNER JOIN city c ON p.id_city = c.id_city";
-
+		return $consulta;
 		for ($i=0; $i < count($filters_shop); $i++){
 			if ($i==0){
 				$consulta.= " WHERE " . $filters_shop[$i][0] . "='" . $filters_shop[$i][1] . "'";
+				return $consulta;
 			}else {
 				$consulta.= " AND " . $filters_shop[$i][0] . "='" . $filters_shop[$i][1] . "'";
+				return $consulta;
 			}        
 		}
-
+		return $consulta;
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
 		connect::close($conexion);

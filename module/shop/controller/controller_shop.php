@@ -74,15 +74,15 @@ switch ($_GET['op']) {
         }
         break;
 
-    // case 'filters_shop';
-    //     $homeQuery = new DAOshop();
-    //     $selSlide = $homeQuery->filters_shop($_POST['filters_shop']);
-    //     if (!empty($selSlide)) {
-    //         echo json_encode($selSlide);
-    //     } else {
-    //         echo "error";
-    //     }
-    //     break;
+    case 'filters_shop';
+        $homeQuery = new DAOshop();
+        $selSlide = $homeQuery->filters_shop($_POST['filters_shop']);
+        if (!empty($selSlide)) {
+            echo json_encode($selSlide);
+        } else {
+            echo "error";
+        }
+        break;
 
     default;
         include("views/inc/error404.html");
