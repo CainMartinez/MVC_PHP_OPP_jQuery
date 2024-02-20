@@ -14,7 +14,7 @@ switch ($_GET['op']) {
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
-                $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function($image) use ($property) {
+                $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
                     return $image['id_property'] == $property['id_property'];
                 }));
             }
@@ -31,27 +31,27 @@ switch ($_GET['op']) {
 
     case 'home_filter':
 
-            // echo json_encode("Entra correcto al HOME_FILTER php");
-            // echo json_encode($_POST['filters_home']);
-            // break;
-            $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_filter_home($_POST['filters_home']);
-            // echo json_encode($Dates_Properties);
-            // break;
+        // echo json_encode("Entra correcto al HOME_FILTER php");
+        // echo json_encode($_POST['filters_home']);
+        // break;
+        $daoshop = new DAOShop();
+        $Dates_Properties = $daoshop->select_filter_home($_POST['filters_home']);
+        // echo json_encode($Dates_Properties);
+        // break;
 
-            $Date_images = $daoshop->select_images_property();
+        $Date_images = $daoshop->select_images_property();
 
-            foreach ($Dates_Properties as $key => $property) {
-                $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function($image) use ($property) {
-                    return $image['id_property'] == $property['id_property'];
-                }));
-            }
+        foreach ($Dates_Properties as $key => $property) {
+            $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
+                return $image['id_property'] == $property['id_property'];
+            }));
+        }
 
-            if (!empty($Dates_Properties)) {
-                echo json_encode($Dates_Properties);
-            } else {
-                echo json_encode("error");
-            }
+        if (!empty($Dates_Properties)) {
+            echo json_encode($Dates_Properties);
+        } else {
+            echo json_encode("error");
+        }
 
         break;
 
@@ -74,16 +74,15 @@ switch ($_GET['op']) {
         }
         break;
 
-    case 'filters_shop';
-        $homeQuery = new DAOshop();
-        $selSlide = $homeQuery -> filters($_POST['filter']);
-        if (!empty($selSlide)) {
-            echo json_encode($selSlide);
-        }
-        else {
-            echo "error";
-        }
-        break;
+    // case 'filters_shop';
+    //     $homeQuery = new DAOshop();
+    //     $selSlide = $homeQuery->filters_shop($_POST['filters_shop']);
+    //     if (!empty($selSlide)) {
+    //         echo json_encode($selSlide);
+    //     } else {
+    //         echo "error";
+    //     }
+    //     break;
 
     default;
         include("views/inc/error404.html");

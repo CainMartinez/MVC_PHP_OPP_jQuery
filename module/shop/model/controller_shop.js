@@ -319,8 +319,8 @@ function print_filters() {
             '<div class="row">' +
             '<div class="col-md-12 text-center">' +
             '<p></p>' +
-            '<button class="button button-primary filter_button button_spinner mr-5" id="Button_filter">Filter</button>' +
-            '<button class="button button-primary-white filter_remove ml-5" id="Remove_filter">Remove</button>' +
+            // '<button class="button button-primary filter_button button_spinner mr-5" id="Button_filter">Filter</button>' +
+            '<button class="button button-primary-white filter_remove ml-5" id="Remove_filter">Remove Filter</button>' +
             '</div>' +
             '</div>')
             $(document).on('click', '#Button_filter', function() {
@@ -331,79 +331,72 @@ function print_filters() {
             });
 }
 function filter_button() {
-    // Filter category
+    let filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || {};
+
+    // Function to handle filter change
+    function handleFilterChange(filterName, value) {
+        filter_shop[filterName] = value;
+        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+    }
+
+    // Function to set filter value
+    function setFilterValue(filterName) {
+        if (filter_shop[filterName]) {
+            $(`#${filterName}`).val(filter_shop[filterName]);
+        }
+    }
+
     $('#filter_category').change(function () {
-        localStorage.setItem('filter_category', this.value);
+        handleFilterChange('filter_category', this.value);
     });
-    if (localStorage.getItem('filter_category')) {
-        $('#filter_category').val(localStorage.getItem('filter_category'));
-    }
+    setFilterValue('filter_category');
 
-    // Filter city
     $('#filter_city').change(function () {
-        localStorage.setItem('filter_city', this.value);
+        handleFilterChange('filter_city', this.value);
     });
-    if (localStorage.getItem('filter_city')) {
-        $('#filter_city').val(localStorage.getItem('filter_city'));
-    }
+    setFilterValue('filter_city');
 
-    // Filter extras
     $('#filter_extras').change(function () {
-        localStorage.setItem('filter_extras', this.value);
+        handleFilterChange('filter_extras', this.value);
     });
-    if (localStorage.getItem('filter_extras')) {
-        $('#filter_extras').val(localStorage.getItem('filter_extras'));
-    }
+    setFilterValue('filter_extras');
 
-    // Filter operation
     $('#filter_operation').change(function () {
-        localStorage.setItem('filter_operation', this.value);
+        handleFilterChange('filter_operation', this.value);
     });
-    if (localStorage.getItem('filter_operation')) {
-        $('#filter_operation').val(localStorage.getItem('filter_operation'));
-    }
+    setFilterValue('filter_operation');
 
-    // Filter type
     $('#filter_type').change(function () {
-        localStorage.setItem('filter_type', this.value);
+        handleFilterChange('filter_type', this.value);
     });
-    if (localStorage.getItem('filter_type')) {
-        $('#filter_type').val(localStorage.getItem('filter_type'));
-    }
+    setFilterValue('filter_type');
+
     $('#filter_large_persons').change(function () {
-        localStorage.setItem('filter_large_persons', this.value);
+        handleFilterChange('filter_large_persons', this.value);
     });
-    if (localStorage.getItem('filter_large_persons')) {
-        $('#filter_large_persons').val(localStorage.getItem('filter_large_persons'));
-    }
-    // // Filter for large persons
-    // $('input[name="filter_large_persons"]').change(function () {
-    //     localStorage.setItem('filter_large_persons', this.value);
-    // });
-    // if (localStorage.getItem('filter_large_persons')) {
-    //     $('input[name="filter_large_persons"][value="' + localStorage.getItem('filter_large_persons') + '"]').prop('checked', true);
-    // }
+    setFilterValue('filter_large_persons');
 }
 function apply_filters() {
-    var filter = [];
+    let filter = [];
+    let filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || {};
 
-    if (localStorage.getItem('filter_category')) {
-        filter.push(['category', localStorage.getItem('filter_category')])
+    if (filter_shop['filter_category']) {
+        filter.push(['category', filter_shop['filter_category']])
     }
-    if (localStorage.getItem('filter_city')) {
-        filter.push(['city', localStorage.getItem('filter_city')])
+    if (filter_shop['filter_city']) {
+        filter.push(['city', filter_shop['filter_city']])
     }
-    if (localStorage.getItem('filter_extras')) {
-        filter.push(['extras', localStorage.getItem('filter_extras')])
+    if (filter_shop['filter_extras']) {
+        filter.push(['extras', filter_shop['filter_extras']])
     }
-    if (localStorage.getItem('filter_operation')) {
-        filter.push(['operation', localStorage.getItem('filter_operation')])
+    if (filter_shop['filter_operation']) {
+        filter.push(['operation', filter_shop['filter_operation']])
     }
-    if (localStorage.getItem('filter_type')) {
-        filter.push(['type', localStorage.getItem('filter_type')])
+    if (filter_shop['filter_type']) {
+        filter.push(['type', filter_shop['filter_type']])
     }
-    if (localStorage.getItem('filter_large_persons')) {
-        filter.push(['large_persons', localStorage.getItem('filter_large_persons')])
+    if (filter_shop['filter_large_persons']) {
+        filter.push(['large_persons', filter_shop['filter_large_persons']])
     }
 
     return filter;
@@ -425,13 +418,7 @@ function apply_filters() {
 // }
 
 function remove_filters() {
-    localStorage.removeItem('filter_category');
-    localStorage.removeItem('filter_city');
-    localStorage.removeItem('filter_extras');
-    localStorage.removeItem('filter_operation');
-    localStorage.removeItem('filter_type');
-    localStorage.removeItem('filter_large_persons');
-    localStorage.removeItem('filter');
+    localStorage.removeItem('filter_shop');
     location.reload();
 }
 
