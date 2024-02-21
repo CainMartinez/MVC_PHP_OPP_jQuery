@@ -167,7 +167,7 @@ function loadDetails(id_property) {
             $('<td></td>').addClass('property-operation').css('text-align', 'left').html('<i class="fas fa-handshake" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Operation: ' + operation + '</span><hr>').appendTo(row4);
 
             var row5 = $("<tr></tr>").appendTo(table);
-            $('<td></td>').attr('colspan', 3).addClass('large-person').html('<i class="fas fa-user-plus" style="font-size: 1.3em;"></i> <span style="font-size: 1.3em;">Adapted for a Large Persons: ' + data[0].large_person + '</span><hr>').appendTo(row5);
+            $('<td></td>').attr('colspan', 3).addClass('large-person').html('<i class="fas fa-user-plus" style="font-size: 1.3em;"></i> <span style="font-size: 1.3em;">Adapted for a Large Persons: ' + data[0].name_large_people + '</span><hr>').appendTo(row5);
 
             var row6 = $("<tr></tr>").appendTo(table);
             $('<td></td>').attr('colspan', 3).addClass('property-description').css('text-align', 'center').html('<i class="fas fa-align-left" style="font-size: 1.5em;"></i> <span style="font-size: 1.5em;">Description: ' + data[0].description + '</span><hr>').appendTo(row6);
@@ -231,36 +231,36 @@ function print_filters() {
             '<label for="filter_category">Category:</label>' +
             '<select id="filter_category" class="form-control filter_category">' +
             '<option value="" selected disabled>Select Category</option>' +
-            '<option value="New Building">New Building</option>' +
-            '<option value="Pool">Pool</option>' +
-            '<option value="Beach">Beach</option>' +
-            '<option value="Garden">Garden</option>' +
-            '<option value="Garage">Garage</option>' +
-            '<option value="Storage">Storage</option>' +
-            '<option value="Terrace">Terrace</option>' +
+            '<option value="1">New Building</option>' +
+            '<option value="2">Pool</option>' +
+            '<option value="3">Beach</option>' +
+            '<option value="4">Garden</option>' +
+            '<option value="5">Garage</option>' +
+            '<option value="6">Storage</option>' +
+            '<option value="7">Terrace</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="filter_city">City:</label>' +
             '<select id="filter_city" class="form-control filter_city">' +
             '<option value="" selected disabled>Select City</option>' +
-            '<option value="Ontinyent">Ontinyent</option>' +
-            '<option value="Gandia">Gandia</option>' +
-            '<option value="Albaida">Albaida</option>' +
-            '<option value="Alcoi">Alcoi</option>' +
-            '<option value="Xativa">Xativa</option>' +
+            '<option value="1">Ontinyent</option>' +
+            '<option value="2">Gandia</option>' +
+            '<option value="3">Albaida</option>' +
+            '<option value="4">Alcoi</option>' +
+            '<option value="5">Xativa</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="filter_extras">Extras:</label>' +
             '<select id="filter_extras" class="form-control filter_extras">' +
             '<option value="" selected disabled>Select Extras</option>' +
-            '<option value="Heating">Heating</option>' +
-            '<option value="Air Conditioning">Air Conditioning</option>' +
-            '<option value="Fireplace">Fireplace</option>' +
-            '<option value="Elevator">Elevator</option>' +
-            '<option value="Sauna">Sauna</option>' +
-            '<option value="Solar Panel">Solar Panel</option>' +
+            '<option value="1">Heating</option>' +
+            '<option value="2">Air Conditioning</option>' +
+            '<option value="3">Fireplace</option>' +
+            '<option value="4">Elevator</option>' +
+            '<option value="5">Sauna</option>' +
+            '<option value="6">Solar Panel</option>' +
             '</select>' +
             '</div>' +
             '</div>' +
@@ -269,21 +269,21 @@ function print_filters() {
             '<label for="filter_operation">Operation:</label>' +
             '<select id="filter_operation" class="form-control filter_operation">' +
             '<option value="" selected disabled>Select Operation</option>' +
-            '<option value="Sale">Sale</option>' +
-            '<option value="Rent">Rent</option>' +
-            '<option value="Share">Share</option>' +
-            '<option value="Rent to Own">Rent to Own</option>' +
+            '<option value="1">Sale</option>' +
+            '<option value="2">Rent</option>' +
+            '<option value="3">Share</option>' +
+            '<option value="4">Rent to Own</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="filter_type">Type:</label>' +
             '<select id="filter_type" class="form-control filter_type">' +
             '<option value="" selected disabled>Select Type</option>' +
-            '<option value="Apartment">Apartment</option>' +
-            '<option value="House">House</option>' +
-            '<option value="Townhouse">Townhouse</option>' +
-            '<option value="Duplex">Duplex</option>' +
-            '<option value="Office">Office</option>' +
+            '<option value="1">Apartment</option>' +
+            '<option value="2">House</option>' +
+            '<option value="3">Townhouse</option>' +
+            '<option value="4">Duplex</option>' +
+            '<option value="5">Office</option>' +
             '</select>' +
             '</div>' +
             // '<div class="col-md-4">' +
@@ -303,9 +303,9 @@ function print_filters() {
             '<label>Adapted for Large Persons:</label><hr>' +
             '<select id="filter_large_persons" class="form-control filter_large_persons">' +
             '<option value="" selected disabled>Select Option</option>' +
-            '<option value="Yes">Yes</option>' +
-            '<option value="Partially">Partially</option>'+
-            '<option value="No">No</option>' +
+            '<option value="1">Yes</option>' +
+            '<option value="2">No</option>' +
+            '<option value="3">Partially</option>'+
             '</select>' +
             '</div>' +
             '<div class="col-md-4 text-center">' +
@@ -333,13 +333,11 @@ function print_filters() {
 function filter_button() {
     let filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || {};
 
-    // Function to handle filter change
     function handleFilterChange(filterName, value) {
         filter_shop[filterName] = value;
         localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
     }
 
-    // Function to set filter value
     function setFilterValue(filterName) {
         if (filter_shop[filterName]) {
             $(`#${filterName}`).val(filter_shop[filterName]);
@@ -347,32 +345,39 @@ function filter_button() {
     }
 
     $('#filter_category').change(function () {
-        handleFilterChange('filter_category', this.value);
+        handleFilterChange('id_category', this.value);
+        apply_filters();
+
     });
     setFilterValue('filter_category');
 
     $('#filter_city').change(function () {
-        handleFilterChange('filter_city', this.value);
+        handleFilterChange('id_city', this.value);
+        apply_filters();
     });
     setFilterValue('filter_city');
 
     $('#filter_extras').change(function () {
-        handleFilterChange('filter_extras', this.value);
+        handleFilterChange('id_extras', this.value);
+        apply_filters();
     });
     setFilterValue('filter_extras');
 
     $('#filter_operation').change(function () {
-        handleFilterChange('filter_operation', this.value);
+        handleFilterChange('id_operation', this.value);
+        apply_filters();
     });
     setFilterValue('filter_operation');
 
     $('#filter_type').change(function () {
-        handleFilterChange('filter_type', this.value);
+        handleFilterChange('id_type', this.value);
+        apply_filters();
     });
     setFilterValue('filter_type');
 
     $('#filter_large_persons').change(function () {
-        handleFilterChange('filter_large_persons', this.value);
+        handleFilterChange('id_large_people', this.value);
+        apply_filters();
     });
     setFilterValue('filter_large_persons');
 }
@@ -401,22 +406,6 @@ function apply_filters() {
 
     return filter;
 }
-// function highlight(filter) {
-//     if (filter != 0) {
-//         $('.highlight').empty();
-//         $('<div style="display: inline; float: right;"></div>').appendTo('.highlight')
-//             .html('<p style="display: inline; margin:10px;">Sus filtros: </p>');
-//         for (row in filter) {
-//             $('<div style="display: inline; float: right;"></div>').appendTo('.highlight')
-//                 .html('<p style="display: inline; margin:3px;">' + filter[row] + '</p>');
-//         }
-//     }
-//     else {
-//         $('.highlight').empty();
-//         location.reload();
-//     }
-// }
-
 function remove_filters() {
     localStorage.removeItem('filter_shop');
     location.reload();

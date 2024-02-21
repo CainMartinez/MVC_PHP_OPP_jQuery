@@ -102,6 +102,7 @@ class DAOShop{
 				(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
 				FROM property p
 				INNER JOIN city c ON p.id_city = c.id_city
+				INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people
 				WHERE p.id_property = '$id'";
 
 		$conexion = connect::con();
@@ -135,7 +136,8 @@ class DAOShop{
 			(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
 			(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
 			FROM property p
-			INNER JOIN city c ON p.id_city = c.id_city";
+			INNER JOIN city c ON p.id_city = c.id_city
+			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people";
 		return $consulta;
 		for ($i=0; $i < count($filters_shop); $i++){
 			if ($i==0){
