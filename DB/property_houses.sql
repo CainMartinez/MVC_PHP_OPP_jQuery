@@ -6,7 +6,8 @@
 -- Tiempo de generación: 21-02-2024 a las 21:55:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
-
+CREATE DATABASE `property_houses`;
+USE `property_houses`;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -74,6 +75,24 @@ INSERT INTO `city` (`id_city`, `name_city`, `is_active`, `creation_date`, `updat
 (3, 'Albaida', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/city/Albaida.webp'),
 (4, 'Alcoi', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/city/Alcoi.webp'),
 (5, 'Xativa', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/city/Xativa.webp');
+
+CREATE TABLE `large_people` (
+  `id_large_people` int(10) NOT NULL,
+  `name_large_people` varchar(50) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `creation_date` varchar(50) DEFAULT NULL,
+  `update_date` varchar(50) DEFAULT NULL,
+  `image_city` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `city`
+--
+
+INSERT INTO `large_people` (`id_large_people`, `name_large_people`, `is_active`, `creation_date`, `update_date`) VALUES
+(1, 'Yes', 1, NOW(), NOW()),
+(2, 'No', 1, NOW(), NOW()),
+(3, 'Partially', 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -222,11 +241,11 @@ CREATE TABLE `property` (
 --
 
 INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `id_large_people`, `is_active`, `creation_date`, `update_date`, `id_city`) VALUES
-(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, NULL, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
-(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, NULL, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
-(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, NULL, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
-(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, NULL, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
-(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, NULL, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
+(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1),
+(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2),
+(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 3, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3),
+(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4),
+(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
 
 -- --------------------------------------------------------
 
@@ -391,6 +410,9 @@ ALTER TABLE `category`
 ALTER TABLE `city`
   ADD PRIMARY KEY (`id_city`);
 
+ALTER TABLE `large_people`
+  ADD PRIMARY KEY (`id_large_people`);
+
 --
 -- Indices de la tabla `extras`
 --
@@ -467,6 +489,8 @@ ALTER TABLE `category`
 ALTER TABLE `city`
   MODIFY `id_city` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
+ALTER TABLE `large_people`
+  MODIFY `id_large_people` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `extras`
 --
@@ -512,7 +536,7 @@ ALTER TABLE `images`
 --
 ALTER TABLE `property`
   ADD CONSTRAINT `fk_city` FOREIGN KEY (`id_city`) REFERENCES `city` (`id_city`),
-  ADD CONSTRAINT `property_ibfk_1` FOREIGN KEY (`id_large_people`) REFERENCES `large_people` (`id_large_people`);
+  ADD CONSTRAINT `fk_large_people` FOREIGN KEY (`id_large_people`) REFERENCES `large_people` (`id_large_people`);
 
 --
 -- Filtros para la tabla `property_category`

@@ -14,8 +14,9 @@ function loadProperties() {
     } else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
     } else if (filters_shop !== false) {
-        ajaxForSearch("modules/shop/crtl/crtl_shop.php?op=filters_shop");
-        localStorage.removeItem('filters_shop');
+        console.log('Envio en la URL op=filters_shop');
+        ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop");
+        // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
     }
@@ -23,7 +24,7 @@ function loadProperties() {
 function ajaxForSearch(url) {
 
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
-    // console.log(filters_home);
+    console.log(filters_home);
     localStorage.removeItem('filters_home');
     ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home })
         .then(function (data) {
@@ -92,7 +93,84 @@ function ajaxForSearch(url) {
             }
         }).catch(function (error) {
             console.error(error);
-            window.location.href = "index.php?page=503";
+            // window.location.href = "index.php?page=503";
+        });
+
+
+}
+function ajaxForSearch_Shop(url) {
+
+    var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
+    console.log(filters_shop);
+    localStorage.removeItem('filters_shop');
+    ajaxPromise('POST', 'JSON', url, {filters_shop})
+        .then(function (data) {
+            // console.log(data);
+            // console.log('entra en el then HOME_FILTER');
+            $('#properties_shop').empty();
+            $('#images_properties').empty();
+
+            if (data == "error") {
+                $('<div></div>').appendTo('#properties_shop')
+                    .html(
+                        '<h3>¡No results are found with the applied filters!</h3>'
+                    )
+            } else {
+                for (let row in data) {
+                    let property = data[row];
+                    // console.log(property.images);
+
+                    let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+                    let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+
+                    for (let image of property.images) {
+                        $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+                            "<article class='thumbnail-light'>" +
+                            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+                            image.path_images +
+                            "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
+                            "</article>"
+                        );
+                    }
+
+                    owlCarouselDiv.owlCarousel({
+                        loop: true,
+                        margin: 100,
+                        nav: true,
+                        responsive: {
+                            0: {
+                                items: 1
+                            },
+                        }
+                    });
+
+                    propertyDiv.append(`
+                            <article class='post-modern wow slideInLeft '><br>
+                                <h4 class='post-modern-title'>
+                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
+                                </h4>
+                                <ul class='post-modern-meta'>
+                                    <li><a class='button-winona' href='#'>${property.price} €</a></li>
+                                    <li>City: ${property.name_city}</li>
+                                    <li>Square meters: ${property.square_meters}</li>
+                                </ul>
+                                <p>${property.description}</p><br>
+                                <div class='buttons'>
+                                    <table id='table-shop'> 
+                                        <tr>
+                                            <td>
+                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </article>
+                        `)
+                }
+            }
+        }).catch(function (error) {
+            console.error(error);
+            // window.location.href = "index.php?page=503";
         });
 
 
@@ -228,8 +306,8 @@ function print_filters() {
     $('<div class="div-filters container"></div>').appendTo('#title_property')
         .html('<div class="row">' +
             '<div class="col-md-4">' +
-            '<label for="filter_category">Category:</label>' +
-            '<select id="filter_category" class="form-control filter_category">' +
+            '<label for="id_category">Category:</label>' +
+            '<select id="id_category" class="form-control id_category">' +
             '<option value="" selected disabled>Select Category</option>' +
             '<option value="1">New Building</option>' +
             '<option value="2">Pool</option>' +
@@ -241,8 +319,8 @@ function print_filters() {
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
-            '<label for="filter_city">City:</label>' +
-            '<select id="filter_city" class="form-control filter_city">' +
+            '<label for="id_city">City:</label>' +
+            '<select id="id_city" class="form-control id_city">' +
             '<option value="" selected disabled>Select City</option>' +
             '<option value="1">Ontinyent</option>' +
             '<option value="2">Gandia</option>' +
@@ -252,8 +330,8 @@ function print_filters() {
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
-            '<label for="filter_extras">Extras:</label>' +
-            '<select id="filter_extras" class="form-control filter_extras">' +
+            '<label for="id_extras">Extras:</label>' +
+            '<select id="id_extras" class="form-control id_extras">' +
             '<option value="" selected disabled>Select Extras</option>' +
             '<option value="1">Heating</option>' +
             '<option value="2">Air Conditioning</option>' +
@@ -266,8 +344,8 @@ function print_filters() {
             '</div>' +
             '<div class="row">' +
             '<div class="col-md-4">' +
-            '<label for="filter_operation">Operation:</label>' +
-            '<select id="filter_operation" class="form-control filter_operation">' +
+            '<label for="id_operation">Operation:</label>' +
+            '<select id="id_operation" class="form-control id_operation">' +
             '<option value="" selected disabled>Select Operation</option>' +
             '<option value="1">Sale</option>' +
             '<option value="2">Rent</option>' +
@@ -276,8 +354,8 @@ function print_filters() {
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
-            '<label for="filter_type">Type:</label>' +
-            '<select id="filter_type" class="form-control filter_type">' +
+            '<label for="id_type">Type:</label>' +
+            '<select id="id_type" class="form-control id_type">' +
             '<option value="" selected disabled>Select Type</option>' +
             '<option value="1">Apartment</option>' +
             '<option value="2">House</option>' +
@@ -300,8 +378,8 @@ function print_filters() {
             // '</div>' +
             // '</div>' +
             '<div class="col-md-4">' +
-            '<label>Adapted for Large Persons:</label><hr>' +
-            '<select id="filter_large_persons" class="form-control filter_large_persons">' +
+            '<label for="id_large_people">Adapted for Large Persons:</label><hr>' +
+            '<select id="id_large_people" class="form-control id_large_people">' +
             '<option value="" selected disabled>Select Option</option>' +
             '<option value="1">Yes</option>' +
             '<option value="2">No</option>' +
@@ -319,101 +397,93 @@ function print_filters() {
             '<div class="row">' +
             '<div class="col-md-12 text-center">' +
             '<p></p>' +
-            // '<button class="button button-primary filter_button button_spinner mr-5" id="Button_filter">Filter</button>' +
             '<button class="button button-primary-white filter_remove ml-5" id="Remove_filter">Remove Filter</button>' +
             '</div>' +
             '</div>')
-            $(document).on('click', '#Button_filter', function() {
-                apply_filters();
-            });
             $(document).on('click', '#Remove_filter', function() {
                 remove_filters();
             });
 }
-function filter_button() {
-    let filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || {};
+function filters_shop() {
+    let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
 
     function handleFilterChange(filterName, value) {
-        filter_shop[filterName] = value;
-        localStorage.setItem('filter_shop', JSON.stringify(filter_shop));
+        filters_shop[filterName] = value;
+        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+        apply_filters();
+        location.reload();
     }
 
     function setFilterValue(filterName) {
-        if (filter_shop[filterName]) {
-            $(`#${filterName}`).val(filter_shop[filterName]);
+        if (filters_shop[filterName]) {
+            $(`#${filterName}`).val(filters_shop[filterName]);
         }
     }
 
-    $('#filter_category').change(function () {
+    $('#id_category').change(function () {
         handleFilterChange('id_category', this.value);
-        apply_filters();
 
     });
-    setFilterValue('filter_category');
+    setFilterValue('id_category');
 
-    $('#filter_city').change(function () {
+    $('#id_city').change(function () {
         handleFilterChange('id_city', this.value);
-        apply_filters();
     });
-    setFilterValue('filter_city');
+    setFilterValue('id_city');
 
-    $('#filter_extras').change(function () {
+    $('#id_extras').change(function () {
         handleFilterChange('id_extras', this.value);
-        apply_filters();
     });
-    setFilterValue('filter_extras');
+    setFilterValue('id_extras');
 
-    $('#filter_operation').change(function () {
+    $('#id_operation').change(function () {
         handleFilterChange('id_operation', this.value);
-        apply_filters();
     });
-    setFilterValue('filter_operation');
+    setFilterValue('id_operation');
 
-    $('#filter_type').change(function () {
+    $('#id_type').change(function () {
         handleFilterChange('id_type', this.value);
-        apply_filters();
     });
-    setFilterValue('filter_type');
+    setFilterValue('id_type');
 
-    $('#filter_large_persons').change(function () {
+    $('#id_large_people').change(function () {
         handleFilterChange('id_large_people', this.value);
-        apply_filters();
     });
-    setFilterValue('filter_large_persons');
+    setFilterValue('id_large_people');
 }
 function apply_filters() {
     let filter = [];
-    let filter_shop = JSON.parse(localStorage.getItem('filter_shop')) || {};
+    let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
 
-    if (filter_shop['filter_category']) {
-        filter.push(['category', filter_shop['filter_category']])
+    if (filters_shop['id_category']) {
+        filter.push(['id_category', filters_shop['id_category']])
     }
-    if (filter_shop['filter_city']) {
-        filter.push(['city', filter_shop['filter_city']])
+    if (filters_shop['id_city']) {
+        filter.push(['id_city', filters_shop['id_city']])
     }
-    if (filter_shop['filter_extras']) {
-        filter.push(['extras', filter_shop['filter_extras']])
+    if (filters_shop['id_extras']) {
+        filter.push(['id_extras', filters_shop['id_extras']])
     }
-    if (filter_shop['filter_operation']) {
-        filter.push(['operation', filter_shop['filter_operation']])
+    if (filters_shop['id_operation']) {
+        filter.push(['id_operation', filters_shop['id_operation']])
     }
-    if (filter_shop['filter_type']) {
-        filter.push(['type', filter_shop['filter_type']])
+    if (filters_shop['id_type']) {
+        filter.push(['id_type', filters_shop['id_type']])
     }
-    if (filter_shop['filter_large_persons']) {
-        filter.push(['large_persons', filter_shop['filter_large_persons']])
+    if (filters_shop['id_large_people']) {
+        filter.push(['id_large_people', filters_shop['id_large_people']])
     }
 
     return filter;
 }
 function remove_filters() {
-    localStorage.removeItem('filter_shop');
+    localStorage.removeItem('filters_shop');
     location.reload();
 }
 
 $(document).ready(function () {
     loadProperties();
     print_filters();
-    filter_button();
+    filters_shop();
     clicks_shop();
 });
