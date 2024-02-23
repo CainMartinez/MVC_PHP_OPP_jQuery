@@ -77,6 +77,8 @@ switch ($_GET['op']) {
     case 'filters_shop':
         try {
             $daoshop = new DAOShop();
+            // $Dates_Properties = $daoshop->select_all_properties();
+
             $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop']);
             $Date_images = $daoshop->select_images_property();
 

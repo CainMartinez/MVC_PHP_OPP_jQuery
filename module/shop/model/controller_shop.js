@@ -101,6 +101,7 @@ function ajaxForSearch(url) {
 function ajaxForSearch_Shop(url) {
 
     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
+    console.log('entra en el ajaxForSearch_Shop');
     console.log(filters_shop);
     localStorage.removeItem('filters_shop');
     ajaxPromise('POST', 'JSON', url, {filters_shop})

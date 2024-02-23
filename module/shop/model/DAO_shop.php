@@ -129,7 +129,8 @@ class DAOShop{
 		return $imgArray;
 	}
 	function filters_shop($filters_shop){
-		// return $filters_shop;
+		error_log(print_r($filters_shop, true), 3, "debug.txt");
+
 		$consulta = "SELECT p.*, c.name_city,lp.name_large_people,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
@@ -138,17 +139,23 @@ class DAOShop{
 			FROM property p
 			INNER JOIN city c ON p.id_city = c.id_city
 			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people";
-		// return $consulta;
-		for ($i=0; $i < count($filters_shop); $i++){
-			if ($i==0){
-				$consulta.= " WHERE " . $filters_shop[$i][0] . "='" . $filters_shop[$i][1] . "'";
-				// return $consulta;
-			}else {
-				$consulta.= " AND " . $filters_shop[$i][0] . "='" . $filters_shop[$i][1] . "'";
-				// return $consulta;
-			}        
+
+		if (isset($filters_shop['id_city'])) {
+			$consulta .= " WHERE c.id_city = " . $filters_shop['id_city'];
+		} elseif (isset($filters_shop['id_large_people'])) {
+			$consulta .= " WHERE lp.id_large_people = " . $filters_shop['id_large_people'];
+		} elseif (isset($filters_shop['id_type'])) {
+			$consulta .= " WHERE p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
+		} elseif (isset($filters_shop['id_operation'])) {
+			$consulta .= " WHERE p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
+		} elseif (isset($filters_shop['id_category'])) {
+			$consulta .= " WHERE p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
+		} elseif (isset($filters_shop['id_extras'])) {
+			$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . $filters_shop['id_extras'] . ")";
 		}
-		// return $consulta;
+
+		error_log($consulta, 3, "debug.txt");
+
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
 		connect::close($conexion);
