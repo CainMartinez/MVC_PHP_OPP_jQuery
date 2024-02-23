@@ -140,18 +140,52 @@ class DAOShop{
 			INNER JOIN city c ON p.id_city = c.id_city
 			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people";
 
-		if (isset($filters_shop['id_city'])) {
-			$consulta .= " WHERE c.id_city = " . $filters_shop['id_city'];
-		} elseif (isset($filters_shop['id_large_people'])) {
-			$consulta .= " WHERE lp.id_large_people = " . $filters_shop['id_large_people'];
-		} elseif (isset($filters_shop['id_type'])) {
-			$consulta .= " WHERE p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
-		} elseif (isset($filters_shop['id_operation'])) {
-			$consulta .= " WHERE p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
-		} elseif (isset($filters_shop['id_category'])) {
-			$consulta .= " WHERE p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
-		} elseif (isset($filters_shop['id_extras'])) {
-			$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . $filters_shop['id_extras'] . ")";
+		foreach ($filters_shop as $key => $value) {
+			if (isset($filters_shop[$key])) {
+				if (strpos($consulta, 'WHERE') !== false) {
+					switch ($key) {
+						case 'id_city':
+							$consulta .= " AND c.id_city = " . $filters_shop['id_city'];
+							break;
+						case 'id_large_people':
+							$consulta .= " AND lp.id_large_people = " . $filters_shop['id_large_people'];
+							break;
+						case 'id_type':
+							$consulta .= " AND p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
+							break;
+						case 'id_operation':
+							$consulta .= " AND p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
+							break;
+						case 'id_category':
+							$consulta .= " AND p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
+							break;
+						case 'id_extras':
+							$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . $filters_shop['id_extras'] . ")";
+							break;
+					}
+				} else {
+					switch ($key) {
+						case 'id_city':
+							$consulta .= " WHERE c.id_city = " . $filters_shop['id_city'];
+							break;
+						case 'id_large_people':
+							$consulta .= " WHERE lp.id_large_people = " . $filters_shop['id_large_people'];
+							break;
+						case 'id_type':
+							$consulta .= " WHERE p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
+							break;
+						case 'id_operation':
+							$consulta .= " WHERE p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
+							break;
+						case 'id_category':
+							$consulta .= " WHERE p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
+							break;
+						case 'id_extras':
+							$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . $filters_shop['id_extras'] . ")";
+							break;
+					}
+				}
+			}
 		}
 
 		error_log($consulta, 3, "debug.txt");

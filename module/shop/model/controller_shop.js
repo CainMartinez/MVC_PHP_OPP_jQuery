@@ -103,7 +103,6 @@ function ajaxForSearch_Shop(url) {
     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
     console.log('entra en el ajaxForSearch_Shop');
     console.log(filters_shop);
-    localStorage.removeItem('filters_shop');
     ajaxPromise('POST', 'JSON', url, {filters_shop})
         .then(function (data) {
             // console.log(data);
@@ -246,7 +245,7 @@ function loadDetails(id_property) {
             $('<td></td>').addClass('property-operation').css('text-align', 'left').html('<i class="fas fa-handshake" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Operation: ' + operation + '</span><hr>').appendTo(row4);
 
             var row5 = $("<tr></tr>").appendTo(table);
-            $('<td></td>').attr('colspan', 3).addClass('large-person').html('<i class="fas fa-user-plus" style="font-size: 1.3em;"></i> <span style="font-size: 1.3em;">Adapted for a Large Persons: ' + data[0].name_large_people + '</span><hr>').appendTo(row5);
+            $('<td></td>').attr('colspan', 3).addClass('large-person').html('<i class="fas fa-user-plus" style="font-size: 1.3em;"></i> <span style="font-size: 1.3em;">Adapted for a XL People: ' + data[0].name_large_people + '</span><hr>').appendTo(row5);
 
             var row6 = $("<tr></tr>").appendTo(table);
             $('<td></td>').attr('colspan', 3).addClass('property-description').css('text-align', 'center').html('<i class="fas fa-align-left" style="font-size: 1.5em;"></i> <span style="font-size: 1.5em;">Description: ' + data[0].description + '</span><hr>').appendTo(row6);
@@ -365,21 +364,8 @@ function print_filters() {
             '<option value="5">Office</option>' +
             '</select>' +
             '</div>' +
-            // '<div class="col-md-4">' +
-            // '<label>Adapted for Large Persons:</label><hr>' +
-            // '<div class="d-flex justify-content-center">' +
-            // '<div class="form-check form-check-inline mr-3">' +
-            // '<input type="radio" id="filter_large_persons_yes" name="filter_large_persons" class="form-check-input">' +
-            // '<label class="form-check-label" for="filter_large_persons_yes">Yes</label>' +
-            // '</div>' +
-            // '<div class="form-check form-check-inline">' +
-            // '<input type="radio" id="filter_large_persons_no" name="filter_large_persons" class="form-check-input">' +
-            // '<label class="form-check-label" for="filter_large_persons_no">No</label>' +
-            // '</div>' +
-            // '</div>' +
-            // '</div>' +
             '<div class="col-md-4">' +
-            '<label for="id_large_people">Adapted for Large Persons:</label><hr>' +
+            '<label for="id_large_people">Adapted for XL People:</label><hr>' +
             '<select id="id_large_people" class="form-control id_large_people">' +
             '<option value="" selected disabled>Select Option</option>' +
             '<option value="1">Yes</option>' +
