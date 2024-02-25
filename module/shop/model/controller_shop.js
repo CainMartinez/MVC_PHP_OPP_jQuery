@@ -465,25 +465,25 @@ function apply_filters() {
     return filter;
 }
 function highlight_shop() {
-    var all_filters = JSON.parse(localStorage.getItem('filters_shop'));
+    var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
 
-    if (all_filters['id_category']) {
-        document.getElementById('id_category').value = all_filters['id_category'];
+    if (highlight_filters['id_category']) {
+        document.getElementById('id_category').value = highlight_filters['id_category'];
     }
-    if (all_filters['id_city']) {
-        document.getElementById('id_city').value = all_filters['id_city'];
+    if (highlight_filters['id_city']) {
+        document.getElementById('id_city').value = highlight_filters['id_city'];
     }
-    if (all_filters['id_extras']) {
-        document.getElementById('id_extras').value = all_filters['id_extras'];
+    if (highlight_filters['id_extras']) {
+        document.getElementById('id_extras').value = highlight_filters['id_extras'];
     }
-    if (all_filters['id_operation']) {
-        document.getElementById('id_operation').value = all_filters['id_operation'];
+    if (highlight_filters['id_operation']) {
+        document.getElementById('id_operation').value = highlight_filters['id_operation'];
     }
-    if (all_filters['id_type']) {
-        document.getElementById('id_type').value = all_filters['id_type'];
+    if (highlight_filters['id_type']) {
+        document.getElementById('id_type').value = highlight_filters['id_type'];
     }
-    if (all_filters['id_large_people']) {
-        document.getElementById('id_large_people').value = all_filters['id_large_people'];
+    if (highlight_filters['id_large_people']) {
+        document.getElementById('id_large_people').value = highlight_filters['id_large_people'];
     }
 }
 function remove_filters() {
