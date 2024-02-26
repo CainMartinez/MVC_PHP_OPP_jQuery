@@ -75,6 +75,7 @@ switch ($_GET['op']) {
         break;
 
     case 'filters_shop':
+
         try {
             $daoshop = new DAOShop();
             // $Dates_Properties = $daoshop->select_all_properties();
@@ -97,7 +98,20 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
+    case 'dynamic_filters_shop':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_all_properties();
 
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
     default;
         include("views/inc/error404.html");
         break;

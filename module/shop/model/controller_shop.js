@@ -16,7 +16,7 @@ function loadProperties() {
     } else if (filters_shop !== false) {
         console.log('Envio en la URL op=filters_shop');
         ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop");
-        // highlight_shop();
+        highlight_shop();
         // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
@@ -176,14 +176,12 @@ function ajaxForSearch_Shop(url) {
 
 
 }
-
 function clicks_shop() {
     $(document).on("click", ".more_info_list", function () {
         var id_property = this.getAttribute('id');
         loadDetails(id_property);
     });
 }
-
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
         .then(function (data) {
@@ -410,7 +408,6 @@ function filters_shop() {
 
     $('#id_category').change(function () {
         handleFilterChange('id_category', this.value);
-
     });
     setFilterValue('id_category');
 
@@ -465,26 +462,28 @@ function apply_filters() {
     return filter;
 }
 function highlight_shop() {
-    var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
 
-    if (highlight_filters['id_category']) {
-        document.getElementById('id_category').value = highlight_filters['id_category'];
-    }
-    if (highlight_filters['id_city']) {
-        document.getElementById('id_city').value = highlight_filters['id_city'];
-    }
-    if (highlight_filters['id_extras']) {
-        document.getElementById('id_extras').value = highlight_filters['id_extras'];
-    }
-    if (highlight_filters['id_operation']) {
-        document.getElementById('id_operation').value = highlight_filters['id_operation'];
-    }
-    if (highlight_filters['id_type']) {
-        document.getElementById('id_type').value = highlight_filters['id_type'];
-    }
-    if (highlight_filters['id_large_people']) {
-        document.getElementById('id_large_people').value = highlight_filters['id_large_people'];
-    }
+    var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
+    console.log(highlight_filters[0][0]);
+
+    // if (highlight_filters.id_category) {
+    //     document.getElementById('id_category').value = highlight_filters[0][1];
+    // }
+    // if (highlight_filters['id_city']) {
+    //     document.getElementById('id_city').value = highlight_filters['id_city'];
+    // }
+    // if (highlight_filters['id_extras']) {
+    //     document.getElementById('id_extras').value = highlight_filters['id_extras'];
+    // }
+    // if (highlight_filters['id_operation']) {
+    //     document.getElementById('id_operation').value = highlight_filters['id_operation'];
+    // }
+    // if (highlight_filters['id_type']) {
+    //     document.getElementById('id_type').value = highlight_filters['id_type'];
+    // }
+    // if (highlight_filters['id_large_people']) {
+    //     document.getElementById('id_large_people').value = highlight_filters['id_large_people'];
+    // }
 }
 function remove_filters() {
     localStorage.removeItem('filters_shop');
