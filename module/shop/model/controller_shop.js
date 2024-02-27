@@ -14,7 +14,7 @@ function loadProperties() {
     } else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
     } else if (filters_shop !== false) {
-        console.log('Envio en la URL op=filters_shop');
+        // console.log('Envio en la URL op=filters_shop');
         ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", highlight_shop);
         // localStorage.removeItem('filters_shop');
     } else {
@@ -24,7 +24,7 @@ function loadProperties() {
 function ajaxForSearch(url) {
 
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
-    console.log(filters_home);
+    // console.log(filters_home);
     localStorage.removeItem('filters_home');
     ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home })
         .then(function (data) {
@@ -101,9 +101,9 @@ function ajaxForSearch(url) {
 function ajaxForSearch_Shop(url, highlight) {
 
     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
-    console.log('entra en el ajaxForSearch_Shop');
-    console.log(filters_shop);
-    ajaxPromise('POST', 'JSON', url, {filters_shop})
+    // console.log('entra en el ajaxForSearch_Shop');
+    // console.log(filters_shop);
+    ajaxPromise('POST', 'JSON', url, { filters_shop })
         .then(function (data) {
             // console.log(data);
             // console.log('entra en el then HOME_FILTER');
@@ -175,8 +175,6 @@ function ajaxForSearch_Shop(url, highlight) {
             console.error(error);
             // window.location.href = "index.php?page=503";
         });
-
-
 }
 function clicks_shop() {
     $(document).on("click", ".more_info_list", function () {
@@ -191,7 +189,7 @@ function loadDetails(id_property) {
             $('#properties_shop').empty();
             $('#images_properties').empty();
             // console.log(data);
-            console.log(data[0].type_concat);
+            // console.log(data[0].type_concat);
             var type = data[0].type_concat;
             var operation = data[0].operation_concat;
             var category = data[0].category_concat;
@@ -304,8 +302,8 @@ function loadDetails(id_property) {
         });
 }
 function print_filters() {
-    $('<div class="div-filters container"></div>').appendTo('#title_property')
-        .html('<div class="row">' +
+    $('<div class="div-filters container"></div>').appendTo('#title_property').html
+        ('<div class="row">' +
             '<div class="col-md-4">' +
             '<label for="id_category">Category:</label>' +
             '<select id="id_category" class="form-control id_category">' +
@@ -322,12 +320,12 @@ function print_filters() {
             '<div class="col-md-4">' +
             '<label for="id_city">City:</label>' +
             '<select id="id_city" class="form-control id_city">' +
-            '<option value="" selected disabled>Select City</option>' +
-            '<option value="1">Ontinyent</option>' +
-            '<option value="2">Gandia</option>' +
-            '<option value="3">Albaida</option>' +
-            '<option value="4">Alcoi</option>' +
-            '<option value="5">Xativa</option>' +
+            // '<option value="" selected disabled>Select City</option>' +
+            // '<option value="1">Ontinyent</option>' +
+            // '<option value="2">Gandia</option>' +
+            // '<option value="3">Albaida</option>' +
+            // '<option value="4">Alcoi</option>' +
+            // '<option value="5">Xativa</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
@@ -371,7 +369,7 @@ function print_filters() {
             '<option value="" selected disabled>Select Option</option>' +
             '<option value="1">Yes</option>' +
             '<option value="2">No</option>' +
-            '<option value="3">Partially</option>'+
+            '<option value="3">Partially</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4 text-center">' +
@@ -388,9 +386,32 @@ function print_filters() {
             '<button class="button button-primary-white filter_remove ml-5" id="Remove_filter">Remove Filter</button>' +
             '</div>' +
             '</div>')
-            $(document).on('click', '#Remove_filter', function() {
-                remove_filters();
-            });
+            ajaxPromise(
+                "GET",
+                "JSON",
+                "module/home/controller/controller_home.php?op=dynamic_filters_shop"
+            )
+                .then(function (data) {
+                    console.log(data);
+                    var selectCity = $('#id_city');
+                    selectCity.empty(); // Limpiar las opciones existentes
+                    selectCity.append('<option value="" selected disabled>Select City</option>'); // Opción por defecto
+        
+                    for (row in data) {
+                        var option = $("<option></option>")
+                            .attr("value", data[row].id_city)
+                            .text(data[row].name_city);
+                        selectCity.append(option);
+                    }
+                })
+                .catch(function (e) {
+                    console.error(e);
+                    // window.location.href ="index.php?page=503;
+                });
+
+    $(document).on('click', '#Remove_filter', function () {
+        remove_filters();
+    });
 }
 function filters_shop() {
     let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
@@ -463,8 +484,6 @@ function apply_filters() {
 
     return filter;
 }
-
-
 function highlight_shop() {
 
     var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
@@ -510,7 +529,6 @@ function remove_filters() {
     localStorage.removeItem('filters_shop');
     location.reload();
 }
-
 $(document).ready(function () {
     loadProperties();
     print_filters();
