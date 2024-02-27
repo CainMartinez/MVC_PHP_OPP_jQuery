@@ -129,7 +129,7 @@ class DAOShop{
 		return $imgArray;
 	}
 	function filters_shop($filters_shop){
-		error_log(print_r($filters_shop, true), 3, "debug.txt");
+		// error_log(print_r($filters_shop, true), 3, "debug.txt");
 
 		$consulta = "SELECT p.*, c.name_city,lp.name_large_people,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
