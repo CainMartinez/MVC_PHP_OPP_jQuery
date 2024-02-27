@@ -15,7 +15,7 @@ function loadProperties() {
         // if para el filtro de la barra de busqueda
     } else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
-        ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", highlight_shop);
+        ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", highlight_shop_old);
         // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
@@ -308,36 +308,18 @@ function print_filters() {
             '<label for="id_category">Category:</label>' +
             '<select id="id_category" class="form-control id_category">' +
             '<option value="" selected disabled>Select Category</option>' +
-            '<option value="1">New Building</option>' +
-            '<option value="2">Pool</option>' +
-            '<option value="3">Beach</option>' +
-            '<option value="4">Garden</option>' +
-            '<option value="5">Garage</option>' +
-            '<option value="6">Storage</option>' +
-            '<option value="7">Terrace</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="id_city">City:</label>' +
             '<select id="id_city" class="form-control id_city">' +
-            // '<option value="" selected disabled>Select City</option>' +
-            // '<option value="1">Ontinyent</option>' +
-            // '<option value="2">Gandia</option>' +
-            // '<option value="3">Albaida</option>' +
-            // '<option value="4">Alcoi</option>' +
-            // '<option value="5">Xativa</option>' +
+            '<option value="" selected disabled>Select City</option>'+
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="id_extras">Extras:</label>' +
             '<select id="id_extras" class="form-control id_extras">' +
             '<option value="" selected disabled>Select Extras</option>' +
-            '<option value="1">Heating</option>' +
-            '<option value="2">Air Conditioning</option>' +
-            '<option value="3">Fireplace</option>' +
-            '<option value="4">Elevator</option>' +
-            '<option value="5">Sauna</option>' +
-            '<option value="6">Solar Panel</option>' +
             '</select>' +
             '</div>' +
             '</div>' +
@@ -346,30 +328,18 @@ function print_filters() {
             '<label for="id_operation">Operation:</label>' +
             '<select id="id_operation" class="form-control id_operation">' +
             '<option value="" selected disabled>Select Operation</option>' +
-            '<option value="1">Sale</option>' +
-            '<option value="2">Rent</option>' +
-            '<option value="3">Share</option>' +
-            '<option value="4">Rent to Own</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="id_type">Type:</label>' +
             '<select id="id_type" class="form-control id_type">' +
             '<option value="" selected disabled>Select Type</option>' +
-            '<option value="1">Apartment</option>' +
-            '<option value="2">House</option>' +
-            '<option value="3">Townhouse</option>' +
-            '<option value="4">Duplex</option>' +
-            '<option value="5">Office</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
             '<label for="id_large_people">Adapted for XL People:</label><hr>' +
             '<select id="id_large_people" class="form-control id_large_people">' +
             '<option value="" selected disabled>Select Option</option>' +
-            '<option value="1">Yes</option>' +
-            '<option value="2">No</option>' +
-            '<option value="3">Partially</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-md-4 text-center">' +
@@ -386,31 +356,97 @@ function print_filters() {
             '<button class="button button-primary-white filter_remove ml-5" id="Remove_filter">Remove Filter</button>' +
             '</div>' +
             '</div>')
-            ajaxPromise(
-                "GET",
-                "JSON",
-                "module/home/controller/controller_home.php?op=dynamic_filters_shop"
-            )
-                .then(function (data) {
-                    console.log(data);
-                    var selectCity = $('#id_city');
-                    selectCity.empty(); // Limpiar las opciones existentes
-                    selectCity.append('<option value="" selected disabled>Select City</option>'); // Opción por defecto
-        
-                    for (row in data) {
-                        var option = $("<option></option>")
-                            .attr("value", data[row].id_city)
-                            .text(data[row].name_city);
-                        selectCity.append(option);
-                    }
-                })
-                .catch(function (e) {
-                    console.error(e);
-                    // window.location.href ="index.php?page=503;
-                });
-
     $(document).on('click', '#Remove_filter', function () {
         remove_filters();
+    });
+    load_city();
+    load_large_people();
+    load_extras();
+    load_operation();
+    load_type();
+    load_category();
+}
+function load_city() {
+    ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_city')
+        .then(function (data) {
+            
+            for (let row in data) {
+                let city = data[row];
+                $('#id_city').append('<option value="' + city.id_city + '">' + city.name_city + '</option>');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+}
+function load_large_people() {
+    ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_large_people')
+        .then(function (data) {
+            for (let row in data) {
+                let large_people = data[row];
+                $('#id_large_people').append('<option value="' + large_people.id_large_people + '">' + large_people.name_large_people + '</option>');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+}
+function load_type(){
+    ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_type')
+        .then(function (data) {
+            for (let row in data) {
+                let type = data[row];
+                $('#id_type').append('<option value="' + type.id_type + '">' + type.name_type + '</option>');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+}
+function load_operation() {
+    ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_operation')
+        .then(function (data) {
+            for (let row in data) {
+                let operation = data[row];
+                $('#id_operation').append('<option value="' + operation.id_operation + '">' + operation.name_operation + '</option>');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+}
+function load_extras() {
+    ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_extras')
+        .then(function (data) {
+            for (let row in data) {
+                let extras = data[row];
+                $('#id_extras').append('<option value="' + extras.id_extras + '">' + extras.name_extras + '</option>');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+}
+function load_category() {
+    ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_category')
+        .then(function (data) {
+            for (let row in data) {
+                let category = data[row];
+                $('#id_category').append('<option value="' + category.id_category + '">' + category.name_category + '</option>');
+            }
+            let selectedCategory = localStorage.getItem('selectedCategory');
+            if (selectedCategory) {
+                $('#id_category').val(selectedCategory);
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+
+    $('#id_category').change(function() {
+        let selectedCategory = $(this).val();
+        localStorage.setItem('selectedCategory', selectedCategory);
+        $('#id_city').addClass('selected_filters');
     });
 }
 function filters_shop() {
@@ -484,7 +520,7 @@ function apply_filters() {
 
     return filter;
 }
-function highlight_shop() {
+function highlight_shop_old() {
 
     var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
 
@@ -525,8 +561,12 @@ function highlight_shop() {
         }
     }
 }
+function highlight_shop(){
+
+}
 function remove_filters() {
     localStorage.removeItem('filters_shop');
+    localStorage.removeItem('selectedCategory');
     location.reload();
 }
 $(document).ready(function () {

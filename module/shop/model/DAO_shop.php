@@ -40,6 +40,98 @@ class DAOShop{
 		}
 		return $imagesArray;
 	}
+	function select_city(){
+		$sql = "SELECT * FROM city";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$cityArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			foreach ($res as $row) {
+				array_push($cityArray, $row);
+			}
+		}
+		return $cityArray;
+	
+	}
+	function select_type() {
+		$sql= "SELECT * FROM `type` ORDER BY id_type ASC LIMIT 30;";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
+	function select_large_people(){
+		$sql= "SELECT * FROM `large_people` ORDER BY id_large_people ASC LIMIT 30;";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	
+	}
+	function select_extras() {
+		$sql= "SELECT * FROM `extras`;";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
+	function select_categories() {
+		$sql= "SELECT * FROM category";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
+	function select_operations(){
+		$sql= "SELECT * FROM operation";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
 	function select_filter_home($filters_home){
 		$sql = "SELECT *
 		FROM property p, city c, property_type pt, property_operation po, property_category pc, property_extras pe

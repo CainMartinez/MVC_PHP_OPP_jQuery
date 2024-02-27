@@ -98,7 +98,7 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
-    case 'dynamic_filters_shop':
+    case 'dynamic_city':
         try {
             $daoshop = new DAOShop();
             $Dates_Properties = $daoshop->select_all_properties();
@@ -112,6 +112,77 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
+    case 'dynamic_type':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_type();
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'dynamic_operation':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_operations();
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'dynamic_large_people':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_large_people();
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'dynamic_extras':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_extras();
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'dynamic_category':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->select_categories();
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+
     default;
         include("views/inc/error404.html");
         break;
