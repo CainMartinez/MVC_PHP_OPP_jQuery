@@ -15,7 +15,7 @@ function loadProperties() {
         // if para el filtro de la barra de busqueda
     } else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
-        ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", highlight_shop_old);
+        ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop",highlight_shop);
         // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
@@ -316,12 +316,6 @@ function print_filters() {
             '<option value="" selected disabled>Select City</option>'+
             '</select>' +
             '</div>' +
-            '<div class="col-md-4">' +
-            '<label for="id_extras">Extras:</label>' +
-            '<select id="id_extras" class="form-control id_extras">' +
-            '<option value="" selected disabled>Select Extras</option>' +
-            '</select>' +
-            '</div>' +
             '</div>' +
             '<div class="row">' +
             '<div class="col-md-4">' +
@@ -342,6 +336,15 @@ function print_filters() {
             '<option value="" selected disabled>Select Option</option>' +
             '</select>' +
             '</div>' +
+            '</div>' +
+            '<div class="row">' +
+                '<div class="col-md-4">' +
+                    '<label for="id_extras" class="form-check-label">Extras:</label>' +
+                    '<div id="id_extras" class="id_extras row">' +
+                    '</div>' +
+                '</div>' +
+            '</div>'+
+            '</div>'+
             '<div class="col-md-4 text-center">' +
             '<div id="overlay">' +
             '<div class="cv-spinner">' +
@@ -374,10 +377,19 @@ function load_city() {
                 let city = data[row];
                 $('#id_city').append('<option value="' + city.id_city + '">' + city.name_city + '</option>');
             }
+            let selectedCity = localStorage.getItem('selectedCity');
+            if (selectedCity) {
+                $('#id_city').val(selectedCity);
+                $('#id_city').addClass('selected_filters');
+            }
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
+    $('#id_city').change(function() {
+        let selectedCity = $(this).val();
+        localStorage.setItem('selectedCity', selectedCity);
+    });
 }
 function load_large_people() {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_large_people')
@@ -386,10 +398,19 @@ function load_large_people() {
                 let large_people = data[row];
                 $('#id_large_people').append('<option value="' + large_people.id_large_people + '">' + large_people.name_large_people + '</option>');
             }
+            let selectedLargePeople = localStorage.getItem('selectedLargePeople');
+            if (selectedLargePeople) {
+                $('#id_large_people').val(selectedLargePeople);
+                $('#id_large_people').addClass('selected_filters');
+            }
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
+    $('#id_large_people').change(function() {
+        let selectedLargePeople = $(this).val();
+        localStorage.setItem('selectedLargePeople', selectedLargePeople);
+    });
 }
 function load_type(){
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_type')
@@ -398,10 +419,19 @@ function load_type(){
                 let type = data[row];
                 $('#id_type').append('<option value="' + type.id_type + '">' + type.name_type + '</option>');
             }
+            let selectedType = localStorage.getItem('selectedType');
+            if (selectedType) {
+                $('#id_type').val(selectedType);
+                $('#id_type').addClass('selected_filters');
+            }
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
+    $('#id_type').change(function() {
+        let selectedType = $(this).val();
+        localStorage.setItem('selectedType', selectedType);
+    });
 }
 function load_operation() {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_operation')
@@ -410,22 +440,43 @@ function load_operation() {
                 let operation = data[row];
                 $('#id_operation').append('<option value="' + operation.id_operation + '">' + operation.name_operation + '</option>');
             }
+            let selectedOperation = localStorage.getItem('selectedOperation');
+            if (selectedOperation) {
+                $('#id_operation').val(selectedOperation);
+                $('#id_operation').addClass('selected_filters');
+            }
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
+    $('#id_operation').change(function() {
+        let selectedOperation = $(this).val();
+        localStorage.setItem('selectedOperation', selectedOperation);
+    });
 }
 function load_extras() {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_extras')
         .then(function (data) {
             for (let row in data) {
                 let extras = data[row];
-                $('#id_extras').append('<option value="' + extras.id_extras + '">' + extras.name_extras + '</option>');
+                // Cambia el select por un checkbox
+                $('#id_extras').append('<div class="form-check col-md-6"><input type="checkbox" class="form-check-input" id="' + extras.id_extras + '" value="' + extras.id_extras + '"><label class="form-check-label" for="' + extras.id_extras + '">' + extras.name_extras + '</label></div>');                       
+            }
+            let selectedExtras = localStorage.getItem('selectedExtras');
+            if (selectedExtras) {
+                $('#' + selectedExtras).prop('checked', true);
+                $('#' + selectedExtras).addClass('selected_filters');
             }
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
+
+    // Cambia el evento change por click y ajusta cómo se obtiene el valor seleccionado
+    $('#id_extras').on('click', 'input[type="checkbox"]', function() {
+        let selectedExtras = $(this).attr('id');
+        localStorage.setItem('selectedExtras', selectedExtras);
+    });
 }
 function load_category() {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_category')
@@ -437,6 +488,7 @@ function load_category() {
             let selectedCategory = localStorage.getItem('selectedCategory');
             if (selectedCategory) {
                 $('#id_category').val(selectedCategory);
+                $('#id_category').addClass('selected_filters');
             }
         }).catch(function (e) {
             console.error(e);
@@ -446,16 +498,16 @@ function load_category() {
     $('#id_category').change(function() {
         let selectedCategory = $(this).val();
         localStorage.setItem('selectedCategory', selectedCategory);
-        $('#id_city').addClass('selected_filters');
     });
 }
 function filters_shop() {
     let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
 
-    function handleFilterChange(filterName, value) {
-        filters_shop[filterName] = value;
+    function handleFilterChange(filterName, filterValue) {
+        let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+        filters_shop[filterName] = filterValue;
         localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
-        apply_filters();
+        filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
         location.reload();
     }
 
@@ -475,10 +527,19 @@ function filters_shop() {
     });
     setFilterValue('id_city');
 
-    $('#id_extras').change(function () {
-        handleFilterChange('id_extras', this.value);
+    $('#id_extras').on('change', 'input[type="checkbox"]', function() {
+        let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+        let selectedExtras = filters_shop['id_extras'] || [];
+
+        if (this.checked) {
+            selectedExtras.push(this.value);
+        } else {
+            selectedExtras = selectedExtras.filter(value => value !== this.value);
+        }
+
+        handleFilterChange('id_extras', selectedExtras);
+        setFilterValue('id_extras');
     });
-    setFilterValue('id_extras');
 
     $('#id_operation').change(function () {
         handleFilterChange('id_operation', this.value);
@@ -506,7 +567,9 @@ function apply_filters() {
         filter.push(['id_city', filters_shop['id_city']])
     }
     if (filters_shop['id_extras']) {
-        filter.push(['id_extras', filters_shop['id_extras']])
+        filters_shop['id_extras'].forEach(function(value) {
+            filter.push(['id_extras', value])
+        });
     }
     if (filters_shop['id_operation']) {
         filter.push(['id_operation', filters_shop['id_operation']])
@@ -520,7 +583,7 @@ function apply_filters() {
 
     return filter;
 }
-function highlight_shop_old() {
+function highlight_shop() {
 
     var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
 
@@ -537,8 +600,14 @@ function highlight_shop_old() {
         }
     }
     if (highlight_filters['id_extras']) {
-        $('#id_extras').val(highlight_filters['id_extras']);
-        if ($('#id_extras').val()) {
+        $('#id_extras input[type="checkbox"]').each(function() {
+            if (highlight_filters['id_extras'].includes(this.value)) {
+                $(this).prop('checked', true);
+            } else {
+                $(this).prop('checked', false);
+            }
+        });
+        if (highlight_filters['id_extras'].length > 0) {
             $('#id_extras').addClass('selected_filters');
         }
     }
@@ -561,12 +630,14 @@ function highlight_shop_old() {
         }
     }
 }
-function highlight_shop(){
-
-}
 function remove_filters() {
     localStorage.removeItem('filters_shop');
     localStorage.removeItem('selectedCategory');
+    localStorage.removeItem('selectedCity');
+    localStorage.removeItem('selectedExtras');
+    localStorage.removeItem('selectedOperation');
+    localStorage.removeItem('selectedType');
+    localStorage.removeItem('selectedLargePeople');
     location.reload();
 }
 $(document).ready(function () {

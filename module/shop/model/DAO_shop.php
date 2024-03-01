@@ -252,7 +252,12 @@ class DAOShop{
 							$consulta .= " AND p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
 							break;
 						case 'id_extras':
-							$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . $filters_shop['id_extras'] . ")";
+							if (is_array($filters_shop['id_extras'])) {
+								$extras = implode(',', array_map('intval', $filters_shop['id_extras']));
+								$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras IN (" . $extras . "))";
+							} else {
+								$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+							}
 							break;
 					}
 				} else {
@@ -273,7 +278,12 @@ class DAOShop{
 							$consulta .= " WHERE p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
 							break;
 						case 'id_extras':
-							$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . $filters_shop['id_extras'] . ")";
+							if (is_array($filters_shop['id_extras'])) {
+								$extras = implode(',', array_map('intval', $filters_shop['id_extras']));
+								$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras IN (" . $extras . "))";
+							} else {
+								$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+							}
 							break;
 					}
 				}

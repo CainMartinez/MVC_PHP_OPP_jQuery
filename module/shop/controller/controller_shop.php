@@ -101,7 +101,7 @@ switch ($_GET['op']) {
     case 'dynamic_city':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_all_properties();
+            $Dates_Properties = $daoshop->select_city();
 
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
