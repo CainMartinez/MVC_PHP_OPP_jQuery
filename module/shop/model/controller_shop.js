@@ -244,7 +244,7 @@ function loadDetails(id_property) {
             $('<td></td>').addClass('property-operation').css('text-align', 'left').html('<i class="fas fa-handshake" style="font-size: 1.25em;"></i> <span style="font-size: 1.25em;">Operation: ' + operation + '</span><hr>').appendTo(row4);
 
             var row5 = $("<tr></tr>").appendTo(table);
-            $('<td></td>').attr('colspan', 3).addClass('large-person').html('<i class="fas fa-user-plus" style="font-size: 1.3em;"></i> <span style="font-size: 1.3em;">Adapted for a XL People: ' + data[0].name_large_people + '</span><hr>').appendTo(row5);
+            $('<td></td>').attr('colspan', 3).addClass('large-person').html('<i class="fas fa-user-plus" style="font-size: 1.3em;"></i> <span style="font-size: 1.3em;">Adapted for Reduced Mobility: ' + data[0].name_large_people + '</span><hr>').appendTo(row5);
 
             var row6 = $("<tr></tr>").appendTo(table);
             $('<td></td>').attr('colspan', 3).addClass('property-description').css('text-align', 'center').html('<i class="fas fa-align-left" style="font-size: 1.5em;"></i> <span style="font-size: 1.5em;">Description: ' + data[0].description + '</span><hr>').appendTo(row6);
@@ -331,7 +331,7 @@ function print_filters() {
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
-            '<label for="id_large_people">Adapted for XL People:</label><hr>' +
+            '<label for="id_large_people">Adapted for Reduced Mobility:</label><hr>' +
             '<select id="id_large_people" class="form-control id_large_people">' +
             '<option value="" selected disabled>Select Option</option>' +
             '</select>' +
@@ -459,7 +459,6 @@ function load_extras() {
         .then(function (data) {
             for (let row in data) {
                 let extras = data[row];
-                // Cambia el select por un checkbox
                 $('#id_extras').append('<div class="form-check col-md-6"><input type="checkbox" class="form-check-input" id="' + extras.id_extras + '" value="' + extras.id_extras + '"><label class="form-check-label" for="' + extras.id_extras + '">' + extras.name_extras + '</label></div>');                       
             }
             let selectedExtras = localStorage.getItem('selectedExtras');
@@ -472,7 +471,6 @@ function load_extras() {
             // window.location.href = "index.php?page=503";
         });
 
-    // Cambia el evento change por click y ajusta cómo se obtiene el valor seleccionado
     $('#id_extras').on('click', 'input[type="checkbox"]', function() {
         let selectedExtras = $(this).attr('id');
         localStorage.setItem('selectedExtras', selectedExtras);
