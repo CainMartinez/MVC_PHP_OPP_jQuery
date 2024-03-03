@@ -331,61 +331,32 @@ function print_filters() {
             '</select>' +
             '</div>' +
             '<div class="col-md-4">' +
-            '<label for="id_large_people">Adapted for Reduced Mobility:</label><hr>' +
+            '<label for="id_large_people">Adapted for Reduced Mobility:</label>' +
             '<select id="id_large_people" class="form-control id_large_people">' +
             '<option value="" selected disabled>Select Option</option>' +
             '</select>' +
             '</div>' +
             '</div>' +
             '<div class="row">' +
-                '<div class="col-md-4">' +`
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              Launch demo modal
+            '<div class="col-md-4">' +`
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Extras
             </button><div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Extras</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                
-                <label class="cyberpunk-checkbox-label">
-                <input type="checkbox" class="cyberpunk-checkbox">
-                Heating
-            </label>
-            <label class="cyberpunk-checkbox-label">
-                <input type="checkbox" class="cyberpunk-checkbox">
-                Air conditioning
-            </label>
-            <label class="cyberpunk-checkbox-label">
-                <input type="checkbox" class="cyberpunk-checkbox">
-                Fireplace
-            </label>
-            <label class="cyberpunk-checkbox-label">
-                <input type="checkbox" class="cyberpunk-checkbox">
-                Elevator
-            </label>
-            <label class="cyberpunk-checkbox-label">
-                <input type="checkbox" class="cyberpunk-checkbox">
-                Sauna
-            </label>
-            <label class="cyberpunk-checkbox-label">
-                <input type="checkbox" class="cyberpunk-checkbox">
-                Solar Panel
-            </label>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
+            <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Extras</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </div>`+
-                    '<label for="id_extras" class="form-check-label">Extras:</label>' +
-                    '<div id="id_extras" class="id_extras row">' +
-                    '</div>' +
-                '</div>' +
+            <div class="modal-body" id="id_extras">      
+            </div>
+            <div class="modal-footer">
+            <button id="apply_extras" type="button" class="btn btn-primary">Apply Filters</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                </div>
+            </div>
+            </div>
+            </div>`+
+            '</div>' +
             '</div>'+
             '</div>'+
             '<div class="col-md-4 text-center">' +
@@ -405,6 +376,9 @@ function print_filters() {
             )
     $(document).on('click', '#Remove_filter', function () {
         remove_filters();
+    });
+    $(document).on('click', '#apply_extras', function () {
+        handleCheckboxChange();
     });
     load_city();
     load_large_people();
@@ -503,7 +477,7 @@ function load_extras() {
         .then(function (data) {
             for (let row in data) {
                 let extras = data[row];
-                $('#id_extras').append('<div class="form-check col-md-6"><input type="checkbox" class="form-check-input" id="' + extras.id_extras + '" value="' + extras.id_extras + '"><label class="form-check-label" for="' + extras.id_extras + '">' + extras.name_extras + '</label></div>');                       
+                $('#id_extras').append('<label class="cyberpunk-checkbox-label"><input type="checkbox" class="cyberpunk-checkbox" id="' + extras.id_extras + '" value="' + extras.id_extras + '">' + extras.name_extras + '</label>');                       
             }
             let selectedExtras = localStorage.getItem('selectedExtras');
             if (selectedExtras) {
@@ -569,20 +543,6 @@ function filters_shop() {
     });
     setFilterValue('id_city');
 
-    $('#id_extras').on('change', 'input[type="checkbox"]', function() {
-        let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
-        let selectedExtras = filters_shop['id_extras'] || [];
-
-        if (this.checked) {
-            selectedExtras.push(this.value);
-        } else {
-            selectedExtras = selectedExtras.filter(value => value !== this.value);
-        }
-
-        handleFilterChange('id_extras', selectedExtras);
-        setFilterValue('id_extras');
-    });
-
     $('#id_operation').change(function () {
         handleFilterChange('id_operation', this.value);
     });
@@ -597,6 +557,28 @@ function filters_shop() {
         handleFilterChange('id_large_people', this.value);
     });
     setFilterValue('id_large_people');
+}
+function handleCheckboxChange() {
+    let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+    let selectedExtras = filters_shop['id_extras'] || [];
+    
+    function handleFilterCheckBox(filterName, filterValue) {
+        let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+        filters_shop[filterName] = filterValue;
+        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+        filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
+    }
+    $('#id_extras input[type="checkbox"]').each(function() {
+        if (this.checked) {
+            if (!selectedExtras.includes(this.value)) {
+                selectedExtras.push(this.value);
+            }
+        } else {
+            selectedExtras = selectedExtras.filter(value => value !== this.value);
+        }
+    });
+
+    handleFilterCheckBox('id_extras', selectedExtras);
 }
 function apply_filters() {
     let filter = [];
