@@ -303,20 +303,41 @@ function loadDetails(id_property) {
 }
 function print_filters() {
     $('<div class="div-filters container"></div>').appendTo('#title_property').html
-        ('<div class="row">' +
-            '<div class="col-md-4">' +
-            '<label for="id_category">Category:</label>' +
-            '<select id="id_category" class="form-control id_category">' +
-            '<option value="" selected disabled>Select Category</option>' +
-            '</select>' +
-            '</div>' +
-            '<div class="col-md-4">' +
-            '<label for="id_city">City:</label>' +
-            '<select id="id_city" class="form-control id_city">' +
-            '<option value="" selected disabled>Select City</option>'+
-            '</select>' +
-            '</div>' +
-            '</div>' +
+        (`<div class="row">
+        <div class="col-md-4">
+            <label for="id_category">Category:</label>
+            <select id="id_category" class="form-control id_category">
+                <option value="" selected disabled>Select Category</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="id_extras">Extras:</label>
+            <button type="button" id="button_extras" class="form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <p style="text-align:left;">Select Extras</p>
+            </button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Extras</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="id_extras"></div>
+                        <div class="modal-footer">
+                            <button id="apply_extras" type="button" class="btn btn-primary">Apply Filters</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="id_city">City:</label>
+            <select id="id_city" class="form-control id_city">
+                <option value="" selected disabled>Select City</option>
+            </select>
+        </div>
+    </div>`+
             '<div class="row">' +
             '<div class="col-md-4">' +
             '<label for="id_operation">Operation:</label>' +
@@ -338,24 +359,7 @@ function print_filters() {
             '</div>' +
             '</div>' +
             '<div class="row">' +
-            '<div class="col-md-4">' +`
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Extras
-            </button><div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Extras</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="id_extras">      
-            </div>
-            <div class="modal-footer">
-            <button id="apply_extras" type="button" class="btn btn-primary">Apply Filters</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                </div>
-            </div>
-            </div>
-            </div>`+
+            
             '</div>' +
             '</div>'+
             '</div>'+
@@ -379,6 +383,7 @@ function print_filters() {
     });
     $(document).on('click', '#apply_extras', function () {
         handleCheckboxChange();
+        location.reload();
     });
     load_city();
     load_large_people();
@@ -479,20 +484,16 @@ function load_extras() {
                 let extras = data[row];
                 $('#id_extras').append('<label class="cyberpunk-checkbox-label"><input type="checkbox" class="cyberpunk-checkbox" id="' + extras.id_extras + '" value="' + extras.id_extras + '">' + extras.name_extras + '</label>');                       
             }
-            let selectedExtras = localStorage.getItem('selectedExtras');
-            if (selectedExtras) {
-                $('#' + selectedExtras).prop('checked', true);
-                $('#' + selectedExtras).addClass('selected_filters');
+            let filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
+            if (filters_shop && filters_shop.id_extras) {
+                filters_shop.id_extras.forEach(function(extra) {
+                    $('#id_extras input[value=' + extra + ']').prop('checked', true);
+                });
             }
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
-
-    $('#id_extras').on('click', 'input[type="checkbox"]', function() {
-        let selectedExtras = $(this).attr('id');
-        localStorage.setItem('selectedExtras', selectedExtras);
-    });
 }
 function load_category() {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_category')
@@ -570,11 +571,13 @@ function handleCheckboxChange() {
     }
     $('#id_extras input[type="checkbox"]').each(function() {
         if (this.checked) {
-            if (!selectedExtras.includes(this.value)) {
-                selectedExtras.push(this.value);
+            let value = parseInt(this.value, 10);
+            if (!selectedExtras.includes(value)) {
+                selectedExtras.push(value);
             }
         } else {
-            selectedExtras = selectedExtras.filter(value => value !== this.value);
+            let value = parseInt(this.value, 10);
+            selectedExtras = selectedExtras.filter(val => val !== value);
         }
     });
 
@@ -632,7 +635,7 @@ function highlight_shop() {
             }
         });
         if (highlight_filters['id_extras'].length > 0) {
-            $('#id_extras').addClass('selected_filters');
+            $('#button_extras').addClass('selected_filters');
         }
     }
     if (highlight_filters['id_operation']) {
