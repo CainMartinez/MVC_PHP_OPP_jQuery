@@ -253,8 +253,12 @@ class DAOShop{
 							break;
 						case 'id_extras':
 							if (is_array($filters_shop['id_extras'])) {
-								$extras = implode(',', array_map('intval', $filters_shop['id_extras']));
-								$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras IN (" . $extras . "))";
+								$extras = array_map('intval', $filters_shop['id_extras']);
+								$conditions = [];
+								foreach ($extras as $extra) {
+									$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
+								}
+								$consulta .= " AND " . implode(' AND ', $conditions);
 							} else {
 								$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
 							}
@@ -279,8 +283,12 @@ class DAOShop{
 							break;
 						case 'id_extras':
 							if (is_array($filters_shop['id_extras'])) {
-								$extras = implode(',', array_map('intval', $filters_shop['id_extras']));
-								$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras IN (" . $extras . "))";
+								$extras = array_map('intval', $filters_shop['id_extras']);
+								$conditions = [];
+								foreach ($extras as $extra) {
+									$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
+								}
+								$consulta .= " WHERE " . implode(' AND ', $conditions);
 							} else {
 								$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
 							}
@@ -289,8 +297,8 @@ class DAOShop{
 				}
 			}
 		}
-
-		// error_log($consulta, 3, "debug.txt");
+		// error_log($filters_shop['id_extras'], 3, "debug.txt");
+		error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
