@@ -1,18 +1,18 @@
-function carousel_type() {
+function carousel_people() {
   ajaxPromise(
     "GET",
     "JSON",
-    "module/home/controller/controller_home.php?op=Carrousel_Type"
+    "module/home/controller/controller_home.php?op=Carrousel_People"
   )
     .then(function (data) {
       let html = "";
       for (row in data) {
         html += `
-                <div class="swiper-slide swiper-slide_video carrousel_home" id='${data[row].id_type}' style="background-image: url('${data[row].image_type}')">
+                <div class="swiper-slide swiper-slide_video carrousel_home" id='${data[row].id_large_people}' style="background-image: url('${data[row].image_people}')">
                     <div class="container">
                         <div class="jumbotron-classic-content">
                             <div class="wow-outer">
-                                <div class="title-docor-text font-weight-bold title-decorated text-uppercase wow slideInLeft text-white">${data[row].name_type}</div>
+                                <div class="title-docor-text font-weight-bold title-decorated text-uppercase wow slideInLeft text-white">${data[row].name_large_people}</div>
                             </div>
                             <h1 class="text-uppercase text-white font-weight-bold wow-outer"><span class="wow slideInDown" data-wow-delay=".2s">Properties</span></h1>
                             <div class="wow-outer button-outer">
@@ -37,8 +37,8 @@ function carousel_type() {
     })
     .catch(function (error) {
       console.error(error);
-      window.location.href =
-        "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Carrousel Type HOME";
+      // window.location.href =
+      //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Carrousel Type HOME";
     });
 }
 function loadCategories() {
@@ -87,9 +87,39 @@ function loadCategories() {
       });
     })
     .catch(function () {
-      window.location.href =
-        "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Categories HOME";
+      // window.location.href =
+      //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Categories HOME";
     });
+}
+function loadType() {
+  ajaxPromise( 
+    "GET",
+    "JSON",
+    "module/home/controller/controller_home.php?op=Carrousel_Type"
+  )
+  .then(function (data) {
+    let html = "";
+    for (row in data) {
+      html += `
+              <div class="col-md-6 wow-outer city_home" id='${data[row].id_type}'>
+                  <article class="post-modern wow slideInLeft">
+                      <a class="post-modern-media" href="#">
+                          <img class="propertyImage" src="${data[row].image_type}" alt="" width="571" height="353"/>
+                      </a>
+                      <h4 class="post-modern-title title-city">
+                          <a class="post-modern-title" href="#">${data[row].name_type}</a>
+                      </h4>
+                      <ul class="post-modern-meta"></ul>
+                  </article>
+              </div>
+          `;
+    }
+    $("#propertyType").html(html);
+  })
+  .catch(function () {
+    // window.location.href =
+    //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar= Type HOME";
+  });
 }
 function loadOperation() {
   ajaxPromise(
@@ -117,8 +147,8 @@ function loadOperation() {
       }
     })
     .catch(function () {
-      window.location.href =
-        "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Operation HOME";
+      // window.location.href =
+      //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Operation HOME";
     });
 }
 function loadCity() {
@@ -147,8 +177,8 @@ function loadCity() {
       $("#propertyContainer").html(html);
     })
     .catch(function () {
-      window.location.href =
-        "index.php?module=ctrl_exceptions&page=503&type=503&lugar=City HOME";
+      // window.location.href =
+      //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=City HOME";
     });
 }
 function loadExtras() {
@@ -179,8 +209,8 @@ function loadExtras() {
       $(".row-lg-50.row-35.row-xxl-70").html(html);
     })
     .catch(function () {
-      window.location.href =
-        "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Operation HOME";
+      // window.location.href =
+      //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Operation HOME";
     });
 }
 function loadRecomendation() {
@@ -214,8 +244,8 @@ function loadRecomendation() {
       $("#propertyRecomendation").html(html);
     })
     .catch(function () {
-      window.location.href =
-        "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
+      // window.location.href =
+      //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
     });
 }
 function clicks_home() {
@@ -273,10 +303,11 @@ function clicks_home() {
   });
 }
 $(document).ready(function () {
-  carousel_type();
+  carousel_people();
   loadCategories();
   loadOperation();
   loadCity();
+  loadType();
   loadExtras();
   loadRecomendation();
   clicks_home();

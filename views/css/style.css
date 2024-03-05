@@ -17461,7 +17461,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .c3-line {
 	stroke-width: 3px;
 }
+a{
+	color: #007bff;
+	text-decoration: none !important;
 
+}
 /*-- Point --*/
 .c3-circle._expanded_ {
 	stroke-width: 2px;

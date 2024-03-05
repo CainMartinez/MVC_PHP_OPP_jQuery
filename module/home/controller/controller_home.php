@@ -6,7 +6,22 @@
         case 'list';
             include ('module/home/view/home.html');
         break;
+        case 'Carrousel_People';
 
+            try{
+                $daohome = new DAOHome();
+                $SelectPeople = $daohome->select_people();
+            } catch(Exception $e){
+                echo json_encode("error");
+            }
+            
+            if(!empty($SelectPeople)){
+                echo json_encode($SelectPeople); 
+            }
+            else{
+                echo json_encode("error");
+            }
+        break;
         case 'Carrousel_Type';
 
             try{

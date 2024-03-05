@@ -3,6 +3,21 @@
 	include($path . "/model/connect.php");
     
 	class DAOHome {
+		function select_people() {
+			$sql= "SELECT * FROM `large_people` ORDER BY id_large_people;";
+
+			$conexion = connect::con();
+			$res = mysqli_query($conexion, $sql);
+			connect::close($conexion);
+
+			$retrArray = array();
+			if (mysqli_num_rows($res) > 0) {
+				while ($row = mysqli_fetch_assoc($res)) {
+					$retrArray[] = $row;
+				}
+			}
+			return $retrArray;
+		}
 		function select_type() {
 			$sql= "SELECT * FROM `type` ORDER BY id_type ASC LIMIT 30;";
 

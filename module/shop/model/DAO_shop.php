@@ -298,7 +298,7 @@ class DAOShop{
 			}
 		}
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		error_log($consulta, 3, "debug.txt");
+		// error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);

@@ -73,7 +73,7 @@ function ajaxForSearch(url) {
                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
                                 </h4>
                                 <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${property.price} €</a></li>
+                                    <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
                                     <li>City: ${property.name_city}</li>
                                     <li>Square meters: ${property.square_meters}</li>
                                 </ul>
@@ -150,7 +150,7 @@ function ajaxForSearch_Shop(url, highlight) {
                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
                                 </h4>
                                 <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${property.price} €</a></li>
+                                    <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
                                     <li>City: ${property.name_city}</li>
                                     <li>Square meters: ${property.square_meters}</li>
                                 </ul>
@@ -249,7 +249,7 @@ function loadDetails(id_property) {
             var row6 = $("<tr></tr>").appendTo(table);
             $('<td></td>').attr('colspan', 3).addClass('property-description').css('text-align', 'center').html('<i class="fas fa-align-left" style="font-size: 1.5em;"></i> <span style="font-size: 1.5em;">Description: ' + data[0].description + '</span><hr>').appendTo(row6);
             var row7 = $("<tr></tr>").appendTo(table);
-            $('<td></td>').attr('colspan', 3).addClass('property-price').html('<i class="fas fa-euro-sign" style="font-size: 2em;"></i> <span style="font-size: 2em;">Price: ' + data[0].price + '</span><hr>').appendTo(row7);
+            $('<td></td>').attr('colspan', 3).addClass('property-price').html(' <span style="font-size: 2em;">Price: ' + data[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '&nbsp;</span><i class="fas fa-euro-sign" style="font-size: 2em;"></i><hr>').appendTo(row7);
             $('<br>').appendTo(table);
 
             propertyDetailsDiv.append(table);
