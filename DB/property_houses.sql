@@ -3,11 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-02-2024 a las 21:55:12
+-- Tiempo de generación: 06-03-2024 a las 15:50:02
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
-CREATE DATABASE `property_houses`;
-USE `property_houses`;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -75,24 +74,6 @@ INSERT INTO `city` (`id_city`, `name_city`, `is_active`, `creation_date`, `updat
 (3, 'Albaida', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/city/Albaida.webp'),
 (4, 'Alcoi', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/city/Alcoi.webp'),
 (5, 'Xativa', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 'views/images/city/Xativa.webp');
-
-CREATE TABLE `large_people` (
-  `id_large_people` int(10) NOT NULL,
-  `name_large_people` varchar(50) DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT NULL,
-  `creation_date` varchar(50) DEFAULT NULL,
-  `update_date` varchar(50) DEFAULT NULL,
-  `image_city` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Volcado de datos para la tabla `city`
---
-
-INSERT INTO `large_people` (`id_large_people`, `name_large_people`, `is_active`, `creation_date`, `update_date`) VALUES
-(1, 'Yes', 1, NOW(), NOW()),
-(2, 'No', 1, NOW(), NOW()),
-(3, 'Partially', 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -189,6 +170,30 @@ INSERT INTO `images` (`id_images`, `path_images`, `is_active`, `creation_date`, 
 (23, 'views/images/property/property5-3.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
 (24, 'views/images/property/property5-4.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5),
 (25, 'views/images/property/property5-5.webp', 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `large_people`
+--
+
+CREATE TABLE `large_people` (
+  `id_large_people` int(10) NOT NULL,
+  `name_large_people` varchar(50) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `creation_date` varchar(50) DEFAULT NULL,
+  `update_date` varchar(50) DEFAULT NULL,
+  `image_people` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `large_people`
+--
+
+INSERT INTO `large_people` (`id_large_people`, `name_large_people`, `is_active`, `creation_date`, `update_date`, `image_people`) VALUES
+(1, 'Kitchen', 1, '2024-02-22 16:20:32', '2024-02-22 16:20:32', 'views/images/adapted_people/kitchen.webp'),
+(2, 'Bathroom', 1, '2024-02-22 16:20:32', '2024-02-22 16:20:32', 'views/images/adapted_people/bathroom.webp'),
+(3, 'Stairs', 1, '2024-02-22 16:20:32', '2024-02-22 16:20:32', 'views/images/adapted_people/stairs.webp');
 
 -- --------------------------------------------------------
 
@@ -410,9 +415,6 @@ ALTER TABLE `category`
 ALTER TABLE `city`
   ADD PRIMARY KEY (`id_city`);
 
-ALTER TABLE `large_people`
-  ADD PRIMARY KEY (`id_large_people`);
-
 --
 -- Indices de la tabla `extras`
 --
@@ -427,6 +429,12 @@ ALTER TABLE `images`
   ADD KEY `fk_property` (`id_property`);
 
 --
+-- Indices de la tabla `large_people`
+--
+ALTER TABLE `large_people`
+  ADD PRIMARY KEY (`id_large_people`);
+
+--
 -- Indices de la tabla `operation`
 --
 ALTER TABLE `operation`
@@ -437,7 +445,8 @@ ALTER TABLE `operation`
 --
 ALTER TABLE `property`
   ADD PRIMARY KEY (`id_property`),
-  ADD KEY `fk_city` (`id_city`);
+  ADD KEY `fk_city` (`id_city`),
+  ADD KEY `fk_large_people` (`id_large_people`);
 
 --
 -- Indices de la tabla `property_category`
@@ -487,10 +496,8 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT de la tabla `city`
 --
 ALTER TABLE `city`
-  MODIFY `id_city` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_city` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
-ALTER TABLE `large_people`
-  MODIFY `id_large_people` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `extras`
 --
@@ -502,6 +509,12 @@ ALTER TABLE `extras`
 --
 ALTER TABLE `images`
   MODIFY `id_images` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT de la tabla `large_people`
+--
+ALTER TABLE `large_people`
+  MODIFY `id_large_people` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `operation`
