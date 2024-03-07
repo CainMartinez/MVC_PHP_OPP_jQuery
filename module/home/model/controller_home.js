@@ -128,23 +128,39 @@ function loadOperation() {
     "module/home/controller/controller_home.php?op=Operation"
   )
     .then(function (data) {
-      for (row in data) {
-        var a = $("<a></a>").attr("href", "#").attr("class", "link-operation").attr("id", data[row].id_operation);
+      var table = $("<table></table>");
+      var row = $("<tr></tr>");
+      for (var i = 0; i < data.length; i++) {
+        var a = $("<a></a>").attr("href", "#").attr("id", data[i].id_operation);
         var article = $("<article></article>").attr("class", "box-minimal");
         var imgIcon = $("<img>")
-          .attr("src", data[row].image_operation)
+          .attr("src", data[i].image_operation)
           .attr("class", "box-chloe__icon novi-icon");
         var divMain = $("<div></div>").attr("class", "box-minimal-main");
         var h4 = $("<h4></h4>")
           .attr("class", "box-minimal-title")
-          .text(data[row].name_operation);
+          .text(data[i].name_operation);
 
         divMain.append(h4);
         article.append(imgIcon, divMain);
         a.append(article);
 
-        $("#containerOperation").append(a);
+        var cell = $("<td></td>").append(a).attr("class", "link-operation");
+        row.append(cell);
+
+        // Si hemos añadido 4 celdas a la fila, añadimos la fila a la tabla y creamos una nueva fila
+        if ((i + 1) % 4 === 0) {
+          table.append(row);
+          row = $("<tr></tr>");
+        }
       }
+
+      // Añadimos la última fila a la tabla, en caso de que no tenga 4 celdas
+      if (row.children().length > 0) {
+        table.append(row);
+      }
+
+      $("#containerOperation").append(table);
     })
     .catch(function () {
       // window.location.href =
