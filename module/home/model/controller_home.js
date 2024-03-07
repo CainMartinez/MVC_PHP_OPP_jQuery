@@ -131,7 +131,7 @@ function loadOperation() {
       var table = $("<table></table>");
       var row = $("<tr></tr>");
       for (var i = 0; i < data.length; i++) {
-        var a = $("<a></a>").attr("href", "#").attr("id", data[i].id_operation);
+        var a = $("<a></a>");
         var article = $("<article></article>").attr("class", "box-minimal");
         var imgIcon = $("<img>")
           .attr("src", data[i].image_operation)
@@ -145,7 +145,7 @@ function loadOperation() {
         article.append(imgIcon, divMain);
         a.append(article);
 
-        var cell = $("<td></td>").append(a).attr("class", "link-operation");
+        var cell = $("<td></td>").append(a).attr("class", "link-operation").attr("id", data[i].id_operation);
         row.append(cell);
 
         // Si hemos añadido 4 celdas a la fila, añadimos la fila a la tabla y creamos una nueva fila
@@ -298,7 +298,7 @@ function clicks_home() {
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
-  $(document).on("click",'a.link-operation', function (){
+  $(document).on("click",'td.link-operation', function (){
     // console.log('click_OK_Operation');
     var filters_home = [];
     filters_home.push({"operation":[this.getAttribute('id')]});
