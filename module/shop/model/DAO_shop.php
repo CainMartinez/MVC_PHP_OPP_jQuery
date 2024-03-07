@@ -134,8 +134,9 @@ class DAOShop{
 	}
 	function select_filter_home($filters_home){
 		$sql = "SELECT *
-		FROM property p, city c, property_type pt, property_operation po, property_category pc, property_extras pe
-		WHERE p.id_city = c.id_city 
+		FROM property p,large_people lp, city c, property_type pt, property_operation po, property_category pc, property_extras pe
+		WHERE p.id_city = c.id_city
+		AND p.id_large_people = lp.id_large_people
 		AND p.id_property = pt.id_property 
 		AND p.id_property = po.id_property 
 		AND p.id_property = pc.id_property 
@@ -156,6 +157,9 @@ class DAOShop{
 		} else if (isset($filters_home[0]['city'])) {
 			$city = $filters_home[0]['city'][0];
 			$sql .= " AND c.id_city = '$city'";
+		} else if (isset($filters_home[0]['large_people'])) {
+			$large_people = $filters_home[0]['large_people'][0];
+			$sql .= " AND lp.id_large_people = '$large_people'";
 		}
 		$sql .= " GROUP BY p.id_property;";
 		$conexion = connect::con();

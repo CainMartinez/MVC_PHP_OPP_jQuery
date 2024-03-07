@@ -7,7 +7,7 @@ function loadProperties() {
     if (filters_home !== false) {
         // console.log('Envio en la URL op=home_filter');
         ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
-        localStorage.removeItem('filters_home');
+        // localStorage.removeItem('filters_home');
     } else if (details_home !== false) {
         loadDetails(details_home);
         localStorage.removeItem('details_home');

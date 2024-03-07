@@ -107,21 +107,31 @@
                 <li class="rd-nav-item">
                   <a class="rd-nav-link" href="index.php?page=shop">Shop</a>
                 </li>
-                <!-- <li class="rd-nav-item">
-                  <a class="rd-nav-link" href="index.php?page=aboutus"
-                    >About us</a
-                  >
+                <li class="rd-nav-item">
+                  <select class="form-select" id="select1">
+                    <option value="">Option 1</option>
+                    <option value="">Option 2</option>
+                    <option value="">Option 3</option>
+                  </select>
                 </li>
                 <li class="rd-nav-item">
-                  <a class="rd-nav-link" href="index.php?page=typography"
-                    >Typography</a
-                  >
+                  <select class="form-select" id="select2">
+                    <option value="">Option 1</option>
+                    <option value="">Option 2</option>
+                    <option value="">Option 3</option>
+                  </select>
                 </li>
                 <li class="rd-nav-item">
-                  <a class="rd-nav-link" href="index.php?page=contactus"
-                    >Contacts</a
-                  >
-                </li> -->
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search..." aria-label="Search...">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                  </div>
+                </li>
+                <li class="rd-nav-item">
+                  <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    Register
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -129,4 +139,41 @@
       </nav>
     </div>
   </header>
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="registerModalLabel">Register</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Register Under construction
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Apply</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="loginModalLabel">Login</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Login Under construction
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Apply</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>

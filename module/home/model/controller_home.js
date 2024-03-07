@@ -101,7 +101,7 @@ function loadType() {
     let html = "";
     for (row in data) {
       html += `
-              <div class="col-md-6 wow-outer city_home" id='${data[row].id_type}'>
+              <div class="col-md-6 wow-outer type_home" id='${data[row].id_type}'>
                   <article class="post-modern wow slideInLeft">
                       <a class="post-modern-media" href="#">
                           <img class="propertyImage" src="${data[row].image_type}" alt="" width="571" height="353"/>
@@ -267,6 +267,14 @@ function clicks_home() {
   });
   $(document).on("click",'div.carrousel_home', function (){
     // console.log('click_OK_Carrousel');
+    var filters_home = [];
+    filters_home.push({"large_people":[this.getAttribute('id')]});
+    localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
+      setTimeout(function(){ 
+        window.location.href = 'index.php?page=shop';
+      }, 1000);
+  });
+  $(document).on("click",'div.type_home', function (){
     var filters_home = [];
     filters_home.push({"type":[this.getAttribute('id')]});
     localStorage.setItem('filters_home', JSON.stringify(filters_home)); 
