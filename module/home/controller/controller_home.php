@@ -38,7 +38,6 @@
                 echo json_encode("error");
             }
         break;
-
         case 'Recomendation';
             try{
                 $daohome = new DAOHome();
@@ -54,7 +53,36 @@
                 echo json_encode("error");
             }
         break;
-        
+        case 'lastVisited';
+            try{
+                $daohome = new DAOHome();
+                $SelectLastVisited = $daohome->select_lastVisited();
+            } catch(Exception $e){
+                echo json_encode("error");
+            }
+            
+            if(!empty($SelectLastVisited)){
+                echo json_encode($SelectLastVisited); 
+            }
+            else{
+                echo json_encode("error");
+            }
+        break;
+        case 'mostVisited';
+            try{
+                $daohome = new DAOHome();
+                $SelectLastVisited = $daohome->select_mostVisited();
+            } catch(Exception $e){
+                echo json_encode("error");
+            }
+            
+            if(!empty($SelectLastVisited)){
+                echo json_encode($SelectLastVisited); 
+            }
+            else{
+                echo json_encode("error");
+            }
+        break;
         case 'Category';
 
             try{
@@ -71,7 +99,6 @@
                 echo json_encode("error");
             }
         break;
-
         case 'Operation';            
             try{
                 $daohome = new DAOHome();
@@ -87,9 +114,7 @@
                 echo json_encode("error");
             }
         break;
-
-        case 'City'; 
-
+        case 'City';
             try{
                 $daohome = new DAOHome();
                 $SelectCity = $daohome->select_city();
@@ -104,16 +129,13 @@
                 echo json_encode("error");
             }
         break;
-
         case 'Extras'; 
-
             try{
                 $daohome = new DAOHome();
                 $SelectExtras = $daohome->select_extras();
             } catch(Exception $e){
                 echo json_encode("error");
             }
-            
             if(!empty($SelectExtras)){
                 echo json_encode($SelectExtras); 
             }
@@ -121,7 +143,6 @@
                 echo json_encode("error");
             }
         break;
-
         default;
             include("views/inc/error404.html");
         break;

@@ -4,6 +4,24 @@ $path = $_SERVER['DOCUMENT_ROOT'];
 include($path . "/model/connect.php");
 
 class DAOShop{
+	function incrementVisits($id_property) {
+		$sql = "UPDATE property SET visits = visits + 1 WHERE id_property = ?";
+	
+		$conexion = connect::con();
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("i", $id_property);
+		$stmt->execute();
+		connect::close($conexion);
+	}
+	function insertCurrentDate($id_property) {
+		$sql = "UPDATE property SET currently_date = NOW() WHERE id_property = ?";
+
+		$conexion = connect::con();
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("i", $id_property);
+		$stmt->execute();
+		connect::close($conexion);
+	}
 	function select_all_properties(){
 		$sql = "SELECT DISTINCT p.*,c.*
 		FROM property p, city c

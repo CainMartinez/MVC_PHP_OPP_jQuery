@@ -517,6 +517,7 @@ function load_category() {
         localStorage.setItem('selectedCategory', selectedCategory);
     });
 }
+
 function filters_shop() {
     let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
 
@@ -533,7 +534,11 @@ function filters_shop() {
             $(`#${filterName}`).val(filters_shop[filterName]);
         }
     }
-
+    function setFilterValue(filterName) {
+        if (filters_shop[filterName]) {
+            $(`#${filterName}`).val(filters_shop[filterName]);
+        }
+    }
     $('#id_category').change(function () {
         handleFilterChange('id_category', this.value);
     });

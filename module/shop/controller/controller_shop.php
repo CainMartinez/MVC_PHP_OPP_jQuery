@@ -60,6 +60,10 @@ switch ($_GET['op']) {
             $daoshop = new DAOShop();
             $Date_property = $daoshop->select_details_property($_GET['id']);
             $Date_images = $daoshop->select_imgs_property($_GET['id']);
+
+            // Incrementar las visitas a la propiedad
+            $daoshop->incrementVisits($_GET['id']);
+            $daoshop->insertCurrentDate($_GET['id']);
         } catch (Exception $e) {
             echo json_encode("error");
         }

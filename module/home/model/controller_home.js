@@ -264,6 +264,76 @@ function loadRecomendation() {
       //   "index.php?module=ctrl_exceptions&page=503&type=503&lugar=Recomendation HOME";
     });
 }
+function loadMostVisited() {
+  ajaxPromise(
+    "GET",
+    "JSON",
+    "module/home/controller/controller_home.php?op=mostVisited"
+  )
+    .then(function(mostVisited) {
+        let html = "";
+        for (let i = 0; i < mostVisited.length; i++) {
+            let property = mostVisited[i];
+            html += `
+                <div class="col-md-6 wow-outer property_recomendation" id="${property.id_property}">
+                    <article class="post-modern wow slideInLeft">
+                        <a class="post-modern-media">
+                            <img src="${property.path_images}" alt="" width="571" height="353"/>
+                        </a>
+                        <h4 class="post-modern-title">
+                            <a class="post-modern-title">${property.property_name}</a>
+                        </h4>
+                        <ul class="post-modern-meta">
+                            <li><a class="button-winona">${property.price} €</a></li>
+                            <li>${property.square_meters} Sq. Meters</li>
+                            <li>${property.number_of_rooms} Rooms</li>
+                        </ul>
+                        <p>${property.description}</p>
+                    </article>
+                </div>
+                `;
+        }
+        $("#mostVisited").html(html);
+    })
+    .catch(function(error) {
+        console.error(error);
+    });
+}
+function loadLastVisited() {
+  ajaxPromise(
+    "GET",
+    "JSON",
+    "module/home/controller/controller_home.php?op=lastVisited"
+  )
+    .then(function(lastVisited) {
+        let html = "";
+        for (let i = 0; i < lastVisited.length; i++) {
+            let property = lastVisited[i];
+            html += `
+                <div class="col-md-6 wow-outer property_recomendation" id="${property.id_property}">
+                    <article class="post-modern wow slideInLeft">
+                        <a class="post-modern-media">
+                            <img src="${property.path_images}" alt="" width="571" height="353"/>
+                        </a>
+                        <h4 class="post-modern-title">
+                            <a class="post-modern-title">${property.property_name}</a>
+                        </h4>
+                        <ul class="post-modern-meta">
+                            <li><a class="button-winona">${property.price} €</a></li>
+                            <li>${property.square_meters} Sq. Meters</li>
+                            <li>${property.number_of_rooms} Rooms</li>
+                        </ul>
+                        <p>${property.description}</p>
+                    </article>
+                </div>
+                `;
+        }
+        $("#lastVisited").html(html);
+    })
+    .catch(function(error) {
+        console.error(error);
+    });
+}
 function clicks_home() {
   $(document).on("click",'div.property_recomendation', function (){
     // console.log('click_OK_Recomendation');
@@ -335,4 +405,6 @@ $(document).ready(function () {
   loadExtras();
   loadRecomendation();
   clicks_home();
+  loadMostVisited();
+  loadLastVisited()
 });
