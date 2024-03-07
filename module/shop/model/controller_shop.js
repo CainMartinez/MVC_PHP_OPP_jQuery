@@ -376,7 +376,13 @@ function print_filters() {
             '<p></p>' +
             '<button class="button button-primary-white filter_remove ml-5" id="Remove_filter">Remove Filter</button>' +
             '</div>' +
-            '</div>'
+            '</div>'+
+            '<br><br><select id="order" class="form-control order">' +
+            '<option value="" selected disabled>Order BY</option>' +
+            '<option value="price">Price</option>' +
+            '<option value="name">Name</option>' +
+            '<option value="visits">Most Visits</option>' +
+            '</select>' 
             )
     $(document).on('click', '#Remove_filter', function () {
         remove_filters();
@@ -385,12 +391,77 @@ function print_filters() {
         handleCheckboxChange();
         location.reload();
     });
+    order_properties();
     load_city();
     load_large_people();
     load_extras();
     load_operation();
     load_type();
     load_category();
+}
+function order_properties() {
+    $('#order').change(function () {
+        var order = $(this).val();
+        var filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+        filters_shop['order'] = order;
+        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+        
+        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=order_properties', { filters_shop })
+        .then(function (data) {
+            $('#properties_shop').empty();
+            $('#images_properties').empty();
+            for (let row in data) {
+                let property = data[row];
+                let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+                let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+                for (let image of property.images) {
+                    $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+                        "<article class='thumbnail-light'>" +
+                        "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+                        image.path_images +
+                        "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
+                        "</article>"
+                    );
+                }
+                owlCarouselDiv.owlCarousel({
+                    loop: true,
+                    margin: 100,
+                    nav: true,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                    }
+                });
+                propertyDiv.append(`
+                        <article class='post-modern wow slideInLeft '><br>
+                            <h4 class='post-modern-title'>
+                                <a class='post-modern-title' href='#'>${property.property_name}</a>
+                            </h4>
+                            <ul class='post-modern-meta'>
+                                <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
+                                <li>City: ${property.name_city}</li>
+                                <li>Square meters: ${property.square_meters}</li>
+                            </ul>
+                            <p>${property.description}</p><br>
+                            <div class='buttons'>
+                                <table id='table-shop'> 
+                                    <tr>
+                                        <td>
+                                            <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </article>
+                    `)
+            }
+        }).catch(function (error) {
+            console.error(error);
+            // window.location.href = "index.php?page=503";
+        });
+    
+    });
 }
 function load_city() {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=dynamic_city')

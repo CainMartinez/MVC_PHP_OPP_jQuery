@@ -1,0 +1,21 @@
+nameSELECT DISTINCT p.*,c.*
+		FROM property p, city c
+		WHERE p.id_city = c.id_city
+		GROUP BY p.id_property
+		ORDER BY p.name_property ASCnameSELECT DISTINCT p.*,c.*
+		FROM property p, city c
+		WHERE p.id_city = c.id_city
+		GROUP BY p.id_property
+		ORDER BY p.property_name ASCpriceSELECT DISTINCT p.*,c.*
+		FROM property p, city c
+		WHERE p.id_city = c.id_city
+		GROUP BY p.id_property
+		ORDER BY p.price DESCvisitsSELECT DISTINCT p.*,c.*
+		FROM property p, city c
+		WHERE p.id_city = c.id_city
+		GROUP BY p.id_property
+		ORDER BY p.visits DESCnameSELECT DISTINCT p.*,c.*
+		FROM property p, city c
+		WHERE p.id_city = c.id_city
+		GROUP BY p.id_property
+		ORDER BY p.property_name ASC

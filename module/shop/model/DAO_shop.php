@@ -42,6 +42,42 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
+	function select_order_properties($filters_shop){
+		error_log($filters_shop['order'], 3, "debug.txt");
+
+		$order = 'ASC';
+		$filter = 'price';
+
+		if ($filters_shop['order'] == 'price') {
+			$order = 'DESC';
+			$filter = 'price';
+		}else if ($filters_shop['order'] == 'name') {
+			$order = 'ASC';
+			$filter = 'property_name';
+		} else if ($filters_shop['order'] == 'visits') {
+			$order = 'DESC';
+			$filter = 'visits';
+		}
+
+		$sql = "SELECT DISTINCT p.*,c.*
+		FROM property p, city c
+		WHERE p.id_city = c.id_city
+		GROUP BY p.id_property
+		ORDER BY p.$filter $order";
+		error_log($sql, 3, "debug.txt");
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
 	function select_images_property(){
 		$sql = "SELECT *
 			    FROM images";
