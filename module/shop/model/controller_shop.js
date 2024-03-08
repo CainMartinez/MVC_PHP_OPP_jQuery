@@ -588,7 +588,6 @@ function load_category() {
         localStorage.setItem('selectedCategory', selectedCategory);
     });
 }
-
 function filters_shop() {
     let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
 
