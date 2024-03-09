@@ -1,0 +1,3 @@
+Siguientes bugs a arreglar:
+1.- Check box: si desmarcas las casillas el array en local storage se muestra vacio y filtra incorrectamente.
+2.- Order by: sobrescribe la consulta a la de los filtros, y viceversa.

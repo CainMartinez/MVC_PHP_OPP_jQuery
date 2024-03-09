@@ -43,7 +43,7 @@ class DAOShop{
 		return $retrArray;
 	}
 	function select_order_properties($filters_shop){
-		error_log($filters_shop['order'], 3, "debug.txt");
+		// error_log($filters_shop['order'], 3, "debug.txt");
 
 		$order = 'ASC';
 		$filter = 'price';
@@ -64,7 +64,7 @@ class DAOShop{
 		WHERE p.id_city = c.id_city
 		GROUP BY p.id_property
 		ORDER BY p.$filter $order";
-		error_log($sql, 3, "debug.txt");
+		// error_log($sql, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);

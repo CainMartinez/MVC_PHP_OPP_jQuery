@@ -1,5 +1,0 @@
-priceSELECT DISTINCT p.*,c.*
-		FROM property p, city c
-		WHERE p.id_city = c.id_city
-		GROUP BY p.id_property
-		ORDER BY p.price DESC
