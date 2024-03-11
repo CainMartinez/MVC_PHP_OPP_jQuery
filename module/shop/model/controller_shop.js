@@ -13,6 +13,7 @@ function loadProperties() {
         localStorage.removeItem('details_home');
     } else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter');
     } else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
         ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop",highlight_shop);
