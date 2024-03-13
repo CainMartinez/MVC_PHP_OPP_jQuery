@@ -5,7 +5,6 @@ function load_search_city() {
             for (let row in data) {
                 let city = data[row];
                 $('#search_city').append('<option value="' + city.id_city + '">' + city.name_city + '</option>');
-
             }
             // console.log(data);
 
@@ -35,20 +34,26 @@ function load_search_type(data = undefined) {
 
     ajaxPromise('POST', 'JSON', ajaxUrl, ajaxData)
         .then(function (data) {
-            $('<option>Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
+            $('<option>Select Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
             for (let row in data) {
                 let type = data[row];
                 $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
             }
+            $('#search_type').change(function() {
+                let selectedType = $(this).val();
+                localStorage.setItem('selectedType', selectedType);
+
+            });
+            let selectedType = localStorage.getItem('selectedType');
+            if (selectedType) {
+                $('#search_type').val(selectedType);
+                $('#search_type').addClass('selected_filters');
+            }
+
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
-
-    $('#search_type').change(function() {
-        let selectedType = $(this).val();
-        localStorage.setItem('selectedType', selectedType);
-    });
 }
 function launch_search(){
     load_search_city();
@@ -63,13 +68,20 @@ function launch_search(){
     });
 }
 function autocomplete(){
+
     $("#autocom").on("keyup", function () {
+
         $('#search_type').css('display', 'block');
         let auto_complete_data = {complete: $(this).val()};
+        console.log(auto_complete_data);
+
         if (($('#search_type').val() != 0)){
             auto_complete_data.name_type = $('#search_type').val();
+            console.log(auto_complete_data.id_type);
             if(($('#search_type').val() != 0) && ($('#search_city').val() != 0)){
                 auto_complete_data.name_city = $('#search_city').val();
+                console.log(auto_complete_data.name_city);
+
             }
         }
         if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){ 
@@ -78,11 +90,12 @@ function autocomplete(){
             
         ajaxPromise('module/search/controller/controller_search.php?op=autocomplete', 'POST', 'JSON', auto_complete_data)
         .then(function(data) {
+
             $('#search_auto').empty();
             $('#search_auto').fadeIn(10000000);
             // console.log(data);
                 for (row in data) {
-                    $('<div></div>').appendTo('#search_auto').html(data[row].city).attr({'class': 'search_element', 'id': data[row].id_property});
+                    $('<div></div>').appendTo('#search_auto').html(data[row].property).attr({'class': 'search_element', 'id': data[row].id_property});
                 }
             $(document).on('click', '.search_element', function() {
                 $('#autocom').val(this.getAttribute('id'));
