@@ -33,33 +33,21 @@ class DAOSearch{
 		return $cityArray;
 	
 	}
-	function select_type_null(){
-		$sql = "SELECT DISTINCT * FROM type";
-
+	function select_search_type($city = null){
 		$conexion = connect::con();
-		$res = mysqli_query($conexion, $sql);
-		connect::close($conexion);
 
-		$typeArray = array();
-		if (mysqli_num_rows($res) > 0) {
-			foreach ($res as $row) {
-				array_push($typeArray, $row);
-			}
+		if ($city === null) {
+			$sql = "SELECT DISTINCT * FROM type";
+		} else {
+			$sql = "SELECT DISTINCT t.name_type
+			FROM type t,property_type pt,property p
+			WHERE t.id_type = pt.id_type 
+			AND pt.id_property = p.id_property
+			AND p.id_city='$city'";
 		}
-		return $typeArray;
-	}
-	function select_search_type($city){
-		error_log($city, 3, "debug.txt");
-		$sql = "SELECT DISTINCT t.name_type
-		FROM type t,property_type pt,property p
-		WHERE t.id_type = pt.id_type 
-		AND pt.id_property = p.id_property
-		AND p.id_city='$city'";
-	
-		$conexion = connect::con();
+
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
-		// error_log($sql, 3, "debug.txt");
 
 		$typeArray = array();
 		if (mysqli_num_rows($res) > 0) {

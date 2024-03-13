@@ -26,33 +26,25 @@ function load_search_city() {
 }
 function load_search_type(data = undefined) {
     $('#search_type').empty();
-    if (data == undefined) {
-        ajaxPromise('POST', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_type_null')
-            .then(function (data) {
-                $('<option>Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
-                for (let row in data) {
-                    let type = data[row];
-                    $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
-                }
-                // console.log(data);
-            }).catch(function (e) {
-                console.error(e);
-                // window.location.href = "index.php?page=503";
-            });
-    } else {
-        console.log(data['id_city']);
-        id_city=data['id_city'];
-        ajaxPromise('POST', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_type', {id_city})
-            .then(function (data) {
-                for (let row in data) {
-                    let type = data[row];
-                    $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
-                }
-            }).catch(function (e) {
-                console.error(e);
-                // window.location.href = "index.php?page=503";
-            });
+    let ajaxUrl = 'module/search/controller/controller_search.php?op=dynamic_search_type';
+    let ajaxData = {};
+
+    if (data !== undefined) {
+        ajaxData.id_city = data['id_city'];
     }
+
+    ajaxPromise('POST', 'JSON', ajaxUrl, ajaxData)
+        .then(function (data) {
+            $('<option>Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
+            for (let row in data) {
+                let type = data[row];
+                $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+
     $('#search_type').change(function() {
         let selectedType = $(this).val();
         localStorage.setItem('selectedType', selectedType);

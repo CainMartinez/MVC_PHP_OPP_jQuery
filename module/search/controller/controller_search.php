@@ -18,27 +18,13 @@ switch ($_GET['op']) {
         }
         break;
     case 'dynamic_search_type':
-
-        $city = $_POST['id_city'];
         try {
             $daosearch = new DAOSearch();
-            $Dates_Properties = $daosearch->select_search_type($city);
-
-            if (!empty($Dates_Properties)) {
-                echo json_encode($Dates_Properties);
+            if (isset($_POST['id_city'])) {
+                $Dates_Properties = $daosearch->select_search_type($_POST['id_city']);
             } else {
-                echo json_encode("error");
+                $Dates_Properties = $daosearch->select_search_type();
             }
-        } catch (Exception $e) {
-            echo json_encode("error");
-        }
-        error_log($city, 3, "debug.txt");
-
-        break;
-    case 'dynamic_search_type_null':
-        try {
-            $daosearch = new DAOSearch();
-            $Dates_Properties = $daosearch->select_type_null();
 
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
