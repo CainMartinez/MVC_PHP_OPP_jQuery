@@ -3,27 +3,18 @@
 $path = $_SERVER['DOCUMENT_ROOT'];
 include($path . "/model/connect.php");
 
-class DAOShop{
+class DAOSearch{
 	
-	function select_search_properties(){
-		$sql = "SELECT DISTINCT p.*,c.*
-		FROM property p, city c
-		WHERE p.id_city = c.id_city
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC";
-
-
-		$conexion = connect::con();
-		$res = mysqli_query($conexion, $sql);
-		connect::close($conexion);
-
-		$retrArray = array();
-		if (mysqli_num_rows($res) > 0) {
-			while ($row = mysqli_fetch_assoc($res)) {
-				$retrArray[] = $row;
-			}
+	function select_auto($complete, $name_type, $name_city){
+		if (!empty($name_type) && empty($name_city)){
+			return $this->select_type($complete, $name_type);
+		} else if (!empty($name_type) && !empty($name_city)){
+			return $this->select_auto_type_city($complete, $name_type, $name_city);
+		} else if (empty($name_type) && !empty($name_city)){
+			return $this->select_city($name_city, $complete);
+		} else {
+			return $this->select_autos($complete);
 		}
-		return $retrArray;
 	}
 	
 	function select_search_city(){
@@ -42,12 +33,34 @@ class DAOShop{
 		return $cityArray;
 	
 	}
-	function select_search_operations(){
-		$sql= "SELECT * FROM operation";
+	function select_type_null(){
+		$sql = "SELECT DISTINCT * FROM type";
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
+
+		$typeArray = array();
+		if (mysqli_num_rows($res) > 0) {
+			foreach ($res as $row) {
+				array_push($typeArray, $row);
+			}
+		}
+		return $typeArray;
+	}
+	function select_search_type($type){
+		$type = json_decode($type);
+		$sql = "SELECT DISTINCT t.name_type
+		FROM type t,property_type pt,city c,property p
+		WHERE t.id_type = pt.id_type 
+		AND pt.id_property = p.id_property 
+		AND p.id_city = c.id_city";
+		// AND c.name_city='$type'";
+	
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+		error_log($sql, 3, "debug.txt");
 
 		$retrArray = array();
 		if (mysqli_num_rows($res) > 0) {
@@ -58,79 +71,5 @@ class DAOShop{
 		return $retrArray;
 	}
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		// error_log($consulta, 3, "debug.txt");
-
-	
+		
 }
-    class DAO_search{
-
-        function select_car_type(){
-            
-			$sql = "SELECT DISTINCT type_name FROM type";
-
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-
-        function select_car_brand(){
-            
-            $sql = "SELECT DISTINCT brand_name FROM brand";
-
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-
-        function select_car_type_brand($car_type){
-            
-            $sql = "SELECT DISTINCT b.brand_name FROM cars c INNER JOIN type t INNER JOIN brand b ON c.brand = b.cod_brand AND c.type = t.cod_type WHERE t.type_name='$car_type'";
-
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-
-        function select_auto_car_type($auto, $car_type){
-            
-            $sql = "SELECT DISTINCT c.city FROM cars c INNER JOIN type t ON c.type = t.cod_type WHERE t.type_name='$car_type' AND c.city LIKE '$auto%'";
-
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-
-        function select_auto_car_type_brand($auto, $car_type, $car_brand){
-            
-            $sql = "SELECT DISTINCT c.city FROM cars c INNER JOIN type t INNER JOIN brand b ON c.brand = b.cod_brand AND c.type = t.cod_type WHERE t.type_name='$car_type' AND b.brand_name='$car_brand' AND c.city LIKE '$auto%'";
-
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-
-        function select_auto_car_brand($auto, $car_brand){
-            
-            $sql = "SELECT DISTINCT c.city FROM cars c INNER JOIN brand b ON c.brand = b.cod_brand WHERE b.brand_name='$car_brand' AND c.city LIKE '$auto%'";
-
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-
-        function select_auto($auto){
-            
-            $sql = "SELECT DISTINCT city FROM cars WHERE city LIKE '$auto%'";
-			$conexion = connect::con();
-            $res = mysqli_query($conexion, $sql);
-            connect::close($conexion);
-            return $res;
-        }
-        
-    }

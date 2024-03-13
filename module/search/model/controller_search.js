@@ -1,65 +1,96 @@
-function load_car_type(){
-    ajaxPromise('module/search/controller/controller_search.php?op=car_type', 'POST', 'JSON')
-    .then(function(data) {
-        for (row in data) {
-            let content = data[row].type_name.replace(/_/g, " ");
-            $('#type_select').append('<option value = "' + data[row].type_name + '">' + content + '</option>');
-        }
-    }).catch(function() {
-        console.log("Error load car type");
+function load_search_city() {
+    ajaxPromise('GET', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_city')
+        .then(function (data) {
+            
+            for (let row in data) {
+                let city = data[row];
+                $('#search_city').append('<option value="' + city.name_city + '">' + city.name_city + '</option>');
+
+            }
+            // console.log(data);
+
+            let selectedCity = localStorage.getItem('selectedCity');
+            if (selectedCity) {
+                $('#search_city').val(selectedCity);
+                $('#search_city').addClass('selected_filters');
+            }
+        }).catch(function (e) {
+            console.error(e);
+            // window.location.href = "index.php?page=503";
+        });
+        
+    $('#search_city').change(function() {
+        let selectedCity = $(this).val();
+        localStorage.setItem('selectedCity', selectedCity);
     });
 }
-
-function load_car_brand(data = undefined){
-    ajaxPromise('module/search/controller/controller_search.php?op=car_brand', 'POST', 'JSON', data)
-    .then(function(data) {
-        // console.log(data);
-        $('#brand_select').empty();
-        $('#brand_select').append('<option value = "0">Car brand...</option>');
-        for (row in data) {
-            let content = data[row].brand_name.replace(/_/g, " ");
-            $('#brand_select').append('<option value = "' + data[row].brand_name + '">' + content + '</option>');
-        }
-    }).catch(function() {
-        console.log('Error load car brand');
-    }); 
+function load_search_type(data = undefined) {
+    $('#search_type').empty();
+    if (data == undefined) {
+        ajaxPromise('POST', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_type_null')
+            .then(function (data) {
+                $('<option>Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
+                for (let row in data) {
+                    let type = data[row];
+                    $('<option value="' + type.name_type + '">' + type.name_type + '</option>').appendTo('#search_type');
+                }
+                // console.log(data);
+            }).catch(function (e) {
+                console.error(e);
+                // window.location.href = "index.php?page=503";
+            });
+    } else {
+        console.log(data);
+        ajaxPromise('POST', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_type', {data})
+            .then(function (data) {
+                for (let row in data) {
+                    let type = data[row];
+                    $('<option value="' + type.name_type + '">' + type.name_type + '</option>').appendTo('#search_type');
+                }
+                console.log(data);
+            }).catch(function (e) {
+                console.error(e);
+                // window.location.href = "index.php?page=503";
+            });
+    }
+    $('#search_type').change(function() {
+        let selectedType = $(this).val();
+        localStorage.setItem('selectedType', selectedType);
+    });
 }
-
-function launch_search() {
-    load_car_type();
-    load_car_brand();
-    $('#type_select').on('change', function(){
-        let type_name = $(this).val();
-        if (type_name === 0) {
-            load_car_brand();
+function launch_search(){
+    load_search_city();
+    load_search_type();
+    $('#search_city').on('change', function(){
+        let name_city = $(this).val();
+        if (name_city === 0) {
+            load_search_type();
         }else {
-            load_car_brand({car_type: type_name});
+            load_search_type({name_city});
         }
     });
 }
-
 function autocomplete(){
-
     $("#autocom").on("keyup", function () {
-        $('#search_auto').css('display', 'block');
+        $('#search_type').css('display', 'block');
         let auto_complete_data = {complete: $(this).val()};
-        if (($('#type_select').val() != 0)){
-            auto_complete_data.car_type = $('#type_select').val();
-            if(($('#type_select').val() != 0) && ($('#brand_select').val() != 0)){
-                auto_complete_data.car_brand = $('#brand_select').val();
-             }
+        if (($('#search_type').val() != 0)){
+            auto_complete_data.name_type = $('#search_type').val();
+            if(($('#search_type').val() != 0) && ($('#search_city').val() != 0)){
+                auto_complete_data.name_city = $('#search_city').val();
+            }
         }
-        if(($('#type_select').val() == 0) && ($('#brand_select').val() != 0)){ 
-            auto_complete_data.car_brand = $('#brand_select').val();
+        if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){ 
+            auto_complete_data.name_city = $('#search_city').val();
         }
             
         ajaxPromise('module/search/controller/controller_search.php?op=autocomplete', 'POST', 'JSON', auto_complete_data)
         .then(function(data) {
             $('#search_auto').empty();
             $('#search_auto').fadeIn(10000000);
-            console.log(data);
+            // console.log(data);
                 for (row in data) {
-                    $('<div></div>').appendTo('#search_auto').html(data[row].city).attr({'class': 'search_element', 'id': data[row].city});
+                    $('<div></div>').appendTo('#search_auto').html(data[row].city).attr({'class': 'search_element', 'id': data[row].id_property});
                 }
             $(document).on('click', '.search_element', function() {
                 $('#autocom').val(this.getAttribute('id'));
@@ -75,45 +106,38 @@ function autocomplete(){
         });
     });
 }
-
 function search_button() {
     $('#search_button').on('click', function() {
-           
         var search = [];
-
-        if(($('#type_select').val() == 0) && ($('#brand_select').val() == 0)){
+        if(($('#search_type').val() == 0) && ($('#search_city').val() == 0)){
             if($('#autocom').val() != ""){
-                search.push({"city":[$('#autocom').val()]});
+                search.push({"property":[$('#autocom').val()]});
             }
-        }else if(($('#type_select').val() != 0) && ($('#brand_select').val() == 0)){
+        }else if(($('#search_type').val() != 0) && ($('#search_city').val() == 0)){
             if($('#autocom').val() != ""){
-                search.push({"city":[$('#autocom').val()]});
+                search.push({"property":[$('#autocom').val()]});
             }
-            search.push({"type_name":[$('#type_select').val()]});
-        }else if(($('#type_select').val() == 0) && ($('#brand_select').val() != 0)){
+            search.push({"type_name":[$('#search_type').val()]});
+        }else if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){
             if($('#autocom').val() != ""){
-                search.push({"city":[$('#autocom').val()]});
+                search.push({"property":[$('#autocom').val()]});
             }
-            search.push({"brand_name":[$('#brand_select').val()]});
+            search.push({"brand_name":[$('#search_city').val()]});
         }else{
             if($('#autocom').val() != ""){
-                search.push({"city":[$('#autocom').val()]});
+                search.push({"property":[$('#autocom').val()]});
             }
-            search.push({"type_name":[$('#type_select').val()]});
-            search.push({"brand_name":[$('#brand_select').val()]});
+            search.push({"name_type":[$('#search_type').val()]});
+            search.push({"name_city":[$('#search_city').val()]});
         }
-        
-        localStorage.removeItem('filters');
+        localStorage.removeItem('filters_search');
         localStorage.setItem('currentPage', 'shop-list');
-
         if(search.length != 0){
-            localStorage.setItem('filters', JSON.stringify(search));
+            localStorage.setItem('filters_search', JSON.stringify(search));
         }
-        window.location.href = 'index.php?module=shop&op=view';
-
+        window.location.href = 'index.php?module=shop&op=list';
     });
 }
-
 $(document).ready(function() {
     launch_search();
     autocomplete();

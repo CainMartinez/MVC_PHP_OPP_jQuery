@@ -1,12 +1,12 @@
 <?php
 $path = $_SERVER['DOCUMENT_ROOT'];
-include($path . "/module/shop/model/DAO_shop.php");
+include($path . "/module/search/model/DAO_search.php");
 
 switch ($_GET['op']) {
     case 'dynamic_search_city':
         try {
-            $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_search_city();
+            $daosearch = new DAOSearch();
+            $Dates_Properties = $daosearch->select_search_city();
 
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
@@ -17,10 +17,42 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
-    case 'dynamic_search_operation':
+    case 'dynamic_search_type':
+
+        $city = $_POST['name_city'];
         try {
-            $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_search_operations();
+            $daosearch = new DAOSearch();
+            $Dates_Properties = $daosearch->select_search_type($city);
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        error_log($city, 3, "debug.txt");
+
+        break;
+    case 'dynamic_search_type_null':
+        try {
+            $daosearch = new DAOSearch();
+            $Dates_Properties = $daosearch->select_type_null();
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'autocomplete':
+        try {
+            $daosearch = new DAOSearch();
+            $Dates_Properties = $daosearch->select_auto($_POST['complete'], $_POST['name_type'], $_POST['name_city']);
 
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
