@@ -1,5 +1,1 @@
-SELECT DISTINCT t.name_type
-		FROM type t,property_type pt,city c,property p
-		WHERE t.id_type = pt.id_type 
-		AND pt.id_property = p.id_property 
-		AND p.id_city = c.id_city
+22

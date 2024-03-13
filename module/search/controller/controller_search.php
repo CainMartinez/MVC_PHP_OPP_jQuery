@@ -19,7 +19,7 @@ switch ($_GET['op']) {
         break;
     case 'dynamic_search_type':
 
-        $city = $_POST['name_city'];
+        $city = $_POST['id_city'];
         try {
             $daosearch = new DAOSearch();
             $Dates_Properties = $daosearch->select_search_type($city);

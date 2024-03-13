@@ -48,27 +48,26 @@ class DAOSearch{
 		}
 		return $typeArray;
 	}
-	function select_search_type($type){
-		$type = json_decode($type);
+	function select_search_type($city){
+		error_log($city, 3, "debug.txt");
 		$sql = "SELECT DISTINCT t.name_type
-		FROM type t,property_type pt,city c,property p
+		FROM type t,property_type pt,property p
 		WHERE t.id_type = pt.id_type 
-		AND pt.id_property = p.id_property 
-		AND p.id_city = c.id_city";
-		// AND c.name_city='$type'";
+		AND pt.id_property = p.id_property
+		AND p.id_city='$city'";
 	
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
-		error_log($sql, 3, "debug.txt");
+		// error_log($sql, 3, "debug.txt");
 
-		$retrArray = array();
+		$typeArray = array();
 		if (mysqli_num_rows($res) > 0) {
-			while ($row = mysqli_fetch_assoc($res)) {
-				$retrArray[] = $row;
+			foreach ($res as $row) {
+				array_push($typeArray, $row);
 			}
 		}
-		return $retrArray;
+		return $typeArray;
 	}
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
 		

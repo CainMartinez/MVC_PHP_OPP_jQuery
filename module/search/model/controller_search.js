@@ -4,7 +4,7 @@ function load_search_city() {
             
             for (let row in data) {
                 let city = data[row];
-                $('#search_city').append('<option value="' + city.name_city + '">' + city.name_city + '</option>');
+                $('#search_city').append('<option value="' + city.id_city + '">' + city.name_city + '</option>');
 
             }
             // console.log(data);
@@ -32,7 +32,7 @@ function load_search_type(data = undefined) {
                 $('<option>Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
                 for (let row in data) {
                     let type = data[row];
-                    $('<option value="' + type.name_type + '">' + type.name_type + '</option>').appendTo('#search_type');
+                    $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
                 }
                 // console.log(data);
             }).catch(function (e) {
@@ -40,14 +40,14 @@ function load_search_type(data = undefined) {
                 // window.location.href = "index.php?page=503";
             });
     } else {
-        console.log(data);
-        ajaxPromise('POST', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_type', {data})
+        console.log(data['id_city']);
+        id_city=data['id_city'];
+        ajaxPromise('POST', 'JSON', 'module/search/controller/controller_search.php?op=dynamic_search_type', {id_city})
             .then(function (data) {
                 for (let row in data) {
                     let type = data[row];
-                    $('<option value="' + type.name_type + '">' + type.name_type + '</option>').appendTo('#search_type');
+                    $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
                 }
-                console.log(data);
             }).catch(function (e) {
                 console.error(e);
                 // window.location.href = "index.php?page=503";
@@ -62,11 +62,11 @@ function launch_search(){
     load_search_city();
     load_search_type();
     $('#search_city').on('change', function(){
-        let name_city = $(this).val();
-        if (name_city === 0) {
+        let id_city = $(this).val();
+        if (id_city === 0) {
             load_search_type();
         }else {
-            load_search_type({name_city});
+            load_search_type({id_city});
         }
     });
 }
