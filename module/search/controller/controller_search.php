@@ -38,7 +38,7 @@ switch ($_GET['op']) {
     case 'autocomplete':
         try {
             $daosearch = new DAOSearch();
-            $Dates_Properties = $daosearch->select_auto($_POST['complete'], $_POST['id_type'], $_POST['id_city']);
+            $Dates_Properties = $daosearch->select_auto($_POST['id_city'], $_POST['id_type'], $_POST['complete'] );
 
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);

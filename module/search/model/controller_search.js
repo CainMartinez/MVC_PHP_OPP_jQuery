@@ -37,7 +37,7 @@ function load_search_type(data = undefined) {
             $('<option>Select Type</option>').attr('selected', true).attr('disabled', true).appendTo('#search_type');
             for (let row in data) {
                 let type = data[row];
-                $('<option value="' + type.id_type + '">' + type.name_type + '</option>').appendTo('#search_type');
+                $('#search_type').append('<option value="' + type.id_type + '">' + type.name_type + '</option>');
             }
             $('#search_type').change(function() {
                 let selectedType = $(this).val();
@@ -70,44 +70,39 @@ function launch_search(){
 function autocomplete(){
 
     $("#autocom").on("keyup", function () {
-
-        $('#search_type').css('display', 'block');
+        
+        $('#search_results').css('display', 'block')
         let auto_complete_data = {complete: $(this).val()};
         console.log(auto_complete_data);
 
         if (($('#search_type').val() != 0)){
-            auto_complete_data.name_type = $('#search_type').val();
+            auto_complete_data.id_type = $('#search_type').val();
             console.log(auto_complete_data.id_type);
             if(($('#search_type').val() != 0) && ($('#search_city').val() != 0)){
-                auto_complete_data.name_city = $('#search_city').val();
-                console.log(auto_complete_data.name_city);
+                auto_complete_data.id_city = $('#search_city').val();
+                console.log(auto_complete_data.id_city);
 
             }
         }
         if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){ 
-            auto_complete_data.name_city = $('#search_city').val();
+            auto_complete_data.id_city = $('#search_city').val();
         }
-            
-        ajaxPromise('module/search/controller/controller_search.php?op=autocomplete', 'POST', 'JSON', auto_complete_data)
+        console.log(auto_complete_data);
+        ajaxPromise('POST', 'JSON','module/search/controller/controller_search.php?op=autocomplete', auto_complete_data)
         .then(function(data) {
-
-            $('#search_auto').empty();
-            $('#search_auto').fadeIn(10000000);
-            // console.log(data);
-                for (row in data) {
-                    $('<div></div>').appendTo('#search_auto').html(data[row].property).attr({'class': 'search_element', 'id': data[row].id_property});
-                }
+            $('#search_results').empty();
+            $('#search_results').fadeIn(10000000);
+            console.log(data);
+            for (row in data) {
+                $('<li></li>').appendTo('#search_results').html(data[row].name_category).attr({'class': 'list-group-item list-group-item-action search_element', 'id': data[row].name_category});
+            }
             $(document).on('click', '.search_element', function() {
                 $('#autocom').val(this.getAttribute('id'));
-                $('#search_auto').fadeOut(1000);
+                $('#search_results').fadeOut(1000);
             });
-            $(document).on('click scroll', function(event) {
-                if (event.target.id !== 'autocom') {
-                    $('#search_auto').fadeOut(1000);
-                }
-            });
-        }).catch(function() {
-            $('#search_auto').fadeOut(500);
+        }).catch(function(e) {
+            console.error(e);
+            $('#search_results').fadeOut(500);
         });
     });
 }
