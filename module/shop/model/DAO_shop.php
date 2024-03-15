@@ -78,6 +78,33 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
+	function search_filter($category,$city,$type){
+		$sql = "SELECT DISTINCT p.*,c.*,t.*,cat.*
+		FROM property p, city c,type t,property_type pt,category cat, property_category pc
+		WHERE p.id_city = c.id_city
+        AND pt.id_property = p.id_property
+        AND cat.id_category = pc.id_category
+        AND pc.id_property = p.id_property
+        AND pt.id_type = t.id_type
+        AND t.id_type = '$type'
+        AND p.id_city = '$city'
+        AND cat.name_category = '$category'
+        GROUP BY p.id_property
+		ORDER BY p.id_property ASC";
+
+		error_log($sql, 3, "debug.txt");
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if ($res->num_rows > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
 	function select_images_property(){
 		$sql = "SELECT *
 			    FROM images";

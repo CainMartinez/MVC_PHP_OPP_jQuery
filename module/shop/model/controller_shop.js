@@ -13,7 +13,8 @@ function loadProperties() {
         localStorage.removeItem('details_home');
     } else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
-        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter');
+        ajaxForSearch_filter('module/shop/controller/controller_shop.php?op=search_filter');
+        localStorage.removeItem('filters_search');
     } else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
         ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop",highlight_shop);
@@ -21,6 +22,80 @@ function loadProperties() {
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
     }
+}
+function ajaxForSearch_filter(url) {
+    var filters_home = JSON.parse(localStorage.getItem('filters_search'));
+    ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home })
+        .then(function (data) {
+            // console.log(data);
+            // console.log('entra en el then HOME_FILTER');
+            $('#properties_shop').empty();
+            $('#images_properties').empty();
+
+            if (data == "error") {
+                $('<div></div>').appendTo('#properties_shop')
+                    .html(
+                        '<h3>¡No results are found with the applied filters!</h3>'
+                    )
+            } else {
+                for (let row in data) {
+                    let property = data[row];
+                    // console.log(property.images);
+
+                    let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+                    let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+
+                    for (let image of property.images) {
+                        $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+                            "<article class='thumbnail-light'>" +
+                            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+                            image.path_images +
+                            "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
+                            "</article>"
+                        );
+                    }
+
+                    owlCarouselDiv.owlCarousel({
+                        loop: true,
+                        margin: 100,
+                        nav: true,
+                        responsive: {
+                            0: {
+                                items: 1
+                            },
+                        }
+                    });
+
+                    propertyDiv.append(`
+                            <article class='post-modern wow slideInLeft '><br>
+                                <h4 class='post-modern-title'>
+                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
+                                </h4>
+                                <ul class='post-modern-meta'>
+                                    <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
+                                    <li>City: ${property.name_city}</li>
+                                    <li>Square meters: ${property.square_meters}</li>
+                                </ul>
+                                <p>${property.description}</p><br>
+                                <div class='buttons'>
+                                    <table id='table-shop'> 
+                                        <tr>
+                                            <td>
+                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </article>
+                        `)
+                }
+            }
+        }).catch(function (error) {
+            console.error(error);
+            // window.location.href = "index.php?page=503";
+        });
+
+
 }
 function ajaxForSearch(url) {
 

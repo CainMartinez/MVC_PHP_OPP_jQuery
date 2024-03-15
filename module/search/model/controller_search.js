@@ -81,7 +81,6 @@ function autocomplete(){
             if(($('#search_type').val() != 0) && ($('#search_city').val() != 0)){
                 auto_complete_data.id_city = $('#search_city').val();
                 console.log(auto_complete_data.id_city);
-
             }
         }
         if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){ 
@@ -109,33 +108,33 @@ function autocomplete(){
 function search_button() {
     $('#search_button').on('click', function() {
         var search = [];
-        if(($('#search_type').val() == 0) && ($('#search_city').val() == 0)){
+        if(($('#search_city').val() == 0) && ($('#search_type').val() == 0)){
             if($('#autocom').val() != ""){
-                search.push({"property":[$('#autocom').val()]});
+                search.push({"name_category":[$('#autocom').val()]});
             }
-        }else if(($('#search_type').val() != 0) && ($('#search_city').val() == 0)){
+        }else if(($('#search_city').val() != 0) && ($('#search_type').val() == 0)){
             if($('#autocom').val() != ""){
-                search.push({"property":[$('#autocom').val()]});
+                search.push({"name_category":[$('#autocom').val()]});
             }
-            search.push({"type_name":[$('#search_type').val()]});
-        }else if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){
+            search.push({"type_name":[$('#search_city').val()]});
+        }else if(($('#search_city').val() == 0) && ($('#search_type').val() != 0)){
             if($('#autocom').val() != ""){
-                search.push({"property":[$('#autocom').val()]});
-            }
-            search.push({"brand_name":[$('#search_city').val()]});
-        }else{
-            if($('#autocom').val() != ""){
-                search.push({"property":[$('#autocom').val()]});
+                search.push({"name_category":[$('#autocom').val()]});
             }
             search.push({"name_type":[$('#search_type').val()]});
-            search.push({"name_city":[$('#search_city').val()]});
+        }else{
+            if($('#autocom').val() != ""){
+                search.push({"name_category":[$('#autocom').val()]});
+            }
+            search.push({"id_city":[$('#search_city').val()]});
+            search.push({"id_type":[$('#search_type').val()]});
         }
-        localStorage.removeItem('filters_search');
-        localStorage.setItem('currentPage', 'shop-list');
         if(search.length != 0){
             localStorage.setItem('filters_search', JSON.stringify(search));
+            setTimeout(function(){ 
+                window.location.href = 'index.php?page=shop';
+            }, 1000);
         }
-        window.location.href = 'index.php?module=shop&op=list';
     });
 }
 $(document).ready(function() {

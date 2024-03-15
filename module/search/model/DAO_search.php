@@ -16,7 +16,6 @@ class DAOSearch{
 			return $this->select_category($complete);
 		}
 	}
-
 	function select_category($complete){
 		
 		$sql = "SELECT DISTINCT c.name_category 
