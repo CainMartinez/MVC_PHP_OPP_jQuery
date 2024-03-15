@@ -10,8 +10,8 @@ class DAOSearch{
 			return $this->select_only_one_city($name_city, $complete);
 		} else if (!empty($name_type) && !empty($name_city)){
 			return $this->select_auto_type_city($name_city, $name_type, $complete);
-		} else if (empty($name_type) && !empty($name_city)){
-			return $this->select_only_one_type($name_city, $complete);
+		} else if (!empty($name_type) && empty($name_city)){
+			return $this->select_only_one_type($name_type, $complete);
 		} else {
 			return $this->select_category($complete);
 		}
@@ -40,10 +40,12 @@ class DAOSearch{
 	}
 	function select_only_one_type($type, $complete){
 		$sql = "SELECT DISTINCT c.name_category 
-		FROM property p,property_category pc,category c 
+		FROM property p,property_category pc,category c,type t,property_type pt
 		WHERE p.id_property = pc.id_property
 		AND pc.id_category = c.id_category
-		AND p.id_type = '$type'
+        AND pt.id_type = t.id_type
+        AND pt.id_property = p.id_property
+		AND t.id_type = '$type'
 		AND c.name_category LIKE '$complete%'";
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
@@ -77,14 +79,16 @@ class DAOSearch{
         }
         return $retrArray;
 	}
-	function select_auto_type_city($complete, $type, $city){
-		$sql = "SELECT DISTINCT *
-		FROM property p, type t, property_type pt
-		WHERE p.id_property = pt.id_property
-		AND pt.id_type = t.id_type
-		AND p.id_city = '$city'
+	function select_auto_type_city($city, $type, $complete){
+		$sql = "SELECT DISTINCT c.name_category 
+		FROM property p,property_category pc,category c,type t,property_type pt
+		WHERE p.id_property = pc.id_property
+		AND pc.id_category = c.id_category
+        AND pt.id_type = t.id_type
+        AND pt.id_property = p.id_property
 		AND t.id_type = '$type'
-		AND p.name_property LIKE '$complete%'";
+        AND p.id_city = '$city'
+		AND c.name_category LIKE '$complete%'";
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
