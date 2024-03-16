@@ -73,25 +73,25 @@ function autocomplete(){
         
         $('#search_results').css('display', 'block')
         let auto_complete_data = {complete: $(this).val()};
-        console.log(auto_complete_data);
+        // console.log(auto_complete_data);
 
         if (($('#search_type').val() != 0)){
             auto_complete_data.id_type = $('#search_type').val();
-            console.log(auto_complete_data.id_type);
+            // console.log(auto_complete_data.id_type);
             if(($('#search_type').val() != 0) && ($('#search_city').val() != 0)){
                 auto_complete_data.id_city = $('#search_city').val();
-                console.log(auto_complete_data.id_city);
+                // console.log(auto_complete_data.id_city);
             }
         }
         if(($('#search_type').val() == 0) && ($('#search_city').val() != 0)){ 
             auto_complete_data.id_city = $('#search_city').val();
         }
-        console.log(auto_complete_data);
+        // console.log(auto_complete_data);
         ajaxPromise('POST', 'JSON','module/search/controller/controller_search.php?op=autocomplete', auto_complete_data)
         .then(function(data) {
             $('#search_results').empty();
             $('#search_results').fadeIn(10000000);
-            console.log(data);
+            // console.log(data);
             for (row in data) {
                 $('<li></li>').appendTo('#search_results').html(data[row].name_category).attr({'class': 'list-group-item list-group-item-action search_element', 'id': data[row].name_category});
             }
@@ -131,6 +131,7 @@ function search_button() {
         }
         if(search.length != 0){
             localStorage.setItem('filters_search', JSON.stringify(search));
+            console.log(search);
             setTimeout(function(){ 
                 window.location.href = 'index.php?page=shop';
             }, 1000);

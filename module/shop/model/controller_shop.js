@@ -24,11 +24,17 @@ function loadProperties() {
     }
 }
 function ajaxForSearch_filter(url) {
-    var filters_home = JSON.parse(localStorage.getItem('filters_search'));
-    ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home })
+    var filters_search_array = JSON.parse(localStorage.getItem('filters_search'));
+    var filters_search = {};
+
+    filters_search_array.forEach(function(filter) {
+        for (var key in filter) {
+            filters_search[key] = filter[key][0];
+        }
+    });
+    // console.log(filters_search);
+    ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search })
         .then(function (data) {
-            // console.log(data);
-            // console.log('entra en el then HOME_FILTER');
             $('#properties_shop').empty();
             $('#images_properties').empty();
 
@@ -40,7 +46,6 @@ function ajaxForSearch_filter(url) {
             } else {
                 for (let row in data) {
                     let property = data[row];
-                    // console.log(property.images);
 
                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);

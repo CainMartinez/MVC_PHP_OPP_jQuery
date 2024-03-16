@@ -205,29 +205,28 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
-        case 'search_filter':
-            try {
-                $daoshop = new DAOShop();
-                $Dates_Properties = $daoshop->search_filter($_POST['filters_search'['name_category']], $_POST['filters_search'['id_city']], $_POST['filters_search'['id_type']]);
-                $Date_images = $daoshop->select_images_property();
-                error_log($_POST['filters_search'], 3, "debug.txt");
-                foreach ($Dates_Properties as $key => $property) {
-                    $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
-                        return $image['id_property'] == $property['id_property'];
-                    }));
-                }
-    
-                if (!empty($Dates_Properties)) {
-                    echo json_encode($Dates_Properties);
-                } else {
-                    echo json_encode("error");
-                }
-            } catch (Exception $e) {
+    case 'search_filter':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->search_filter($_POST['filters_search']);            
+            $Date_images = $daoshop->select_images_property();
+            foreach ($Dates_Properties as $key => $property) {
+                $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
+                    return $image['id_property'] == $property['id_property'];
+                }));
+            }
+
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
                 echo json_encode("error");
             }
-            break;
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
     
-        default;
+    default;
         include("views/inc/error404.html");
         break;
 }
