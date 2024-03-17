@@ -123,7 +123,7 @@ function ajaxForSearch(url) {
                 for (let row in data) {
                     let property = data[row];
                     // console.log(property.images);
-
+                    $('<div></div>').attr({ 'class': 'maps_content', 'id': 'maps', 'style': 'height: 400px;' }).insertAfter('#properties_shop');                    
                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
 
@@ -171,6 +171,8 @@ function ajaxForSearch(url) {
                             </article>
                         `)
                 }
+                
+                load_map(data);
             }
         }).catch(function (error) {
             console.error(error);
@@ -178,6 +180,33 @@ function ajaxForSearch(url) {
         });
 
 
+}
+function load_map(data) {
+    mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
+    const map = new mapboxgl.Map({
+    container: 'maps',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [-1.5, 40.5],
+    zoom: 4.5
+    });
+
+    for (row in data) {
+    
+        const popup = new mapboxgl.Popup({offset: 25}).setHTML(
+            "<div class='popup' id='"+ data[row].id_property +"'>"+
+                // "<img Intentaré meter el carrousel sino foto estática>" +
+                "<div class='popup_desc_property'><h2>"+ data[row].property_name + " " + data[row].cadastral_reference + " - " + data[row].price + " €" + "</h2>"+
+                    "<h3>"+ data[row].number_of_rooms + " rooms - " + data[row].square_meters + "</h3>"+
+                    "<h3>"+ data[row].description + " - " + data[row].city + "</h3>"+
+                "</div>"+
+            "</div>"
+        );
+
+        const marker = new mapboxgl.Marker({color: 'red'})
+        .setLngLat([data[row].longitude, data[row].latitude])
+        .setPopup(popup)
+        .addTo(map);
+    }
 }
 function ajaxForSearch_Shop(url, highlight) {
 
