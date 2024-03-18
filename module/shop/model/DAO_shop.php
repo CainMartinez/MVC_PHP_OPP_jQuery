@@ -23,9 +23,10 @@ class DAOShop{
 		connect::close($conexion);
 	}
 	function select_all_properties(){
-		$sql = "SELECT DISTINCT p.*,c.*
-		FROM property p, city c
+		$sql = "SELECT DISTINCT p.*,c.*,i.path_images
+		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
+		AND p.id_property = i.id_property
         GROUP BY p.id_property
 		ORDER BY p.id_property DESC";
 
@@ -83,20 +84,21 @@ class DAOShop{
 		$id_city = isset($filters_search['id_city']) ? $filters_search['id_city'] : null;
 		$id_type = isset($filters_search['id_type']) ? $filters_search['id_type'] : null;
 
-		$sql = "SELECT DISTINCT p.*,c.*,t.*,cat.*
-		FROM property p, city c,type t,property_type pt,category cat, property_category pc
+		$sql = "SELECT DISTINCT p.*,c.*,t.*,cat.*,i.path_images
+		FROM property p, city c,type t,property_type pt,category cat, property_category pc, images i
 		WHERE p.id_city = c.id_city
 		AND pt.id_property = p.id_property
 		AND cat.id_category = pc.id_category
 		AND pc.id_property = p.id_property
 		AND pt.id_type = t.id_type
-		AND t.id_type = $id_type
-		AND p.id_city = $id_city
-		AND cat.name_category = '$name_category'
-		GROUP BY p.id_property
+		AND p.id_property = i.id_property"
+		. ($id_type ? " AND t.id_type = $id_type" : "")
+		. ($id_city ? " AND p.id_city = $id_city" : "")
+		. ($name_category ? " AND cat.name_category = '$name_category'" : "") .
+		" GROUP BY p.id_property
 		ORDER BY p.id_property ASC";
 
-		// error_log($sql, 3, "debug.txt");
+		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -276,7 +278,7 @@ class DAOShop{
 		return $imagesArray;
 	}
 	function select_details_property($id){
-		$sql = "SELECT p.*, c.name_city,lp.name_large_people,
+		$sql = "SELECT p.*, c.name_city,lp.name_large_people,i.path_images,
 				(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 				(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
 				(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
@@ -284,6 +286,7 @@ class DAOShop{
 				FROM property p
 				INNER JOIN city c ON p.id_city = c.id_city
 				INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people
+				INNER JOIN images i ON p.id_property = i.id_property
 				WHERE p.id_property = '$id'";
 
 		$conexion = connect::con();

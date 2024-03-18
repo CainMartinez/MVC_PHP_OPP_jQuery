@@ -37,7 +37,7 @@ function ajaxForSearch_filter(url) {
         .then(function (data) {
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
-            $('#maps_details').empty();
+            $('#maps_details').hide();
 
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
@@ -115,7 +115,7 @@ function ajaxForSearch(url) {
             // console.log('entra en el then HOME_FILTER');
             $('#maps_details').empty();
             $('#images_properties').empty();
-            $('#maps_details').empty();
+            $('#maps_details').hide();
             $('#properties_shop_details').empty();
             
             if (data == "error") {
@@ -192,21 +192,21 @@ function load_map_details(data) {
         container: 'maps_details',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [data[0].longitude, data[0].latitude],
-        zoom: 2
+        zoom: 15
     });
 
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        "<div class='popup_details' id='"+ data[0].id_property +"'>"+
-        "<img class='popup_img' src='"+ "views/images/property/" + data[0].path_images +"'>" +
-        "<div class='popup_desc_property'><h2>"+ data[0].property_name + " " + data[0].cadastral_reference + " - " + data[0].price + " €" + "</h2>"+
-                "<h3>"+ data[0].number_of_rooms + " rooms - " + data[0].square_meters + "</h3>"+
-                "<h3>"+ data[0].description + " - " + data[0].city + "</h3>"+
-            "</div>"+
-        "</div>"
+        "<div class='popup' id='"+ data[0].id_property +"'>"+
+                "<img class='popup_img' src='" + data[0].path_images +"'>" +
+                "<div class='popup_desc_property'><h4><i class='fas fa-home'></i>"+ data[0].property_name + "</h4>"+
+                        "<p><i class='fas fa-bed'></i> "+ data[0].number_of_rooms + " rooms <br><i class='fas fa-ruler-combined'></i> " + data[0].square_meters + " Square meters</p>"+
+                        "<b><i class='fas fa-info-circle'></i> "+ data[0].description +"<br><i class='fas fa-city'></i> "+ data[0].name_city + "</b><h5><i class='fas fa-euro-sign'></i> " +  data[0].price + " €</h5>"+
+                    "</div>"+
+                "</div>"
     );
 
     const marker1 = new mapboxgl.Marker({ color: 'red'})
-    .setLngLat([data[row].longitude, data[row].latitude])
+    .setLngLat([data[0].longitude, data[0].latitude])
     .setPopup(popup)
     .addTo(map);
 }
@@ -216,20 +216,20 @@ function load_map(data) {
     const map = new mapboxgl.Map({
         container: 'maps',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-1.5, 40.5],
-        zoom: 4.5
+        center: [-0.5, 38.9],
+        zoom: 8.9
     });
 
     for (row in data) {
     
         const popup = new mapboxgl.Popup({offset: 25}).setHTML(
             "<div class='popup' id='"+ data[row].id_property +"'>"+
-            "<img class='popup_img' src='"+ "views/images/property/" + data[row].path_images +"'>" +
-            "<div class='popup_desc_property'><h2>"+ data[row].property_name + " " + data[row].cadastral_reference + " - " + data[row].price + " €" + "</h2>"+
-                    "<h3>"+ data[row].number_of_rooms + " rooms - " + data[row].square_meters + "</h3>"+
-                    "<h3>"+ data[row].description + " - " + data[row].city + "</h3>"+
-                "</div>"+
-            "</div>"
+                "<img class='popup_img' src='" + data[row].path_images +"'>" +
+                "<div class='popup_desc_property'><h4><i class='fas fa-home'></i>"+ data[row].property_name + "</h4>"+
+                        "<p><i class='fas fa-bed'></i> "+ data[row].number_of_rooms + " rooms <br><i class='fas fa-ruler-combined'></i> " + data[row].square_meters + " Square meters</p>"+
+                        "<b><i class='fas fa-info-circle'></i> "+ data[row].description +"<br><i class='fas fa-city'></i> "+ data[row].name_city + "</b><h5><i class='fas fa-euro-sign'></i> " +  data[row].price + " €" + "</h5>"+
+                    "</div>"+
+                "</div>"
         );
 
         const marker = new mapboxgl.Marker({color: 'red'})
@@ -249,7 +249,7 @@ function ajaxForSearch_Shop(url, highlight) {
             // console.log('entra en el then HOME_FILTER');
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
-            $('#maps_details').empty();
+            $('#maps_details').hide();
 
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
@@ -332,6 +332,7 @@ function loadDetails(id_property) {
             // $('#images_properties').empty();
             $('#map-container').empty();
             $('#div_list').empty();
+            $('#maps_details').show();
             // console.log(data);
             // console.log(data[0].type_concat);
             var type = data[0].type_concat;
