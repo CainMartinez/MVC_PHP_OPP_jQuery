@@ -4,6 +4,23 @@
 	max-width: 15%;
 	margin: 1%;
 }
+#div_list {
+	display: flex; /* Hace que los hijos de #div_list se coloquen uno al lado del otro */
+}
+
+#properties_shop {
+	width: 60%; /* Ajusta el ancho según tus necesidades */
+	margin-left: 10%;
+	margin-right: -12%;
+}
+
+#map-container {
+	position: sticky;
+	top: 0;
+	width: 40%; /* Ajusta el ancho según tus necesidades */
+	height: 100vh; /* Asegura que el mapa ocupe toda la altura de la pantalla */
+	overflow: auto; /* Permite el desplazamiento dentro del mapa si es necesario */
+}
 .modal-title{
 	font-size: 1.5em;
 	color: black!important;

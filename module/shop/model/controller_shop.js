@@ -123,7 +123,6 @@ function ajaxForSearch(url) {
                 for (let row in data) {
                     let property = data[row];
                     // console.log(property.images);
-                    $('<div></div>').attr({ 'class': 'maps_content', 'id': 'maps', 'style': 'height: 400px;' }).insertAfter('#properties_shop');                    
                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
 
@@ -184,10 +183,10 @@ function ajaxForSearch(url) {
 function load_map(data) {
     mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
     const map = new mapboxgl.Map({
-    container: 'maps',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [-1.5, 40.5],
-    zoom: 4.5
+        container: 'maps',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-1.5, 40.5],
+        zoom: 4.5
     });
 
     for (row in data) {
@@ -298,6 +297,7 @@ function loadDetails(id_property) {
 
             $('#properties_shop').empty();
             $('#images_properties').empty();
+            $('#map-container').empty();
             // console.log(data);
             // console.log(data[0].type_concat);
             var type = data[0].type_concat;
