@@ -113,7 +113,9 @@ function ajaxForSearch(url) {
             // console.log('entra en el then HOME_FILTER');
             $('#properties_shop').empty();
             $('#images_properties').empty();
-
+            $('details_map').empty();
+            $('shop_div').empty();
+            
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
                     .html(
@@ -123,6 +125,7 @@ function ajaxForSearch(url) {
                 for (let row in data) {
                     let property = data[row];
                     // console.log(property.images);
+                    // $('<div></div>').addClass('row-lg-50 row-35 offset-top-2').attr('id', 'properties_shop').appendTo('#div_list'); 
                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
 
@@ -180,6 +183,32 @@ function ajaxForSearch(url) {
 
 
 }
+function load_map_details(data) {
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
+    const map = new mapboxgl.Map({
+        container: 'maps_details',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [data[0].longitude, data[0].latitude],
+        zoom: 8
+    });
+
+    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+        "<div class='popup_details' id='"+ data[0].id_property +"'>"+
+        "<img class='popup_img' src='"+ "views/images/property/" + data[0].path_images +"'>" +
+        "<div class='popup_desc_property'><h2>"+ data[0].property_name + " " + data[0].cadastral_reference + " - " + data[0].price + " €" + "</h2>"+
+                "<h3>"+ data[0].number_of_rooms + " rooms - " + data[0].square_meters + "</h3>"+
+                "<h3>"+ data[0].description + " - " + data[0].city + "</h3>"+
+            "</div>"+
+        "</div>"
+    );
+
+    const marker1 = new mapboxgl.Marker({ color: 'red'})
+    .setLngLat([data[row].longitude, data[row].latitude])
+    .setPopup(popup)
+    .addTo(map);
+}
+
 function load_map(data) {
     mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
     const map = new mapboxgl.Map({
@@ -193,8 +222,8 @@ function load_map(data) {
     
         const popup = new mapboxgl.Popup({offset: 25}).setHTML(
             "<div class='popup' id='"+ data[row].id_property +"'>"+
-                // "<img Intentaré meter el carrousel sino foto estática>" +
-                "<div class='popup_desc_property'><h2>"+ data[row].property_name + " " + data[row].cadastral_reference + " - " + data[row].price + " €" + "</h2>"+
+            "<img class='popup_img' src='"+ "views/images/property/" + data[row].path_images +"'>" +
+            "<div class='popup_desc_property'><h2>"+ data[row].property_name + " " + data[row].cadastral_reference + " - " + data[row].price + " €" + "</h2>"+
                     "<h3>"+ data[row].number_of_rooms + " rooms - " + data[row].square_meters + "</h3>"+
                     "<h3>"+ data[row].description + " - " + data[row].city + "</h3>"+
                 "</div>"+
@@ -294,22 +323,23 @@ function clicks_shop() {
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
         .then(function (data) {
-
+        
             $('#properties_shop').empty();
             $('#images_properties').empty();
             $('#map-container').empty();
+            $('#div_list').empty();
             // console.log(data);
             // console.log(data[0].type_concat);
             var type = data[0].type_concat;
             var operation = data[0].operation_concat;
             var category = data[0].category_concat;
             var extras = data[0].extras_concat;
-            $('<h2></h2>').addClass('post-modern-title').text(data[0].property_name).appendTo('#shop_div');
+            $('<h2></h2>').addClass('post-modern-title').text(data[0].property_name).appendTo('#properties_shop_details');
             $('<hr>').appendTo('#images_properties');
 
             var rowDiv = $('<div></div>').addClass('row row-35 row-xxl-70 offset-top-2').appendTo('#images_properties');
             var propertyDetailsDiv = $('<div></div>').addClass('property-details').appendTo(rowDiv);
-            var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo('#properties_shop');
+            var owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo('#properties_shop_details');
             for (row in data[1][0]) {
                 var itemDiv = $("<div></div>").addClass("item").appendTo(owlCarouselDiv);
                 var articleContent = "<article class='thumbnail-light'>" +
@@ -405,7 +435,7 @@ function loadDetails(id_property) {
             $('<br>').appendTo(table);
 
             propertyDetailsDiv.append(table);
-
+            load_map_details(data);
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
