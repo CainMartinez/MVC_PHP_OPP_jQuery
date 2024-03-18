@@ -35,8 +35,9 @@ function ajaxForSearch_filter(url) {
     // console.log(filters_search);
     ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search })
         .then(function (data) {
-            $('#properties_shop').empty();
+            $('#properties_shop_details').empty();
             $('#images_properties').empty();
+            $('#maps_details').empty();
 
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
@@ -94,6 +95,7 @@ function ajaxForSearch_filter(url) {
                             </article>
                         `)
                 }
+                load_map(data);
             }
         }).catch(function (error) {
             console.error(error);
@@ -111,10 +113,10 @@ function ajaxForSearch(url) {
         .then(function (data) {
             // console.log(data);
             // console.log('entra en el then HOME_FILTER');
-            $('#properties_shop').empty();
+            $('#maps_details').empty();
             $('#images_properties').empty();
-            $('details_map').empty();
-            $('shop_div').empty();
+            $('#maps_details').empty();
+            $('#properties_shop_details').empty();
             
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
@@ -181,7 +183,7 @@ function ajaxForSearch(url) {
             // window.location.href = "index.php?page=503";
         });
 
-
+        
 }
 function load_map_details(data) {
 
@@ -190,7 +192,7 @@ function load_map_details(data) {
         container: 'maps_details',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [data[0].longitude, data[0].latitude],
-        zoom: 8
+        zoom: 2
     });
 
     const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
@@ -245,8 +247,9 @@ function ajaxForSearch_Shop(url, highlight) {
         .then(function (data) {
             // console.log(data);
             // console.log('entra en el then HOME_FILTER');
-            $('#properties_shop').empty();
+            $('#properties_shop_details').empty();
             $('#images_properties').empty();
+            $('#maps_details').empty();
 
             if (data == "error") {
                 $('<div></div>').appendTo('#properties_shop')
@@ -305,6 +308,7 @@ function ajaxForSearch_Shop(url, highlight) {
                             </article>
                         `)
                 }
+                load_map(data);
             }
             if (highlight) {
                 highlight();
@@ -324,8 +328,8 @@ function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
         .then(function (data) {
         
-            $('#properties_shop').empty();
-            $('#images_properties').empty();
+            // $('#properties_shop').empty();
+            // $('#images_properties').empty();
             $('#map-container').empty();
             $('#div_list').empty();
             // console.log(data);
