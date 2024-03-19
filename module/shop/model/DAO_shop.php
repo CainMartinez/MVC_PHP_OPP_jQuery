@@ -44,8 +44,6 @@ class DAOShop{
 		return $retrArray;
 	}
 	function select_order_properties($filters_shop){
-		// error_log($filters_shop['order'], 3, "debug.txt");
-
 		$order = 'ASC';
 		$filter = 'price';
 
@@ -62,11 +60,52 @@ class DAOShop{
 
 		$sql = "SELECT DISTINCT p.*,c.*
 		FROM property p, city c
-		WHERE p.id_city = c.id_city
-		GROUP BY p.id_property
+		WHERE p.id_city = c.id_city";
+
+		// Aplicar los otros filtros
+		foreach ($filters_shop as $key => $value) {
+			if (isset($filters_shop[$key]) && $key != 'order') {
+				switch ($key) {
+					case 'id_city':
+						$sql .= " AND c.id_city = " . $filters_shop['id_city'];
+						break;
+					case 'id_large_people':
+						$sql .= " AND p.id_large_people = " . $filters_shop['id_large_people'];
+						break;
+					case 'id_type':
+						$sql .= " AND p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
+						break;
+					case 'id_operation':
+						$sql .= " AND p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
+						break;
+					case 'id_category':
+						$sql .= " AND p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
+						break;
+					case 'id_extras':
+						if (is_array($filters_shop['id_extras'])) {
+							$extras = array_map('intval', $filters_shop['id_extras']);
+							$conditions = [];
+							foreach ($extras as $extra) {
+								$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
+							}
+							$sql .= " AND " . implode(' AND ', $conditions);
+						} else {
+							$sql .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+						}
+						break;
+					case 'minPrice':
+						$sql .= " AND p.price >= " . $filters_shop['minPrice'];
+						break;
+					case 'maxPrice':
+						$sql .= " AND p.price <= " . $filters_shop['maxPrice'];
+						break;
+				}
+			}
+		}
+
+		$sql .= " GROUP BY p.id_property
 		ORDER BY p.$filter $order";
 		// error_log($sql, 3, "debug.txt");
-
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -98,7 +137,7 @@ class DAOShop{
 		" GROUP BY p.id_property
 		ORDER BY p.id_property ASC";
 
-		error_log($sql, 3, "debug.txt");
+		// error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -315,13 +354,14 @@ class DAOShop{
 	function filters_shop($filters_shop){
 		// error_log(print_r($filters_shop, true), 3, "debug.txt");
 
-		$consulta = "SELECT p.*, c.name_city,lp.name_large_people,
+		$consulta = "SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
 			(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
 			(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
 			FROM property p
 			INNER JOIN city c ON p.id_city = c.id_city
+			INNER JOIN images i ON p.id_property = i.id_property
 			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people";
 
 		foreach ($filters_shop as $key => $value) {
@@ -355,6 +395,12 @@ class DAOShop{
 								$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
 							}
 							break;
+						case 'minPrice':
+							$consulta .= " AND p.price >= " . $filters_shop['minPrice'];
+							break;
+						case 'maxPrice':
+							$consulta .= " AND p.price <= " . $filters_shop['maxPrice'];
+							break;
 					}
 				} else {
 					switch ($key) {
@@ -385,10 +431,17 @@ class DAOShop{
 								$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
 							}
 							break;
+						case 'minPrice':
+							$consulta .= " WHERE p.price >= " . $filters_shop['minPrice'];
+							break;
+						case 'maxPrice':
+							$consulta .= " WHERE p.price <= " . $filters_shop['maxPrice'];
+							break;
 					}
 				}
 			}
 		}
+		$consulta .= " GROUP BY p.id_property";
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
 		// error_log($consulta, 3, "debug.txt");
 

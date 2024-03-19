@@ -108,12 +108,17 @@
                       <button class="btn btn-primary" type="button" value="search" id="search_button">Search</button>
                       <ul id="search_results" class="list-group position-absolute bg-white zindex-sticky mt-5"></ul> <!-- Nuevo ul para los resultados de la búsqueda -->
                     </div>
+                    <button type="button" id="button_price" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#priceFilterModal">
+                      Price
+                      <i class="tick-icon" style="display: none;"></i></button>
                     <div>
                       <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#registerModal">
                         Register
                       </button>
                     </div>
                   </div>
+                  
+                  
                   <!-- <div id="search">
                     <form class="search_form">
                               <select id="type_select">
@@ -148,9 +153,9 @@
           Register Under construction
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Apply</button>
+          <button type="button" class="btn btn-info">Apply</button>
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -166,12 +171,36 @@
           Login Under construction
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Apply</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-info">Apply</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
-
-
+  <div class="modal fade custom-modal" id="priceFilterModal" tabindex="-1" aria-labelledby="priceFilterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="priceFilterModalLabel">Filter by Price</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="priceFilterForm">
+            <div class="mb-3">
+              <label for="minPrice">Minimum Price</label>
+              <input type="number" class="form-control" id="minPrice">
+            </div>
+            <div class="mb-3">
+              <label for="maxPrice">Maximum Price</label>
+              <input type="number" class="form-control" id="maxPrice">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info">Filter</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

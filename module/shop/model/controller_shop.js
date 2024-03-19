@@ -210,7 +210,6 @@ function load_map_details(data) {
     .setPopup(popup)
     .addTo(map);
 }
-
 function load_map(data) {
     mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
     const map = new mapboxgl.Map({
@@ -460,7 +459,7 @@ function print_filters() {
             <button type="button" id="button_extras" class="form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <p style="text-align:left;">Select Extras</p>
             </button>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade custom-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -469,7 +468,7 @@ function print_filters() {
                         </div>
                         <div class="modal-body" id="id_extras"></div>
                         <div class="modal-footer">
-                            <button id="apply_extras" type="button" class="btn btn-primary">Apply Filters</button>
+                            <button id="apply_extras" type="button" class="btn btn-info">Apply Filters</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -743,7 +742,7 @@ function filters_shop() {
         filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
         location.reload();
     }
-
+    
     function setFilterValue(filterName) {
         if (filters_shop[filterName]) {
             $(`#${filterName}`).val(filters_shop[filterName]);
@@ -754,6 +753,12 @@ function filters_shop() {
             $(`#${filterName}`).val(filters_shop[filterName]);
         }
     }
+    $('.modal-footer .btn-info').click(function() {
+        handleFilterChange('minPrice', $('#minPrice').val());
+        handleFilterChange('maxPrice', $('#maxPrice').val());
+    });
+    setFilterValue('minPrice');
+    setFilterValue('maxPrice');
     $('#id_category').change(function () {
         handleFilterChange('id_category', this.value);
     });
@@ -783,12 +788,6 @@ function handleCheckboxChange() {
     let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
     let selectedExtras = filters_shop['id_extras'] || [];
     
-    function handleFilterCheckBox(filterName, filterValue) {
-        let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
-        filters_shop[filterName] = filterValue;
-        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
-        filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
-    }
     $('#id_extras input[type="checkbox"]').each(function() {
         if (this.checked) {
             let value = parseInt(this.value, 10);
@@ -801,7 +800,17 @@ function handleCheckboxChange() {
         }
     });
 
-    handleFilterCheckBox('id_extras', selectedExtras);
+    if (selectedExtras.length === 0) {
+        delete filters_shop['id_extras'];
+    } else {
+        filters_shop['id_extras'] = selectedExtras;
+    }
+
+    if (Object.keys(filters_shop).length === 0) {
+        localStorage.removeItem('filters_shop');
+    } else {
+        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+    }
 }
 function apply_filters() {
     let filter = [];
@@ -826,6 +835,12 @@ function apply_filters() {
     }
     if (filters_shop['id_large_people']) {
         filter.push(['id_large_people', filters_shop['id_large_people']])
+    }
+    if (filters_shop['minPrice']) {
+        filter.push(['minPrice', filters_shop['minPrice']])
+    }
+    if (filters_shop['maxPrice']) {
+        filter.push(['maxPrice', filters_shop['maxPrice']])
     }
 
     return filter;
@@ -874,6 +889,22 @@ function highlight_shop() {
         $('#id_large_people').val(highlight_filters['id_large_people']);
         if ($('#id_large_people').val()) {
             $('#id_large_people').addClass('selected_filters');
+        }
+    }
+    if (highlight_filters['minPrice']) {
+        $('#minPrice').val(highlight_filters['minPrice']);
+        if ($('#minPrice').val()) {
+            $('#button_price .tick-icon').show();
+        }else{
+            $('#button_price .tick-icon').hide();
+        }
+    }
+    if (highlight_filters['maxPrice']) {
+        $('#maxPrice').val(highlight_filters['maxPrice']);
+        if ($('#maxPrice').val()) {
+            $('#button_price .tick-icon').show();
+        }else{
+            $('#button_price .tick-icon').hide();
         }
     }
 }

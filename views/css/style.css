@@ -7,13 +7,33 @@
 #div_list {
 	display: flex; /* Hace que los hijos de #div_list se coloquen uno al lado del otro */
 }
-
 #properties_shop {
 	width: 60%; /* Ajusta el ancho según tus necesidades */
 	margin-left: 10%;
 	margin-right: -12%;
 }
-
+.custom-modal .modal-dialog {
+	max-width: 500px; /* Cambia esto al ancho que prefieras */
+}
+.tick-icon::before {
+	content: "\2713"; /* Código Unicode para el tick */
+	font-weight: bold;
+	color: white;
+	margin-left: 5px; /* Espacio entre el texto del botón y el tick */
+}
+.btn-info {
+	background-color: #1ca2a2 !important;
+	color: #ffffff !important;
+}
+.btn-info:hover {
+	background-color: #148282 !important;
+	color: #ffffff !important;
+}
+.custom-modal .modal-content {
+	height: auto; /* Cambia esto a la altura que prefieras */
+	max-height: 500px; /* Cambia esto a la altura máxima que prefieras */
+	overflow: auto;
+}
 #map-container {
 	position: sticky;
 	top: 0;
