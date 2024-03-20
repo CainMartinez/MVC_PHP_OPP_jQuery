@@ -395,6 +395,51 @@ function clicks_home() {
         window.location.href = 'index.php?page=shop';
       }, 1000);
   });
+  $(document).on("click", '#filter_price_submit', function() {
+    var filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+    var minPrice = $('#minPrice').val();
+    var maxPrice = $('#maxPrice').val();
+
+    if (minPrice !== "") {
+      filters_shop['minPrice'] = minPrice;
+    } else {
+      delete filters_shop['minPrice'];
+    }
+
+    if (maxPrice !== "") {
+      filters_shop['maxPrice'] = maxPrice;
+    } else {
+      delete filters_shop['maxPrice'];
+    }
+    if (Object.keys(filters_shop).length === 0) {
+        localStorage.removeItem('filters_shop');
+    } else {
+        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+    }
+    setTimeout(function(){ 
+      window.location.href = 'index.php?page=shop';
+    }, 1000);
+  });
+}
+function highlight_home(){
+  var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
+
+    if (highlight_filters['minPrice']) {
+      $('#minPrice').val(highlight_filters['minPrice']);
+      if ($('#minPrice').val()) {
+          $('#button_price .tick-icon').show();
+      }else{
+          $('#button_price .tick-icon').hide();
+      }
+    }
+    if (highlight_filters['maxPrice']) {
+        $('#maxPrice').val(highlight_filters['maxPrice']);
+        if ($('#maxPrice').val()) {
+            $('#button_price .tick-icon').show();
+        }else{
+            $('#button_price .tick-icon').hide();
+        }
+    }
 }
 $(document).ready(function () {
   carousel_people();
@@ -407,4 +452,5 @@ $(document).ready(function () {
   clicks_home();
   loadMostVisited();
   loadLastVisited()
+  highlight_home();
 });

@@ -40,11 +40,13 @@ function ajaxForSearch_filter(url) {
             $('#maps_details').hide();
 
             if (data == "error") {
+                $('#map-container').hide();
                 $('<div></div>').appendTo('#properties_shop')
                     .html(
                         '<h3>¡No results are found with the applied filters!</h3>'
                     )
             } else {
+                $('#map-container').show();
                 for (let row in data) {
                     let property = data[row];
 
@@ -119,11 +121,13 @@ function ajaxForSearch(url) {
             $('#properties_shop_details').empty();
             
             if (data == "error") {
+                $('#map-container').hide();
                 $('<div></div>').appendTo('#properties_shop')
                     .html(
                         '<h3>¡No results are found with the applied filters!</h3>'
                     )
             } else {
+                $('#map-container').show();
                 for (let row in data) {
                     let property = data[row];
                     // console.log(property.images);
@@ -251,11 +255,13 @@ function ajaxForSearch_Shop(url, highlight) {
             $('#maps_details').hide();
 
             if (data == "error") {
+                $('#map-container').hide();
                 $('<div></div>').appendTo('#properties_shop')
                     .html(
                         '<h3>¡No results are found with the applied filters!</h3>'
                     )
             } else {
+                $('#map-container').show();
                 for (let row in data) {
                     let property = data[row];
                     // console.log(property.images);
@@ -737,8 +743,16 @@ function filters_shop() {
 
     function handleFilterChange(filterName, filterValue) {
         let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
-        filters_shop[filterName] = filterValue;
-        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+        if ((filterName === "minPrice" || filterName === "maxPrice") && filterValue === "") {
+            delete filters_shop[filterName];
+        } else {
+            filters_shop[filterName] = filterValue;
+        }
+        if (Object.keys(filters_shop).length === 0) {
+            localStorage.removeItem('filters_shop');
+        } else {
+            localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
+        }
         filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
         location.reload();
     }
