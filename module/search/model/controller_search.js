@@ -8,20 +8,11 @@ function load_search_city() {
             }
             // console.log(data);
 
-            let selectedCity = localStorage.getItem('selectedCity');
-            if (selectedCity) {
-                $('#search_city').val(selectedCity);
-                $('#search_city').addClass('selected_filters');
-            }
+            
         }).catch(function (e) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
-        
-    $('#search_city').change(function() {
-        let selectedCity = $(this).val();
-        localStorage.setItem('selectedCity', selectedCity);
-    });
 }
 function load_search_type(data = undefined) {
     $('#search_type').empty();
@@ -39,16 +30,7 @@ function load_search_type(data = undefined) {
                 let type = data[row];
                 $('#search_type').append('<option value="' + type.id_type + '">' + type.name_type + '</option>');
             }
-            $('#search_type').change(function() {
-                let selectedType = $(this).val();
-                localStorage.setItem('selectedType', selectedType);
-
-            });
-            let selectedType = localStorage.getItem('selectedType');
-            if (selectedType) {
-                $('#search_type').val(selectedType);
-                $('#search_type').addClass('selected_filters');
-            }
+            
 
         }).catch(function (e) {
             console.error(e);
@@ -131,11 +113,33 @@ function search_button() {
         }
         if(search.length != 0){
             localStorage.setItem('filters_search', JSON.stringify(search));
+            localStorage.setItem('filters_shop', JSON.stringify(search));
             console.log(search);
             setTimeout(function(){ 
                 window.location.href = 'index.php?page=shop';
             }, 1000);
         }
+        let selectedCity = $(this).val();
+        localStorage.setItem('selectedCity', selectedCity);
+        let selectedType = $(this).val();
+        localStorage.setItem('selectedType', selectedType);
+        let selectedCategory = $(this).val();
+        localStorage.setItem('selectedCategory', selectedCategory);
+        let selectedType = localStorage.getItem('selectedType');
+            if (selectedType) {
+                $('#search_type').val(selectedType);
+                $('#search_type').addClass('selected_filters');
+            }
+        let selectedCity = localStorage.getItem('selectedCity');
+            if (selectedCity) {
+                $('#search_city').val(selectedCity);
+                $('#search_city').addClass('selected_filters');
+            }
+        let selectedCategory = localStorage.getItem('selectedCategory');
+            if (selectedCategory) {
+                $('#autocom').val(selectedCategory);
+                $('#autocom').addClass('selected_filters');
+            }
     });
 }
 $(document).ready(function() {
