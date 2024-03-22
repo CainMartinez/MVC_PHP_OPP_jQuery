@@ -18,7 +18,7 @@ class DAOSearch{
 	}
 	function select_category($complete){
 		
-		$sql = "SELECT DISTINCT c.name_category 
+		$sql = "SELECT DISTINCT c.name_category,c.id_category
 		FROM property p,property_category pc,category c 
 		WHERE p.id_property = pc.id_property
 		AND pc.id_category = c.id_category
