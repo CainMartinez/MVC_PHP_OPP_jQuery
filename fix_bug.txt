@@ -1,2 +1,0 @@
-Almacenar en localstorage los valores del search solo cuando se pulse el botón de search. 
-Añadir los filtros del home y del search al array filters_shop.

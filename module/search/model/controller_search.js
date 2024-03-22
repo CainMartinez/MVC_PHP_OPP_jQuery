@@ -81,55 +81,65 @@ function autocomplete(){
 function search_button() {
     $('#search_button').on('click', function() {
         var search = [];
-        if(($('#search_city').val() == 0) && ($('#search_type').val() == 0)){
-            if($('#autocom').val() != ""){
-                search.push({"id_category": selectedCategory});
-            }
-        }else if(($('#search_city').val() != 0) && ($('#search_type').val() == 0)){
-            if($('#autocom').val() != ""){
-                search.push({"id_category": selectedCategory});
-            }
-            search.push({"type_name":[$('#search_city').val()]});
-        }else if(($('#search_city').val() == 0) && ($('#search_type').val() != 0)){
-            if($('#autocom').val() != ""){
-                search.push({"id_category": selectedCategory});
-            }
-            search.push({"name_type":[$('#search_type').val()]});
-        }else{
-            if($('#autocom').val() != ""){
-                search.push({"id_category": selectedCategory});
-            }
-            search.push({"id_city":[$('#search_city').val()]});
-            search.push({"id_type":[$('#search_type').val()]});
-        }
-        if(search.length != 0){
-            localStorage.setItem('filters_search', JSON.stringify(search));
-            localStorage.setItem('filters_shop', JSON.stringify(search));
-            console.log(search);
-            setTimeout(function(){ 
-                window.location.href = 'index.php?page=shop';
-            }, 1000);
-        }
+        var shop = [];
         let selectedCity = $('#search_city').val();
         let selectedType = $('#search_type').val();
 
-        localStorage.setItem('selectedType', selectedType);
-        localStorage.setItem('selectedCategory', selectedCategory);
-        localStorage.setItem('selectedCity', selectedCity);
-
-        selectedType = localStorage.getItem('selectedType');
-        selectedCity = localStorage.getItem('selectedCity');
-        if (selectedType) {
-            $('#search_type').val(selectedType);
-            $('#search_type').addClass('selected_filters');
+        // Add to search array only if value is not null or ""
+        if(selectedCity && selectedCity != "") {
+            search.push({"id_city": selectedCity});
         }
-        if (selectedCity) {
+        if(selectedType && selectedType != "") {
+            search.push({"id_type": selectedType});
+        }
+        if(selectedCategory && selectedCategory != "") {
+            search.push({"id_category": selectedCategory});
+        }
+
+        // Add to shop array only if value is not null or ""
+        if(selectedCity && selectedCity != "") {
+            shop.push({"id_city": selectedCity});
+        }
+        if(selectedType && selectedType != "") {
+            shop.push({"id_type": selectedType});
+        }
+        if(selectedCategory && selectedCategory != "") {
+            shop.push({"id_category": selectedCategory});
+        }
+
+        // Add to individual localStorage only if value is not null or ""
+        if(selectedCity && selectedCity != "") {
+            localStorage.setItem('selectedCity', selectedCity);
             $('#search_city').val(selectedCity);
             $('#search_city').addClass('selected_filters');
+        } else {
+            localStorage.removeItem('selectedCity');
+            $('#search_city').removeClass('selected_filters');
         }
-        if (selectedCategory) {
-            $('#autocom').val(selectedCategory);
+        if(selectedType && selectedType != "") {
+            localStorage.setItem('selectedType', selectedType);
+            $('#search_type').val(selectedType);
+            $('#search_type').addClass('selected_filters');
+        } else {
+            localStorage.removeItem('selectedType');
+            $('#search_type').removeClass('selected_filters');
+        }
+        if(selectedCategory && selectedCategory != "") {
+            localStorage.setItem('selectedCategory', selectedCategory);
+            $('#autocom').val($(this).text());
             $('#autocom').addClass('selected_filters');
+        } else {
+            localStorage.removeItem('selectedCategory');
+            $('#autocom').removeClass('selected_filters');
+        }
+
+        // Save search and shop arrays to localStorage
+        if(search.length != 0){
+            localStorage.setItem('filters_search', JSON.stringify(search));
+            localStorage.setItem('filters_shop', JSON.stringify(shop));
+            setTimeout(function(){ 
+                window.location.href = 'index.php?page=shop';
+            }, 1000);
         }
     });
 }

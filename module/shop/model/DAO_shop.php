@@ -119,7 +119,7 @@ class DAOShop{
 		return $retrArray;
 	}
 	function search_filter($filters_search){
-		$name_category = isset($filters_search['name_category']) ? $filters_search['name_category'] : null;
+		$id_category = isset($filters_search['id_category']) ? $filters_search['id_category'] : null;
 		$id_city = isset($filters_search['id_city']) ? $filters_search['id_city'] : null;
 		$id_type = isset($filters_search['id_type']) ? $filters_search['id_type'] : null;
 
@@ -133,7 +133,7 @@ class DAOShop{
 		AND p.id_property = i.id_property"
 		. ($id_type ? " AND t.id_type = $id_type" : "")
 		. ($id_city ? " AND p.id_city = $id_city" : "")
-		. ($name_category ? " AND cat.name_category = '$name_category'" : "") .
+		. ($id_category ? " AND cat.id_category = '$id_category'" : "") .
 		" GROUP BY p.id_property
 		ORDER BY p.id_property ASC";
 

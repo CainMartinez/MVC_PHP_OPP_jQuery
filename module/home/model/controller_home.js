@@ -424,6 +424,7 @@ function clicks_home() {
 function highlight_home(){
   var highlight_filters = JSON.parse(localStorage.getItem('filters_shop'));
 
+  if (highlight_filters) {
     if (highlight_filters['minPrice']) {
       $('#minPrice').val(highlight_filters['minPrice']);
       if ($('#minPrice').val()) {
@@ -440,6 +441,7 @@ function highlight_home(){
             $('#button_price .tick-icon').hide();
         }
     }
+  }
 }
 $(document).ready(function () {
   carousel_people();
