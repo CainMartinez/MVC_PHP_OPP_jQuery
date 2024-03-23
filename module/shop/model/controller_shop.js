@@ -1,21 +1,24 @@
 function loadProperties() {
-    var filters_home = localStorage.getItem('filters_home') || false;
+    // var filters_home = localStorage.getItem('filters_home') || false;
     let details_home = localStorage.getItem('details_home') || false;
     let filters_search = localStorage.getItem('filters_search') || false;
     let filters_shop = localStorage.getItem('filters_shop') || false;
 
-    if (filters_home !== false) {
-        // console.log('Envio en la URL op=home_filter');
-        ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
-        // localStorage.removeItem('filters_home');
-    } else if (details_home !== false) {
+    // if (filters_home !== false) {
+    //     // console.log('Envio en la URL op=home_filter');
+    //     ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
+    //     // localStorage.removeItem('filters_home');
+    // }
+    if (details_home !== false) {
         loadDetails(details_home);
         localStorage.removeItem('details_home');
-    } else if (filters_search !== false) {
+    }
+    if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
         ajaxForSearch_filter('module/shop/controller/controller_shop.php?op=search_filter');
         localStorage.removeItem('filters_search');
-    } else if (filters_shop !== false) {
+    }
+    if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
         ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop",highlight_shop);
         // localStorage.removeItem('filters_shop');

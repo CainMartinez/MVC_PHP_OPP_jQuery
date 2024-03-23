@@ -259,39 +259,45 @@ class DAOShop{
 		return $retrArray;
 	}
 	function select_filter_home($filters_home){
-		$sql = "SELECT *
-		FROM property p,large_people lp, city c, property_type pt, property_operation po, property_category pc, property_extras pe
+		$sql = "SELECT *,i.path_images
+		FROM property p,large_people lp, city c, property_type pt, property_operation po, property_category pc, property_extras pe, images i
 		WHERE p.id_city = c.id_city
+		AND p.id_property = i.id_property
 		AND p.id_large_people = lp.id_large_people
 		AND p.id_property = pt.id_property 
 		AND p.id_property = po.id_property 
 		AND p.id_property = pc.id_property 
 		AND p.id_property = pe.id_property";
 
-		if (isset($filters_home[0]['category'])) {
-			$category = $filters_home[0]['category'][0];
+		if (isset($filters_home[0]['id_category'])) {
+			$category = $filters_home[0]['id_category'][0];
 			$sql .= " AND pc.id_category = '$category'";
-		} else if (isset($filters_home[0]['type'])) {
-			$type = $filters_home[0]['type'][0];
+		} else if (isset($filters_home[0]['id_type'])) {
+			$type = $filters_home[0]['id_type'][0];
 			$sql .= " AND pt.id_type = '$type'";
-		} else if (isset($filters_home[0]['operation'])) {
-			$operation = $filters_home[0]['operation'][0];
+		} else if (isset($filters_home[0]['id_operation'])) {
+			$operation = $filters_home[0]['id_operation'][0];
 			$sql .= " AND po.id_operation = '$operation'";
-		} else if (isset($filters_home[0]['extras'])) {
-			$extras = $filters_home[0]['extras'][0];
+		} else if (isset($filters_home[0]['id_extras'])) {
+			$extras = $filters_home[0]['id_extras'][0];
 			$sql .= " AND pe.id_extras= '$extras'";
-		} else if (isset($filters_home[0]['city'])) {
-			$city = $filters_home[0]['city'][0];
+		} else if (isset($filters_home[0]['id_city'])) {
+			$city = $filters_home[0]['id_city'][0];
 			$sql .= " AND c.id_city = '$city'";
-		} else if (isset($filters_home[0]['large_people'])) {
-			$large_people = $filters_home[0]['large_people'][0];
+		} else if (isset($filters_home[0]['id_large_people'])) {
+			$large_people = $filters_home[0]['id_large_people'][0];
 			$sql .= " AND lp.id_large_people = '$large_people'";
 		}
 		$sql .= " GROUP BY p.id_property;";
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
-
+		if (isset($filters_home[0]['id_category'])) {
+			$id_category = (string) $filters_home[0]['id_category'];
+			error_log($id_category, 3, "debug.txt");
+		} else {
+			error_log('id_category not set', 3, "debug.txt");
+		}		
 		$retrArray = array();
 		if ($res->num_rows > 0) {
 			while ($row = mysqli_fetch_assoc($res)) {

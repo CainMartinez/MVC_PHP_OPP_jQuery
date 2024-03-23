@@ -143,8 +143,26 @@ function search_button() {
         }
     });
 }
+function setupHomeClick() {
+    $('#home').click(function(event) {
+        event.preventDefault();
+        remove_filters();
+        window.location.href = $(this).attr('href');
+    });
+}
+function remove_filters() {
+    localStorage.removeItem('filters_shop');
+    localStorage.removeItem('selectedCategory');
+    localStorage.removeItem('selectedCity');
+    localStorage.removeItem('selectedExtras');
+    localStorage.removeItem('selectedOperation');
+    localStorage.removeItem('selectedType');
+    localStorage.removeItem('selectedLargePeople');
+    location.reload();
+}
 $(document).ready(function() {
     launch_search();
     autocomplete();
     search_button();
+    setupHomeClick();
 });
