@@ -28,8 +28,8 @@ class DAOShop{
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT $number_property, $items_page;";
+		ORDER BY p.id_property DESC";
+		// LIMIT $number_property, $items_page;";
 
 
 		$conexion = connect::con();
