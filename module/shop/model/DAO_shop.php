@@ -296,7 +296,7 @@ class DAOShop{
 		connect::close($conexion);
 		if (isset($filters_home[0]['id_category'])) {
 			$id_category = (string) $filters_home[0]['id_category'];
-			error_log($id_category, 3, "debug.txt");
+			// error_log($id_category, 3, "debug.txt");
 		} else {
 			error_log('id_category not set', 3, "debug.txt");
 		}		
