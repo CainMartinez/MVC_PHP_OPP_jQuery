@@ -22,13 +22,14 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
-	function select_all_properties(){
+	function select_all_properties($number_property, $items_page){
 		$sql = "SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
-		ORDER BY p.id_property DESC";
+		ORDER BY p.id_property DESC
+		LIMIT $number_property, $items_page;";
 
 
 		$conexion = connect::con();
@@ -43,7 +44,7 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function select_order_properties($filters_shop){
+	function select_order_properties($filters_shop, $number_property, $items_page){
 		$order = 'ASC';
 		$filter = 'price';
 
@@ -118,7 +119,7 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function search_filter($filters_search){
+	function search_filter($filters_search, $number_property, $items_page){
 		$id_category = isset($filters_search['id_category']) ? $filters_search['id_category'] : null;
 		$id_city = isset($filters_search['id_city']) ? $filters_search['id_city'] : null;
 		$id_type = isset($filters_search['id_type']) ? $filters_search['id_type'] : null;
@@ -135,7 +136,8 @@ class DAOShop{
 		. ($id_city ? " AND p.id_city = $id_city" : "")
 		. ($id_category ? " AND cat.id_category = '$id_category'" : "") .
 		" GROUP BY p.id_property
-		ORDER BY p.id_property ASC";
+		ORDER BY p.id_property ASC
+		LIMIT $number_property, $items_page;";
 
 		// error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
@@ -357,7 +359,7 @@ class DAOShop{
 		}
 		return $imgArray;
 	}
-	function filters_shop($filters_shop){
+	function filters_shop($filters_shop, $number_property, $items_page){
 		// error_log(print_r($filters_shop, true), 3, "debug.txt");
 
 		$consulta = "SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
@@ -447,12 +449,74 @@ class DAOShop{
 				}
 			}
 		}
-		$consulta .= " GROUP BY p.id_property";
+		$consulta .= " GROUP BY p.id_property
+		LIMIT $number_property, $items_page;";
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		// error_log($consulta, 3, "debug.txt");
+		error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if ($res -> num_rows > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
+	function counting_filters($filters_shop){
+		$sql = "SELECT COUNT(*)total 
+		FROM property p
+		INNER JOIN city c ON p.id_city = c.id_city";
+
+		foreach ($filters_shop as $key => $value) {
+			if (isset($filters_shop[$key])){
+				switch ($key) {
+					case 'id_large_people':
+						$sql .= " INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = " . $filters_shop['id_large_people'];
+						break;
+					case 'id_type':
+						$sql .= " INNER JOIN property_type pt ON p.id_property = pt.id_property INNER JOIN type t ON pt.id_type = t.id_type AND t.id_type = " . $filters_shop['id_type'];
+						break;
+					case 'id_operation':
+						$sql .= " INNER JOIN property_operation po ON p.id_property = po.id_property INNER JOIN operation o ON po.id_operation = o.id_operation AND o.id_operation = " . $filters_shop['id_operation'];
+						break;
+					case 'id_category':
+						$sql .= " INNER JOIN property_category pc ON p.id_property = pc.id_property INNER JOIN category cat ON pc.id_category = cat.id_category AND cat.id_category = " . $filters_shop['id_category'];
+						break;
+					case 'id_extras':
+						if (is_array($filters_shop['id_extras'])) {
+							$extras = array_map('intval', $filters_shop['id_extras']);
+							foreach ($extras as $extra) {
+								$sql .= " INNER JOIN property_extras pe ON p.id_property = pe.id_property INNER JOIN extras e ON pe.id_extras = e.id_extras AND e.id_extras = $extra";
+							}
+						} else {
+							$sql .= " INNER JOIN property_extras pe ON p.id_property = pe.id_property INNER JOIN extras e ON pe.id_extras = e.id_extras AND e.id_extras = " . intval($filters_shop['id_extras']);
+						}
+						break;
+				}
+			}
+		}
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
+		connect::close($conexion);
+
+		$retrArray = array();
+		if ($res -> num_rows > 0) {
+			while ($row = mysqli_fetch_assoc($res)) {
+				$retrArray[] = $row;
+			}
+		}
+		return $retrArray;
+	}
+	function counting(){
+		$sql = "SELECT COUNT(*)total 
+		FROM property p";
+
+		$conexion = connect::con();
+		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
 
 		$retrArray = array();

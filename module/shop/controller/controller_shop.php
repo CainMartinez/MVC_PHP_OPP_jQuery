@@ -6,7 +6,7 @@ switch ($_GET['op']) {
     case 'order_properties':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_order_properties($_POST['filters_shop']);
+            $Dates_Properties = $daoshop->select_order_properties($_POST['filters_shop'],$_POST['number_property'],$_POST['items_page']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -31,7 +31,7 @@ switch ($_GET['op']) {
     case 'all_properties':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_all_properties();
+            $Dates_Properties = $daoshop->select_all_properties($_POST['number_property'], $_POST['items_page']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -103,7 +103,7 @@ switch ($_GET['op']) {
             $daoshop = new DAOShop();
             // $Dates_Properties = $daoshop->select_all_properties();
 
-            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop']);
+            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['number_property'], $_POST['items_page']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -208,7 +208,7 @@ switch ($_GET['op']) {
     case 'search_filter':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->search_filter($_POST['filters_search']);            
+            $Dates_Properties = $daoshop->search_filter($_POST['filters_search'],$_POST['number_property'],$_POST['items_page']);            
             $Date_images = $daoshop->select_images_property();
             foreach ($Dates_Properties as $key => $property) {
                 $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
@@ -216,6 +216,32 @@ switch ($_GET['op']) {
                 }));
             }
 
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'pagination_filters':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->counting_filters($_POST['filters_shop'],$_POST['number_property'],$_POST['items_page']);
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
+    case 'pagination':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->counting();
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
             } else {

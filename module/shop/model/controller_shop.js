@@ -12,13 +12,11 @@ function loadProperties() {
     if (details_home !== false) {
         loadDetails(details_home);
         localStorage.removeItem('details_home');
-    }
-    if (filters_search !== false) {
+    }else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
         ajaxForSearch_filter('module/shop/controller/controller_shop.php?op=search_filter');
         localStorage.removeItem('filters_search');
-    }
-    if (filters_shop !== false) {
+    }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
         ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop",highlight_shop);
         // localStorage.removeItem('filters_shop');
@@ -26,7 +24,7 @@ function loadProperties() {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
     }
 }
-function ajaxForSearch_filter(url) {
+function ajaxForSearch_filter(url,number_property = 0, items_page = 3) {
     var filters_search_array = JSON.parse(localStorage.getItem('filters_search'));
     var filters_search = {};
 
@@ -36,7 +34,7 @@ function ajaxForSearch_filter(url) {
         }
     });
     // console.log(filters_search);
-    ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search })
+    ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search, 'number_property': number_property, 'items_page': items_page})
         .then(function (data) {
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
@@ -109,12 +107,12 @@ function ajaxForSearch_filter(url) {
 
 
 }
-function ajaxForSearch(url) {
+function ajaxForSearch(url, number_property = 0, items_page = 3) {
 
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
     // console.log(filters_home);
     localStorage.removeItem('filters_home');
-    ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home })
+    ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home , 'number_property': number_property, 'items_page': items_page})
         .then(function (data) {
             // console.log(data);
             // console.log('entra en el then HOME_FILTER');
@@ -244,12 +242,12 @@ function load_map(data) {
         .addTo(map);
     }
 }
-function ajaxForSearch_Shop(url, highlight) {
+function ajaxForSearch_Shop(url, highlight, number_property = 0, items_page = 3) {
 
     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
     // console.log('entra en el ajaxForSearch_Shop');
     // console.log(filters_shop);
-    ajaxPromise('POST', 'JSON', url, { filters_shop })
+    ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop , 'number_property': number_property, 'items_page': items_page})
         .then(function (data) {
             // console.log(data);
             // console.log('entra en el then HOME_FILTER');
@@ -552,14 +550,14 @@ function print_filters() {
     load_type();
     load_category();
 }
-function order_properties() {
+function order_properties(number_property = 0, items_page = 3) {
     $('#order').change(function () {
         var order = $(this).val();
         var filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
         filters_shop['order'] = order;
         localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
         
-        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=order_properties', { filters_shop })
+        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=order_properties', { filters_shop, 'number_property': number_property, 'items_page': items_page})
         .then(function (data) {
             $('#properties_shop').empty();
             $('#images_properties').empty();
@@ -925,6 +923,42 @@ function highlight_shop() {
         }
     }
 }
+function pagination_shop() {
+    let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+
+    let url = 'module/shop/controller/controller_shop.php?op=';
+    if (filters_shop && Object.keys(filters_shop).length > 0) {
+        url += 'pagination_filters';
+    } else {
+        url += 'pagination';
+    }
+
+    ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop })
+    .then(function(data) {
+        var total_pages;
+        if (data[0].counter >= 3) {
+            total_pages = Math.ceil(data[0].counter / 3);
+        } else {
+            total_pages = 1;
+        }
+        $('#pagination').empty();
+        for (var i = 1; i <= total_pages; i++) {
+            $('#pagination').append('<a href="#" class="page-number" data-page="' + i + '">' + i + '</a> ');
+        }
+        $('.page-number').click(function(e) {
+            e.preventDefault();
+            var num = $(this).data('page');
+            var total_prod = 3 * (num - 1);
+            var options = { start: total_prod, count: 3 };
+            if (filters_shop != undefined) {
+                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, options);
+            } else {
+                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=all_properties", undefined, options);
+            }
+            $('html, body').animate({ scrollTop: $(".wrap") });
+        });
+    });
+}
 function remove_filters() {
     localStorage.removeItem('filters_shop');
     localStorage.removeItem('selectedCategory');
@@ -940,4 +974,5 @@ $(document).ready(function () {
     print_filters();
     filters_shop();
     clicks_shop();
+    pagination_shop();
 });
