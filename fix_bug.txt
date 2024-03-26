@@ -1,0 +1,1 @@
+quitar reload en los filtros, hacer un empty y repintar.
