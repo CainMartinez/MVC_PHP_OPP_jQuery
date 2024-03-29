@@ -28,10 +28,10 @@ class DAOShop{
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
-		ORDER BY p.id_property DESC";
-		// LIMIT $number_property, $items_page;";
+		ORDER BY p.id_property DESC
+		LIMIT $number_property, $items_page;";
 
-
+		// error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -298,7 +298,7 @@ class DAOShop{
 			$id_category = (string) $filters_home[0]['id_category'];
 			// error_log($id_category, 3, "debug.txt");
 		} else {
-			error_log('id_category not set', 3, "debug.txt");
+			// error_log('id_category not set', 3, "debug.txt");
 		}		
 		$retrArray = array();
 		if ($res->num_rows > 0) {
@@ -452,7 +452,7 @@ class DAOShop{
 		$consulta .= " GROUP BY p.id_property
 		LIMIT $number_property, $items_page;";
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		error_log($consulta, 3, "debug.txt");
+		// error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);

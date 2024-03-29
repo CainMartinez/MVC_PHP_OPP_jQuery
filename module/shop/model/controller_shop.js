@@ -24,7 +24,7 @@ function loadProperties() {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
     }
 }
-function ajaxForSearch_filter(url,number_property = 0, items_page = 3) {
+function ajaxForSearch_filter(url,number_property, items_page) {
     var filters_search_array = JSON.parse(localStorage.getItem('filters_search'));
     var filters_search = {};
 
@@ -107,7 +107,7 @@ function ajaxForSearch_filter(url,number_property = 0, items_page = 3) {
 
 
 }
-function ajaxForSearch(url, number_property = 0, items_page = 3) {
+function ajaxForSearch(url, number_property, items_page) {
 
     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
     // console.log(filters_home);
@@ -242,7 +242,7 @@ function load_map(data) {
         .addTo(map);
     }
 }
-function ajaxForSearch_Shop(url, highlight, number_property = 0, items_page = 3) {
+function ajaxForSearch_Shop(url, highlight, number_property, items_page) {
 
     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
     // console.log('entra en el ajaxForSearch_Shop');
@@ -941,19 +941,21 @@ function pagination_shop() {
         } else {
             total_pages = 1;
         }
-        $('#pagination').empty();
+        $('#pagination .pagination').empty();
+        $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&lt;</a></li>');
         for (var i = 1; i <= total_pages; i++) {
-            $('#pagination').append('<a href="#" class="page-number" data-page="' + i + '">' + i + '</a> ');
+            $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" href="#" data-page="' + i + '">' + i + '</a></li>');
         }
+        $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&gt;</a></li>');
+        $('#pagination').append('<br>');
         $('.page-number').click(function(e) {
             e.preventDefault();
             var num = $(this).data('page');
             var total_prod = 3 * (num - 1);
-            var options = { start: total_prod, count: 3 };
             if (filters_shop != undefined) {
-                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, options);
+                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, total_prod, 3);
             } else {
-                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=all_properties", undefined, options);
+                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=all_properties", undefined, total_prod, 3);
             }
             $('html, body').animate({ scrollTop: $(".wrap") });
         });
