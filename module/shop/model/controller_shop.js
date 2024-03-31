@@ -14,243 +14,35 @@ function loadProperties() {
         localStorage.removeItem('details_home');
     }else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
-        ajaxForSearch_filter('module/shop/controller/controller_shop.php?op=search_filter');
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search);
+        pagination_shop(filters_search);
         localStorage.removeItem('filters_search');
     }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
-        ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop",highlight_shop);
+        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop,highlight_shop);
+        pagination_shop(filters_shop);
         // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
+        pagination_shop();
     }
 }
-function ajaxForSearch_filter(url,number_property, items_page) {
-    var filters_search_array = JSON.parse(localStorage.getItem('filters_search'));
+function ajaxForSearch(url, filterKey, offset = 0, limit = 3, highlight) {
+    var filters = JSON.parse(localStorage.getItem(filterKey));
     var filters_search = {};
 
-    filters_search_array.forEach(function(filter) {
-        for (var key in filter) {
-            filters_search[key] = filter[key][0];
-        }
-    });
-    // console.log(filters_search);
-    ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search, 'number_property': number_property, 'items_page': items_page})
-        .then(function (data) {
-            $('#properties_shop_details').empty();
-            $('#images_properties').empty();
-            $('#maps_details').hide();
-
-            if (data == "error") {
-                $('#map-container').hide();
-                $('<div></div>').appendTo('#properties_shop')
-                    .html(
-                        '<h3>¡No results are found with the applied filters!</h3>'
-                    )
-            } else {
-                $('#map-container').show();
-                for (let row in data) {
-                    let property = data[row];
-
-                    let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-                    let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
-                    for (let image of property.images) {
-                        $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-                            "<article class='thumbnail-light'>" +
-                            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-                            image.path_images +
-                            "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-                            "</article>"
-                        );
-                    }
-
-                    owlCarouselDiv.owlCarousel({
-                        loop: true,
-                        margin: 100,
-                        nav: true,
-                        responsive: {
-                            0: {
-                                items: 1
-                            },
-                        }
-                    });
-
-                    propertyDiv.append(`
-                            <article class='post-modern wow slideInLeft '><br>
-                                <h4 class='post-modern-title'>
-                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
-                                </h4>
-                                <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-                                    <li>City: ${property.name_city}</li>
-                                    <li>Square meters: ${property.square_meters}</li>
-                                </ul>
-                                <p>${property.description}</p><br>
-                                <div class='buttons'>
-                                    <table id='table-shop'> 
-                                        <tr>
-                                            <td>
-                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </article>
-                        `)
-                }
-                load_map(data);
+    if (filterKey === 'filters_search') {
+        filters.forEach(function(filter) {
+            for (var key in filter) {
+                filters_search[key] = filter[key][0];
             }
-        }).catch(function (error) {
-            console.error(error);
-            // window.location.href = "index.php?page=503";
         });
-
-
-}
-function ajaxForSearch(url, number_property, items_page) {
-
-    var filters_home = JSON.parse(localStorage.getItem('filters_home'));
-    // console.log(filters_home);
-    localStorage.removeItem('filters_home');
-    ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home , 'number_property': number_property, 'items_page': items_page})
-        .then(function (data) {
-            // console.log(data);
-            // console.log('entra en el then HOME_FILTER');
-            $('#maps_details').empty();
-            $('#images_properties').empty();
-            $('#maps_details').hide();
-            $('#properties_shop_details').empty();
-            
-            if (data == "error") {
-                $('#map-container').hide();
-                $('<div></div>').appendTo('#properties_shop')
-                    .html(
-                        '<h3>¡No results are found with the applied filters!</h3>'
-                    )
-            } else {
-                $('#map-container').show();
-                for (let row in data) {
-                    let property = data[row];
-                    // console.log(property.images);
-                    // $('<div></div>').addClass('row-lg-50 row-35 offset-top-2').attr('id', 'properties_shop').appendTo('#div_list'); 
-                    let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-                    let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
-                    for (let image of property.images) {
-                        $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-                            "<article class='thumbnail-light'>" +
-                            "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-                            image.path_images +
-                            "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-                            "</article>"
-                        );
-                    }
-
-                    owlCarouselDiv.owlCarousel({
-                        loop: true,
-                        margin: 100,
-                        nav: true,
-                        responsive: {
-                            0: {
-                                items: 1
-                            },
-                        }
-                    });
-
-                    propertyDiv.append(`
-                            <article class='post-modern wow slideInLeft '><br>
-                                <h4 class='post-modern-title'>
-                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
-                                </h4>
-                                <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-                                    <li>City: ${property.name_city}</li>
-                                    <li>Square meters: ${property.square_meters}</li>
-                                </ul>
-                                <p>${property.description}</p><br>
-                                <div class='buttons'>
-                                    <table id='table-shop'> 
-                                        <tr>
-                                            <td>
-                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </article>
-                        `)
-                }
-                
-                load_map(data);
-            }
-        }).catch(function (error) {
-            console.error(error);
-            // window.location.href = "index.php?page=503";
-        });
-
-        
-}
-function load_map_details(data) {
-
-    mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
-    const map = new mapboxgl.Map({
-        container: 'maps_details',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [data[0].longitude, data[0].latitude],
-        zoom: 15
-    });
-
-    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        "<div class='popup' id='"+ data[0].id_property +"'>"+
-                "<img class='popup_img' src='" + data[0].path_images +"'>" +
-                "<div class='popup_desc_property'><h4><i class='fas fa-home'></i>"+ data[0].property_name + "</h4>"+
-                        "<p><i class='fas fa-bed'></i> "+ data[0].number_of_rooms + " rooms <br><i class='fas fa-ruler-combined'></i> " + data[0].square_meters + " Square meters</p>"+
-                        "<b><i class='fas fa-info-circle'></i> "+ data[0].description +"<br><i class='fas fa-city'></i> "+ data[0].name_city + "</b><h5><i class='fas fa-euro-sign'></i> " +  data[0].price + " €</h5>"+
-                    "</div>"+
-                "</div>"
-    );
-
-    const marker1 = new mapboxgl.Marker({ color: 'red'})
-    .setLngLat([data[0].longitude, data[0].latitude])
-    .setPopup(popup)
-    .addTo(map);
-}
-function load_map(data) {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
-    const map = new mapboxgl.Map({
-        container: 'maps',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-0.5, 38.9],
-        zoom: 8.9
-    });
-
-    for (row in data) {
-    
-        const popup = new mapboxgl.Popup({offset: 25}).setHTML(
-            "<div class='popup' id='"+ data[row].id_property +"'>"+
-                "<img class='popup_img' src='" + data[row].path_images +"'>" +
-                "<div class='popup_desc_property'><h4><i class='fas fa-home'></i>"+ data[row].property_name + "</h4>"+
-                        "<p><i class='fas fa-bed'></i> "+ data[row].number_of_rooms + " rooms <br><i class='fas fa-ruler-combined'></i> " + data[row].square_meters + " Square meters</p>"+
-                        "<b><i class='fas fa-info-circle'></i> "+ data[row].description +"<br><i class='fas fa-city'></i> "+ data[row].name_city + "</b><h5><i class='fas fa-euro-sign'></i> " +  data[row].price + " €" + "</h5>"+
-                    "</div>"+
-                "</div>"
-        );
-
-        const marker = new mapboxgl.Marker({color: 'red'})
-        .setLngLat([data[row].longitude, data[row].latitude])
-        .setPopup(popup)
-        .addTo(map);
+    } else {
+        filters_search = filters;
     }
-}
-function ajaxForSearch_Shop(url, highlight, number_property, items_page) {
 
-    var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
-    // console.log('entra en el ajaxForSearch_Shop');
-    // console.log(filters_shop);
-    ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop , 'number_property': number_property, 'items_page': items_page})
+    ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search, 'offset': offset, 'limit': limit})
         .then(function (data) {
-            // console.log(data);
-            // console.log('entra en el then HOME_FILTER');
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
             $('#maps_details').hide();
@@ -265,7 +57,6 @@ function ajaxForSearch_Shop(url, highlight, number_property, items_page) {
                 $('#map-container').show();
                 for (let row in data) {
                     let property = data[row];
-                    // console.log(property.images);
 
                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
@@ -324,6 +115,306 @@ function ajaxForSearch_Shop(url, highlight, number_property, items_page) {
             // window.location.href = "index.php?page=503";
         });
 }
+// function ajaxForSearch_filter(url,number_property, items_page) {
+//     var filters_search_array = JSON.parse(localStorage.getItem('filters_search'));
+//     var filters_search = {};
+
+//     filters_search_array.forEach(function(filter) {
+//         for (var key in filter) {
+//             filters_search[key] = filter[key][0];
+//         }
+//     });
+//     // console.log(filters_search);
+//     ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search, 'number_property': number_property, 'items_page': items_page})
+//         .then(function (data) {
+//             $('#properties_shop_details').empty();
+//             $('#images_properties').empty();
+//             $('#maps_details').hide();
+
+//             if (data == "error") {
+//                 $('#map-container').hide();
+//                 $('<div></div>').appendTo('#properties_shop')
+//                     .html(
+//                         '<h3>¡No results are found with the applied filters!</h3>'
+//                     )
+//             } else {
+//                 $('#map-container').show();
+//                 for (let row in data) {
+//                     let property = data[row];
+
+//                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+//                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+
+//                     for (let image of property.images) {
+//                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+//                             "<article class='thumbnail-light'>" +
+//                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+//                             image.path_images +
+//                             "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
+//                             "</article>"
+//                         );
+//                     }
+
+//                     owlCarouselDiv.owlCarousel({
+//                         loop: true,
+//                         margin: 100,
+//                         nav: true,
+//                         responsive: {
+//                             0: {
+//                                 items: 1
+//                             },
+//                         }
+//                     });
+
+//                     propertyDiv.append(`
+//                             <article class='post-modern wow slideInLeft '><br>
+//                                 <h4 class='post-modern-title'>
+//                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
+//                                 </h4>
+//                                 <ul class='post-modern-meta'>
+//                                     <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
+//                                     <li>City: ${property.name_city}</li>
+//                                     <li>Square meters: ${property.square_meters}</li>
+//                                 </ul>
+//                                 <p>${property.description}</p><br>
+//                                 <div class='buttons'>
+//                                     <table id='table-shop'> 
+//                                         <tr>
+//                                             <td>
+//                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+//                                             </td>
+//                                         </tr>
+//                                     </table>
+//                                 </div>
+//                             </article>
+//                         `)
+//                 }
+//                 load_map(data);
+//             }
+//         }).catch(function (error) {
+//             console.error(error);
+//             // window.location.href = "index.php?page=503";
+//         });
+
+
+// }
+// function ajaxForSearch(url, number_property, items_page) {
+
+//     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
+//     // console.log(filters_home);
+//     localStorage.removeItem('filters_home');
+//     ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home , 'number_property': number_property, 'items_page': items_page})
+//         .then(function (data) {
+//             // console.log(data);
+//             // console.log('entra en el then HOME_FILTER');
+//             $('#maps_details').empty();
+//             $('#images_properties').empty();
+//             $('#maps_details').hide();
+//             $('#properties_shop_details').empty();
+            
+//             if (data == "error") {
+//                 $('#map-container').hide();
+//                 $('<div></div>').appendTo('#properties_shop')
+//                     .html(
+//                         '<h3>¡No results are found with the applied filters!</h3>'
+//                     )
+//             } else {
+//                 $('#map-container').show();
+//                 for (let row in data) {
+//                     let property = data[row];
+//                     // console.log(property.images);
+//                     // $('<div></div>').addClass('row-lg-50 row-35 offset-top-2').attr('id', 'properties_shop').appendTo('#div_list'); 
+//                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+//                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+
+//                     for (let image of property.images) {
+//                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+//                             "<article class='thumbnail-light'>" +
+//                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+//                             image.path_images +
+//                             "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
+//                             "</article>"
+//                         );
+//                     }
+
+//                     owlCarouselDiv.owlCarousel({
+//                         loop: true,
+//                         margin: 100,
+//                         nav: true,
+//                         responsive: {
+//                             0: {
+//                                 items: 1
+//                             },
+//                         }
+//                     });
+
+//                     propertyDiv.append(`
+//                             <article class='post-modern wow slideInLeft '><br>
+//                                 <h4 class='post-modern-title'>
+//                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
+//                                 </h4>
+//                                 <ul class='post-modern-meta'>
+//                                     <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
+//                                     <li>City: ${property.name_city}</li>
+//                                     <li>Square meters: ${property.square_meters}</li>
+//                                 </ul>
+//                                 <p>${property.description}</p><br>
+//                                 <div class='buttons'>
+//                                     <table id='table-shop'> 
+//                                         <tr>
+//                                             <td>
+//                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+//                                             </td>
+//                                         </tr>
+//                                     </table>
+//                                 </div>
+//                             </article>
+//                         `)
+//                 }
+                
+//                 load_map(data);
+//             }
+//         }).catch(function (error) {
+//             console.error(error);
+//             // window.location.href = "index.php?page=503";
+//         });
+
+        
+// }
+function load_map_details(data) {
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
+    const map = new mapboxgl.Map({
+        container: 'maps_details',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [data[0].longitude, data[0].latitude],
+        zoom: 15
+    });
+
+    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+        "<div class='popup' id='"+ data[0].id_property +"'>"+
+                "<img class='popup_img' src='" + data[0].path_images +"'>" +
+                "<div class='popup_desc_property'><h4><i class='fas fa-home'></i>"+ data[0].property_name + "</h4>"+
+                        "<p><i class='fas fa-bed'></i> "+ data[0].number_of_rooms + " rooms <br><i class='fas fa-ruler-combined'></i> " + data[0].square_meters + " Square meters</p>"+
+                        "<b><i class='fas fa-info-circle'></i> "+ data[0].description +"<br><i class='fas fa-city'></i> "+ data[0].name_city + "</b><h5><i class='fas fa-euro-sign'></i> " +  data[0].price + " €</h5>"+
+                    "</div>"+
+                "</div>"
+    );
+
+    const marker1 = new mapboxgl.Marker({ color: 'red'})
+    .setLngLat([data[0].longitude, data[0].latitude])
+    .setPopup(popup)
+    .addTo(map);
+}
+function load_map(data) {
+    mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
+    const map = new mapboxgl.Map({
+        container: 'maps',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-0.5, 38.9],
+        zoom: 8.9
+    });
+
+    for (row in data) {
+    
+        const popup = new mapboxgl.Popup({offset: 25}).setHTML(
+            "<div class='popup' id='"+ data[row].id_property +"'>"+
+                "<img class='popup_img' src='" + data[row].path_images +"'>" +
+                "<div class='popup_desc_property'><h4><i class='fas fa-home'></i>"+ data[row].property_name + "</h4>"+
+                        "<p><i class='fas fa-bed'></i> "+ data[row].number_of_rooms + " rooms <br><i class='fas fa-ruler-combined'></i> " + data[row].square_meters + " Square meters</p>"+
+                        "<b><i class='fas fa-info-circle'></i> "+ data[row].description +"<br><i class='fas fa-city'></i> "+ data[row].name_city + "</b><h5><i class='fas fa-euro-sign'></i> " +  data[row].price + " €" + "</h5>"+
+                    "</div>"+
+                "</div>"
+        );
+
+        const marker = new mapboxgl.Marker({color: 'red'})
+        .setLngLat([data[row].longitude, data[row].latitude])
+        .setPopup(popup)
+        .addTo(map);
+    }
+}
+// function ajaxForSearch_Shop(url, highlight, number_property, items_page) {
+
+//     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
+//     // console.log('entra en el ajaxForSearch_Shop');
+//     // console.log(filters_shop);
+//     ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop , 'number_property': number_property, 'items_page': items_page})
+//         .then(function (data) {
+//             // console.log(data);
+//             // console.log('entra en el then HOME_FILTER');
+//             $('#properties_shop_details').empty();
+//             $('#images_properties').empty();
+//             $('#maps_details').hide();
+
+//             if (data == "error") {
+//                 $('#map-container').hide();
+//                 $('<div></div>').appendTo('#properties_shop')
+//                     .html(
+//                         '<h3>¡No results are found with the applied filters!</h3>'
+//                     )
+//             } else {
+//                 $('#map-container').show();
+//                 for (let row in data) {
+//                     let property = data[row];
+//                     // console.log(property.images);
+
+//                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
+//                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
+
+//                     for (let image of property.images) {
+//                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
+//                             "<article class='thumbnail-light'>" +
+//                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
+//                             image.path_images +
+//                             "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
+//                             "</article>"
+//                         );
+//                     }
+
+//                     owlCarouselDiv.owlCarousel({
+//                         loop: true,
+//                         margin: 100,
+//                         nav: true,
+//                         responsive: {
+//                             0: {
+//                                 items: 1
+//                             },
+//                         }
+//                     });
+
+//                     propertyDiv.append(`
+//                             <article class='post-modern wow slideInLeft '><br>
+//                                 <h4 class='post-modern-title'>
+//                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
+//                                 </h4>
+//                                 <ul class='post-modern-meta'>
+//                                     <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
+//                                     <li>City: ${property.name_city}</li>
+//                                     <li>Square meters: ${property.square_meters}</li>
+//                                 </ul>
+//                                 <p>${property.description}</p><br>
+//                                 <div class='buttons'>
+//                                     <table id='table-shop'> 
+//                                         <tr>
+//                                             <td>
+//                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+//                                             </td>
+//                                         </tr>
+//                                     </table>
+//                                 </div>
+//                             </article>
+//                         `)
+//                 }
+//                 load_map(data);
+//             }
+//             if (highlight) {
+//                 highlight();
+//             }
+//         }).catch(function (error) {
+//             console.error(error);
+//             // window.location.href = "index.php?page=503";
+//         });
+// }
 function clicks_shop() {
     $(document).on("click", ".more_info_list", function () {
         var id_property = this.getAttribute('id');
@@ -944,7 +1035,7 @@ function pagination_shop() {
         $('#pagination .pagination').empty();
         $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&lt;</a></li>');
         for (var i = 1; i <= total_pages; i++) {
-            $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" id="'+i+'" href="#" data-page="' + i + '">' + i + '</a></li>');
+            $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" id="' + i + '" href="#" data-page="' + i + '">' + i + '</a></li>');
         }
         $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&gt;</a></li>');
         $('#pagination').append('<br>');
@@ -952,7 +1043,11 @@ function pagination_shop() {
             e.preventDefault();
             var page = $(this).data('page');
             var offset = 3 * (page - 1);
-            ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, offset, 3);
+            if (filters_shop && Object.keys(filters_shop).length > 0) {
+                ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, offset, 3);
+            } else {
+                ajaxForSearch("module/shop/controller/controller_shop.php?op=all_properties", filters_shop, offset, 3);
+            }
             $('html, body').animate({ scrollTop: $("#div_list").offset().top });
         });
     });

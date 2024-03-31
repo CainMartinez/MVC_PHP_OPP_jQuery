@@ -22,16 +22,16 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
-	function select_all_properties($number_property, $items_page){
+	function select_all_properties($offset = 0, $limit = 3){
 		$sql = "SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
 		ORDER BY p.id_property DESC
-		LIMIT $number_property, $items_page;";
+		LIMIT $offset, $limit;";
 
-		// error_log($sql, 3, "debug.txt");
+		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -44,7 +44,7 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function select_order_properties($filters_shop, $number_property, $items_page){
+	function select_order_properties($filters_shop, $offset = 0, $limit = 3){
 		$order = 'ASC';
 		$filter = 'price';
 
@@ -105,8 +105,9 @@ class DAOShop{
 		}
 
 		$sql .= " GROUP BY p.id_property
-		ORDER BY p.$filter $order";
-		// error_log($sql, 3, "debug.txt");
+		ORDER BY p.$filter $order
+		LIMIT $offset, $limit;";
+		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -119,7 +120,7 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function search_filter($filters_search, $number_property, $items_page){
+	function search_filter($filters_search, $offset = 0, $limit = 3){
 		$id_category = isset($filters_search['id_category']) ? $filters_search['id_category'] : null;
 		$id_city = isset($filters_search['id_city']) ? $filters_search['id_city'] : null;
 		$id_type = isset($filters_search['id_type']) ? $filters_search['id_type'] : null;
@@ -137,9 +138,9 @@ class DAOShop{
 		. ($id_category ? " AND cat.id_category = '$id_category'" : "") .
 		" GROUP BY p.id_property
 		ORDER BY p.id_property ASC
-		LIMIT $number_property, $items_page;";
+		LIMIT $offset, $limit;";
 
-		// error_log($sql, 3, "debug.txt");
+		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -359,7 +360,7 @@ class DAOShop{
 		}
 		return $imgArray;
 	}
-	function filters_shop($filters_shop, $number_property, $items_page){
+	function filters_shop($filters_shop, $offset = 0, $limit = 3){
 		// error_log(print_r($filters_shop, true), 3, "debug.txt");
 
 		$consulta = "SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
@@ -449,10 +450,9 @@ class DAOShop{
 				}
 			}
 		}
-		$consulta .= " GROUP BY p.id_property
-		LIMIT $number_property, $items_page;";
+		$consulta .= " GROUP BY p.id_property LIMIT $offset, $limit;";
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		// error_log($consulta, 3, "debug.txt");
+		error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
@@ -468,12 +468,14 @@ class DAOShop{
 	}
 	function counting_filters($filters_shop){
 		$sql = "SELECT COUNT(*)total 
-		FROM property p
-		INNER JOIN city c ON p.id_city = c.id_city";
+		FROM property p";
 
 		foreach ($filters_shop as $key => $value) {
 			if (isset($filters_shop[$key])){
 				switch ($key) {
+					case 'id_city':
+						$sql .= " INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = " . $filters_shop['id_city'];
+						break;
 					case 'id_large_people':
 						$sql .= " INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = " . $filters_shop['id_large_people'];
 						break;
@@ -502,7 +504,7 @@ class DAOShop{
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
-
+		error_log($sql, 3, "debugCount.txt");
 		$retrArray = array();
 		if ($res -> num_rows > 0) {
 			while ($row = mysqli_fetch_assoc($res)) {

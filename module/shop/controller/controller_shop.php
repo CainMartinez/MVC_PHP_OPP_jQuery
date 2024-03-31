@@ -6,7 +6,7 @@ switch ($_GET['op']) {
     case 'order_properties':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_order_properties($_POST['filters_shop'],$_POST['number_property'],$_POST['items_page']);
+            $Dates_Properties = $daoshop->select_order_properties($_POST['filters_shop'],$_POST['offset'],$_POST['limit']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -31,7 +31,7 @@ switch ($_GET['op']) {
     case 'all_properties':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_all_properties($_POST['number_property'], $_POST['items_page']);
+            $Dates_Properties = $daoshop->select_all_properties($_POST['offset'], $_POST['limit']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -56,7 +56,7 @@ switch ($_GET['op']) {
         // echo json_encode($_POST['filters_home']);
         // break;
         $daoshop = new DAOShop();
-        $Dates_Properties = $daoshop->select_filter_home($_POST['filters_home']);
+        $Dates_Properties = $daoshop->select_filter_home($_POST['filters_home'],$_POST['offset'], $_POST['limit']);
         // echo json_encode($Dates_Properties);
         // break;
 
@@ -103,7 +103,7 @@ switch ($_GET['op']) {
             $daoshop = new DAOShop();
             // $Dates_Properties = $daoshop->select_all_properties();
 
-            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['number_property'], $_POST['items_page']);
+            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset'], $_POST['limit']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -208,7 +208,7 @@ switch ($_GET['op']) {
     case 'search_filter':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->search_filter($_POST['filters_search'],$_POST['number_property'],$_POST['items_page']);            
+            $Dates_Properties = $daoshop->search_filter($_POST['filters_search'],$_POST['offset'], $_POST['limit']);            
             $Date_images = $daoshop->select_images_property();
             foreach ($Dates_Properties as $key => $property) {
                 $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
@@ -228,7 +228,7 @@ switch ($_GET['op']) {
     case 'pagination_filters':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->counting_filters($_POST['filters_shop'],$_POST['number_property'],$_POST['items_page']);
+            $Dates_Properties = $daoshop->counting_filters($_POST['filters_shop']);
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
             } else {

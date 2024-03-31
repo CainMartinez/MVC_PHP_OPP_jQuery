@@ -1,0 +1,15 @@
+SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property pSELECT COUNT(*)total 
+		FROM property pSELECT COUNT(*)total 
+		FROM property pSELECT COUNT(*)total 
+		FROM property pSELECT COUNT(*)total 
+		FROM property pSELECT COUNT(*)total 
+		FROM property p
