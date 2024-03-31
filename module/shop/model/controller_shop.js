@@ -936,28 +936,24 @@ function pagination_shop() {
     ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop })
     .then(function(data) {
         var total_pages;
-        if (data[0].counter >= 3) {
-            total_pages = Math.ceil(data[0].counter / 3);
+        if (data[0].total >= 3) {
+            total_pages = Math.ceil(data[0].total / 3);
         } else {
             total_pages = 1;
         }
         $('#pagination .pagination').empty();
         $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&lt;</a></li>');
         for (var i = 1; i <= total_pages; i++) {
-            $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" href="#" data-page="' + i + '">' + i + '</a></li>');
+            $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" id="'+i+'" href="#" data-page="' + i + '">' + i + '</a></li>');
         }
         $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&gt;</a></li>');
         $('#pagination').append('<br>');
         $('.page-number').click(function(e) {
             e.preventDefault();
-            var num = $(this).data('page');
-            var total_prod = 3 * (num - 1);
-            if (filters_shop != undefined) {
-                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, total_prod, 3);
-            } else {
-                ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=all_properties", undefined, total_prod, 3);
-            }
-            $('html, body').animate({ scrollTop: $(".wrap") });
+            var page = $(this).data('page');
+            var offset = 3 * (page - 1);
+            ajaxForSearch_Shop("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, offset, 3);
+            $('html, body').animate({ scrollTop: $("#div_list").offset().top });
         });
     });
 }
