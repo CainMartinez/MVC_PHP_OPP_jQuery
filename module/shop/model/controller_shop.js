@@ -1033,21 +1033,24 @@ function pagination_shop() {
             total_pages = 1;
         }
         $('#pagination .pagination').empty();
-        $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&lt;</a></li>');
+        // $('#pagination .pagination').append('<li class="page-item"><a class="page-link prev-page" href="#">&lt;</a></li>');
         for (var i = 1; i <= total_pages; i++) {
             $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" id="' + i + '" href="#" data-page="' + i + '">' + i + '</a></li>');
         }
-        $('#pagination .pagination').append('<li class="page-item"><a class="page-link" href="#">&gt;</a></li>');
+        // $('#pagination .pagination').append('<li class="page-item"><a class="page-link next-page" href="#">&gt;</a></li>'); 
         $('#pagination').append('<br>');
         $('.page-number').click(function(e) {
             e.preventDefault();
             var page = $(this).data('page');
             var offset = 3 * (page - 1);
             if (filters_shop && Object.keys(filters_shop).length > 0) {
+                $("#properties_shop").empty();
                 ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, offset, 3);
             } else {
+                $("#properties_shop").empty();
                 ajaxForSearch("module/shop/controller/controller_shop.php?op=all_properties", filters_shop, offset, 3);
             }
+            
             $('html, body').animate({ scrollTop: $("#div_list").offset().top });
         });
     });

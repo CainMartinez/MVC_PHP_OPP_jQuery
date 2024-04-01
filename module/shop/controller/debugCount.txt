@@ -12,4 +12,9 @@ SELECT COUNT(*)total
 		FROM property pSELECT COUNT(*)total 
 		FROM property pSELECT COUNT(*)total 
 		FROM property pSELECT COUNT(*)total 
-		FROM property p
+		FROM property pSELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = 2SELECT COUNT(*)total 
+		FROM property p INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = 2
