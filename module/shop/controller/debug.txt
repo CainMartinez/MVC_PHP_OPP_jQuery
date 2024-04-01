@@ -6,15 +6,13 @@ SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			FROM property p
 			INNER JOIN city c ON p.id_city = c.id_city
 			INNER JOIN images i ON p.id_property = i.id_property
-			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT , 3;SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
-			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
-			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
-			(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
-			(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
-			FROM property p
-			INNER JOIN city c ON p.id_city = c.id_city
-			INNER JOIN images i ON p.id_property = i.id_property
-			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT 3, 3;SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
+			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
+		FROM property p, city c, images i
+		WHERE p.id_city = c.id_city
+		AND p.id_property = i.id_property
+        GROUP BY p.id_property
+		ORDER BY p.id_property DESC
+		LIMIT 0, 3;SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
 			(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
@@ -30,12 +28,21 @@ SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			FROM property p
 			INNER JOIN city c ON p.id_city = c.id_city
 			INNER JOIN images i ON p.id_property = i.id_property
-			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT , 3;SELECT DISTINCT p.*,c.*,i.path_images
+			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
 		ORDER BY p.id_property DESC
+		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,t.*,cat.*,i.path_images
+		FROM property p, city c,type t,property_type pt,category cat, property_category pc, images i
+		WHERE p.id_city = c.id_city
+		AND pt.id_property = p.id_property
+		AND cat.id_category = pc.id_category
+		AND pc.id_property = p.id_property
+		AND pt.id_type = t.id_type
+		AND p.id_property = i.id_property GROUP BY p.id_property
+		ORDER BY p.id_property ASC
 		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
@@ -50,259 +57,23 @@ SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			FROM property p
 			INNER JOIN city c ON p.id_city = c.id_city
 			INNER JOIN images i ON p.id_property = i.id_property
-			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT , 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 6, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 9, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 12, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 6, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 9, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 12, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 12, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
-		FROM property p, city c, images i
-		WHERE p.id_city = c.id_city
-		AND p.id_property = i.id_property
-        GROUP BY p.id_property
-		ORDER BY p.id_property DESC
-		LIMIT 3, 3;SELECT DISTINCT p.*,c.*,i.path_images
+			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT 0, 3;SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
+			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
+			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
+			(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
+			(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
+			FROM property p
+			INNER JOIN city c ON p.id_city = c.id_city
+			INNER JOIN images i ON p.id_property = i.id_property
+			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT 0, 3;SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
+			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
+			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
+			(SELECT GROUP_CONCAT(c.name_category) FROM property_category pc INNER JOIN category c ON pc.id_category = c.id_category WHERE pc.id_property = p.id_property) as category_concat,
+			(SELECT GROUP_CONCAT(e.name_extras) FROM property_extras pe INNER JOIN extras e ON pe.id_extras = e.id_extras WHERE pe.id_property = p.id_property) as extras_concat
+			FROM property p
+			INNER JOIN city c ON p.id_city = c.id_city
+			INNER JOIN images i ON p.id_property = i.id_property
+			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people GROUP BY p.id_property LIMIT 0, 3;SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property

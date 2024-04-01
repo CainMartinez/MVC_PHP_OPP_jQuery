@@ -19,29 +19,30 @@ function loadProperties() {
         localStorage.removeItem('filters_search');
     }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
-        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop,highlight_shop);
+        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop);
         pagination_shop(filters_shop);
+        highlight_shop();
         // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
         pagination_shop();
     }
 }
-function ajaxForSearch(url, filterKey, offset = 0, limit = 3, highlight) {
-    var filters = JSON.parse(localStorage.getItem(filterKey));
-    var filters_search = {};
+function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
+    filters_shop = JSON.parse(localStorage.getItem(filters_shop));
+    // var filters_search = {};
 
-    if (filterKey === 'filters_search') {
-        filters.forEach(function(filter) {
-            for (var key in filter) {
-                filters_search[key] = filter[key][0];
-            }
-        });
-    } else {
-        filters_search = filters;
-    }
+    // if (filterKey === 'filters_search') {
+    //     filters.forEach(function(filter) {
+    //         for (var key in filter) {
+    //             filters_search[key] = filter[key][0];
+    //         }
+    //     });
+    // } else {
+    //     filters_search = filters;
+    // }
 
-    ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search, 'offset': offset, 'limit': limit})
+    ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop, 'offset': offset, 'limit': limit})
         .then(function (data) {
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
@@ -106,9 +107,6 @@ function ajaxForSearch(url, filterKey, offset = 0, limit = 3, highlight) {
                         `)
                 }
                 load_map(data);
-            }
-            if (highlight) {
-                highlight();
             }
         }).catch(function (error) {
             console.error(error);
@@ -641,14 +639,14 @@ function print_filters() {
     load_type();
     load_category();
 }
-function order_properties(number_property = 0, items_page = 3) {
+function order_properties(offset = 0, limit = 3) {
     $('#order').change(function () {
         var order = $(this).val();
         var filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
         filters_shop['order'] = order;
         localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
         
-        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=order_properties', { filters_shop, 'number_property': number_property, 'items_page': items_page})
+        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=order_properties', { filters_shop, 'offset': offset, 'limit': limit})
         .then(function (data) {
             $('#properties_shop').empty();
             $('#images_properties').empty();

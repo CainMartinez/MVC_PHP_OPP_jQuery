@@ -1,20 +1,3 @@
 SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property pSELECT COUNT(*)total 
-		FROM property pSELECT COUNT(*)total 
-		FROM property pSELECT COUNT(*)total 
-		FROM property pSELECT COUNT(*)total 
-		FROM property pSELECT COUNT(*)total 
-		FROM property pSELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people AND lp.id_large_people = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = 2SELECT COUNT(*)total 
-		FROM property p INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = 2
+		FROM property p INNER JOIN property_category pc ON p.id_property = pc.id_property INNER JOIN category cat ON pc.id_category = cat.id_category AND cat.id_category = 5 INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = 3SELECT COUNT(*)total 
+		FROM property p INNER JOIN property_category pc ON p.id_property = pc.id_property INNER JOIN category cat ON pc.id_category = cat.id_category AND cat.id_category = 5 INNER JOIN city c ON p.id_city = c.id_city AND c.id_city = 3
