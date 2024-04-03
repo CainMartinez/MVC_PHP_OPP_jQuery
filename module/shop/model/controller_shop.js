@@ -14,12 +14,12 @@ function loadProperties() {
     }else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
         ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search);
-        // pagination_shop(filters_search);
+        pagination_shop();
         localStorage.removeItem('filters_search');
     }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
+        pagination_shop();
         ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop);
-        // pagination_shop(filters_shop);
         highlight_shop();
         // localStorage.removeItem('filters_shop');
     } else {
@@ -36,9 +36,9 @@ function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
             $('#maps_details').hide();
             if (data == "error") {
                 $('#map-container').hide();
-                $('<div></div>').appendTo('#properties_shop')
+                $('<div style="text-align: right;"></div>').appendTo('#properties_shop')
                     .html(
-                        '<h3>¡No results are found with the applied filters!</h3>'
+                        '<h4>¡No results are found with the applied filters!</h4>'
                     )
             } else {
                 $('#map-container').show();
@@ -89,7 +89,6 @@ function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
                         `)
                 }
                 load_map(data);
-                pagination_shop();
             }
         }).catch(function (error) {
             console.error(error);

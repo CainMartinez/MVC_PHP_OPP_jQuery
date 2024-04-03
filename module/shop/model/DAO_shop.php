@@ -361,6 +361,7 @@ class DAOShop{
 		return $imgArray;
 	}
 	function filters_shop($filters_shop, $offset = 0, $limit = 3){
+		$filters_shop = json_decode($_POST['filters_shop']);
 		if (is_object($filters_shop)) {
 			$filters_shop = get_object_vars($filters_shop);
 		}
