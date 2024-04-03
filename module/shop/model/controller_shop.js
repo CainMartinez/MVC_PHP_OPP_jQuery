@@ -3,7 +3,6 @@ function loadProperties() {
     let details_home = localStorage.getItem('details_home') || false;
     let filters_search = localStorage.getItem('filters_search') || false;
     let filters_shop = localStorage.getItem('filters_shop') || false;
-
     // if (filters_home !== false) {
     //     // console.log('Envio en la URL op=home_filter');
     //     ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
@@ -15,39 +14,26 @@ function loadProperties() {
     }else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
         ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search);
-        pagination_shop(filters_search);
+        // pagination_shop(filters_search);
         localStorage.removeItem('filters_search');
     }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
         ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop);
-        pagination_shop(filters_shop);
+        // pagination_shop(filters_shop);
         highlight_shop();
         // localStorage.removeItem('filters_shop');
     } else {
         ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
-        pagination_shop();
+        // pagination_shop();
     }
 }
 function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
-    filters_shop = JSON.parse(localStorage.getItem(filters_shop));
-    // var filters_search = {};
-
-    // if (filterKey === 'filters_search') {
-    //     filters.forEach(function(filter) {
-    //         for (var key in filter) {
-    //             filters_search[key] = filter[key][0];
-    //         }
-    //     });
-    // } else {
-    //     filters_search = filters;
-    // }
-
+    console.log(filters_shop);
     ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop, 'offset': offset, 'limit': limit})
         .then(function (data) {
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
             $('#maps_details').hide();
-
             if (data == "error") {
                 $('#map-container').hide();
                 $('<div></div>').appendTo('#properties_shop')
@@ -58,10 +44,8 @@ function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
                 $('#map-container').show();
                 for (let row in data) {
                     let property = data[row];
-
                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
                     for (let image of property.images) {
                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
                             "<article class='thumbnail-light'>" +
@@ -71,7 +55,6 @@ function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
                             "</article>"
                         );
                     }
-
                     owlCarouselDiv.owlCarousel({
                         loop: true,
                         margin: 100,
@@ -82,7 +65,6 @@ function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
                             },
                         }
                     });
-
                     propertyDiv.append(`
                             <article class='post-modern wow slideInLeft '><br>
                                 <h4 class='post-modern-title'>
@@ -107,178 +89,13 @@ function ajaxForSearch(url, filters_shop, offset = 0, limit = 3) {
                         `)
                 }
                 load_map(data);
+                pagination_shop();
             }
         }).catch(function (error) {
             console.error(error);
             // window.location.href = "index.php?page=503";
         });
 }
-// function ajaxForSearch_filter(url,number_property, items_page) {
-//     var filters_search_array = JSON.parse(localStorage.getItem('filters_search'));
-//     var filters_search = {};
-
-//     filters_search_array.forEach(function(filter) {
-//         for (var key in filter) {
-//             filters_search[key] = filter[key][0];
-//         }
-//     });
-//     // console.log(filters_search);
-//     ajaxPromise('POST', 'JSON', url, { 'filters_search': filters_search, 'number_property': number_property, 'items_page': items_page})
-//         .then(function (data) {
-//             $('#properties_shop_details').empty();
-//             $('#images_properties').empty();
-//             $('#maps_details').hide();
-
-//             if (data == "error") {
-//                 $('#map-container').hide();
-//                 $('<div></div>').appendTo('#properties_shop')
-//                     .html(
-//                         '<h3>¡No results are found with the applied filters!</h3>'
-//                     )
-//             } else {
-//                 $('#map-container').show();
-//                 for (let row in data) {
-//                     let property = data[row];
-
-//                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-//                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
-//                     for (let image of property.images) {
-//                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-//                             "<article class='thumbnail-light'>" +
-//                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-//                             image.path_images +
-//                             "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-//                             "</article>"
-//                         );
-//                     }
-
-//                     owlCarouselDiv.owlCarousel({
-//                         loop: true,
-//                         margin: 100,
-//                         nav: true,
-//                         responsive: {
-//                             0: {
-//                                 items: 1
-//                             },
-//                         }
-//                     });
-
-//                     propertyDiv.append(`
-//                             <article class='post-modern wow slideInLeft '><br>
-//                                 <h4 class='post-modern-title'>
-//                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
-//                                 </h4>
-//                                 <ul class='post-modern-meta'>
-//                                     <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-//                                     <li>City: ${property.name_city}</li>
-//                                     <li>Square meters: ${property.square_meters}</li>
-//                                 </ul>
-//                                 <p>${property.description}</p><br>
-//                                 <div class='buttons'>
-//                                     <table id='table-shop'> 
-//                                         <tr>
-//                                             <td>
-//                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-//                                             </td>
-//                                         </tr>
-//                                     </table>
-//                                 </div>
-//                             </article>
-//                         `)
-//                 }
-//                 load_map(data);
-//             }
-//         }).catch(function (error) {
-//             console.error(error);
-//             // window.location.href = "index.php?page=503";
-//         });
-
-
-// }
-// function ajaxForSearch(url, number_property, items_page) {
-
-//     var filters_home = JSON.parse(localStorage.getItem('filters_home'));
-//     // console.log(filters_home);
-//     localStorage.removeItem('filters_home');
-//     ajaxPromise('POST', 'JSON', url, { 'filters_home': filters_home , 'number_property': number_property, 'items_page': items_page})
-//         .then(function (data) {
-//             // console.log(data);
-//             // console.log('entra en el then HOME_FILTER');
-//             $('#maps_details').empty();
-//             $('#images_properties').empty();
-//             $('#maps_details').hide();
-//             $('#properties_shop_details').empty();
-            
-//             if (data == "error") {
-//                 $('#map-container').hide();
-//                 $('<div></div>').appendTo('#properties_shop')
-//                     .html(
-//                         '<h3>¡No results are found with the applied filters!</h3>'
-//                     )
-//             } else {
-//                 $('#map-container').show();
-//                 for (let row in data) {
-//                     let property = data[row];
-//                     // console.log(property.images);
-//                     // $('<div></div>').addClass('row-lg-50 row-35 offset-top-2').attr('id', 'properties_shop').appendTo('#div_list'); 
-//                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-//                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
-//                     for (let image of property.images) {
-//                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-//                             "<article class='thumbnail-light'>" +
-//                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-//                             image.path_images +
-//                             "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-//                             "</article>"
-//                         );
-//                     }
-
-//                     owlCarouselDiv.owlCarousel({
-//                         loop: true,
-//                         margin: 100,
-//                         nav: true,
-//                         responsive: {
-//                             0: {
-//                                 items: 1
-//                             },
-//                         }
-//                     });
-
-//                     propertyDiv.append(`
-//                             <article class='post-modern wow slideInLeft '><br>
-//                                 <h4 class='post-modern-title'>
-//                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
-//                                 </h4>
-//                                 <ul class='post-modern-meta'>
-//                                     <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-//                                     <li>City: ${property.name_city}</li>
-//                                     <li>Square meters: ${property.square_meters}</li>
-//                                 </ul>
-//                                 <p>${property.description}</p><br>
-//                                 <div class='buttons'>
-//                                     <table id='table-shop'> 
-//                                         <tr>
-//                                             <td>
-//                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-//                                             </td>
-//                                         </tr>
-//                                     </table>
-//                                 </div>
-//                             </article>
-//                         `)
-//                 }
-                
-//                 load_map(data);
-//             }
-//         }).catch(function (error) {
-//             console.error(error);
-//             // window.location.href = "index.php?page=503";
-//         });
-
-        
-// }
 function load_map_details(data) {
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiMjBqdWFuMTUiLCJhIjoiY2t6eWhubW90MDBnYTNlbzdhdTRtb3BkbyJ9.uR4BNyaxVosPVFt8ePxW1g';
@@ -331,88 +148,6 @@ function load_map(data) {
         .addTo(map);
     }
 }
-// function ajaxForSearch_Shop(url, highlight, number_property, items_page) {
-
-//     var filters_shop = JSON.parse(localStorage.getItem('filters_shop'));
-//     // console.log('entra en el ajaxForSearch_Shop');
-//     // console.log(filters_shop);
-//     ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop , 'number_property': number_property, 'items_page': items_page})
-//         .then(function (data) {
-//             // console.log(data);
-//             // console.log('entra en el then HOME_FILTER');
-//             $('#properties_shop_details').empty();
-//             $('#images_properties').empty();
-//             $('#maps_details').hide();
-
-//             if (data == "error") {
-//                 $('#map-container').hide();
-//                 $('<div></div>').appendTo('#properties_shop')
-//                     .html(
-//                         '<h3>¡No results are found with the applied filters!</h3>'
-//                     )
-//             } else {
-//                 $('#map-container').show();
-//                 for (let row in data) {
-//                     let property = data[row];
-//                     // console.log(property.images);
-
-//                     let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-//                     let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-
-//                     for (let image of property.images) {
-//                         $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-//                             "<article class='thumbnail-light'>" +
-//                             "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-//                             image.path_images +
-//                             "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-//                             "</article>"
-//                         );
-//                     }
-
-//                     owlCarouselDiv.owlCarousel({
-//                         loop: true,
-//                         margin: 100,
-//                         nav: true,
-//                         responsive: {
-//                             0: {
-//                                 items: 1
-//                             },
-//                         }
-//                     });
-
-//                     propertyDiv.append(`
-//                             <article class='post-modern wow slideInLeft '><br>
-//                                 <h4 class='post-modern-title'>
-//                                     <a class='post-modern-title' href='#'>${property.property_name}</a>
-//                                 </h4>
-//                                 <ul class='post-modern-meta'>
-//                                     <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-//                                     <li>City: ${property.name_city}</li>
-//                                     <li>Square meters: ${property.square_meters}</li>
-//                                 </ul>
-//                                 <p>${property.description}</p><br>
-//                                 <div class='buttons'>
-//                                     <table id='table-shop'> 
-//                                         <tr>
-//                                             <td>
-//                                                 <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-//                                             </td>
-//                                         </tr>
-//                                     </table>
-//                                 </div>
-//                             </article>
-//                         `)
-//                 }
-//                 load_map(data);
-//             }
-//             if (highlight) {
-//                 highlight();
-//             }
-//         }).catch(function (error) {
-//             console.error(error);
-//             // window.location.href = "index.php?page=503";
-//         });
-// }
 function clicks_shop() {
     $(document).on("click", ".more_info_list", function () {
         var id_property = this.getAttribute('id');

@@ -361,8 +361,15 @@ class DAOShop{
 		return $imgArray;
 	}
 	function filters_shop($filters_shop, $offset = 0, $limit = 3){
-		// error_log(print_r($filters_shop, true), 3, "debug.txt");
-
+		if (is_object($filters_shop)) {
+			$filters_shop = get_object_vars($filters_shop);
+		}
+		if (!is_array($filters_shop)) {
+			error_log('El array $filters_shop no es un array', 3, "debug.txt");
+			return [];
+		}
+		// error_log($filters_shop, 3, "debug.txt");
+		error_log(print_r($filters_shop, true), 3, "debug.txt");
 		$consulta = "SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
@@ -374,85 +381,84 @@ class DAOShop{
 			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people";
 
 		foreach ($filters_shop as $key => $value) {
-			if (isset($filters_shop[$key])) {
-				if (strpos($consulta, 'WHERE') !== false) {
-					switch ($key) {
-						case 'id_city':
-							$consulta .= " AND c.id_city = " . $filters_shop['id_city'];
-							break;
-						case 'id_large_people':
-							$consulta .= " AND lp.id_large_people = " . $filters_shop['id_large_people'];
-							break;
-						case 'id_type':
-							$consulta .= " AND p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
-							break;
-						case 'id_operation':
-							$consulta .= " AND p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
-							break;
-						case 'id_category':
-							$consulta .= " AND p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
-							break;
-						case 'id_extras':
-							if (is_array($filters_shop['id_extras'])) {
-								$extras = array_map('intval', $filters_shop['id_extras']);
-								$conditions = [];
-								foreach ($extras as $extra) {
-									$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
-								}
-								$consulta .= " AND " . implode(' AND ', $conditions);
-							} else {
-								$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+			error_log("Dentro del bucle foreach. Clave: $key, Valor: $value", 3, "debug.txt");
+			if (strpos($consulta, 'WHERE') !== false) {
+				switch ($key) {
+					case 'id_city':
+						$consulta .= " AND c.id_city = " . $filters_shop['id_city'];
+						break;
+					case 'id_large_people':
+						$consulta .= " AND lp.id_large_people = " . $filters_shop['id_large_people'];
+						break;
+					case 'id_type':
+						$consulta .= " AND p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
+						break;
+					case 'id_operation':
+						$consulta .= " AND p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
+						break;
+					case 'id_category':
+						$consulta .= " AND p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
+						break;
+					case 'id_extras':
+						if (is_array($filters_shop['id_extras'])) {
+							$extras = array_map('intval', $filters_shop['id_extras']);
+							$conditions = [];
+							foreach ($extras as $extra) {
+								$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
 							}
-							break;
-						case 'minPrice':
-							$consulta .= " AND p.price >= " . $filters_shop['minPrice'];
-							break;
-						case 'maxPrice':
-							$consulta .= " AND p.price <= " . $filters_shop['maxPrice'];
-							break;
-					}
-				} else {
-					switch ($key) {
-						case 'id_city':
-							$consulta .= " WHERE c.id_city = " . $filters_shop['id_city'];
-							break;
-						case 'id_large_people':
-							$consulta .= " WHERE lp.id_large_people = " . $filters_shop['id_large_people'];
-							break;
-						case 'id_type':
-							$consulta .= " WHERE p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
-							break;
-						case 'id_operation':
-							$consulta .= " WHERE p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
-							break;
-						case 'id_category':
-							$consulta .= " WHERE p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
-							break;
-						case 'id_extras':
-							if (is_array($filters_shop['id_extras'])) {
-								$extras = array_map('intval', $filters_shop['id_extras']);
-								$conditions = [];
-								foreach ($extras as $extra) {
-									$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
-								}
-								$consulta .= " WHERE " . implode(' AND ', $conditions);
-							} else {
-								$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+							$consulta .= " AND " . implode(' AND ', $conditions);
+						} else {
+							$consulta .= " AND p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+						}
+						break;
+					case 'minPrice':
+						$consulta .= " AND p.price >= " . $filters_shop['minPrice'];
+						break;
+					case 'maxPrice':
+						$consulta .= " AND p.price <= " . $filters_shop['maxPrice'];
+						break;
+				}
+			} else {
+				switch ($key) {
+					case 'id_city':
+						$consulta .= " WHERE c.id_city = " . $filters_shop['id_city'];
+						break;
+					case 'id_large_people':
+						$consulta .= " WHERE lp.id_large_people = " . $filters_shop['id_large_people'];
+						break;
+					case 'id_type':
+						$consulta .= " WHERE p.id_property IN (SELECT pt.id_property FROM property_type pt WHERE pt.id_type = " . $filters_shop['id_type'] . ")";
+						break;
+					case 'id_operation':
+						$consulta .= " WHERE p.id_property IN (SELECT po.id_property FROM property_operation po WHERE po.id_operation = " . $filters_shop['id_operation'] . ")";
+						break;
+					case 'id_category':
+						$consulta .= " WHERE p.id_property IN (SELECT pc.id_property FROM property_category pc WHERE pc.id_category = " . $filters_shop['id_category'] . ")";
+						break;
+					case 'id_extras':
+						if (is_array($filters_shop['id_extras'])) {
+							$extras = array_map('intval', $filters_shop['id_extras']);
+							$conditions = [];
+							foreach ($extras as $extra) {
+								$conditions[] = "p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = $extra)";
 							}
-							break;
-						case 'minPrice':
-							$consulta .= " WHERE p.price >= " . $filters_shop['minPrice'];
-							break;
-						case 'maxPrice':
-							$consulta .= " WHERE p.price <= " . $filters_shop['maxPrice'];
-							break;
-					}
+							$consulta .= " WHERE " . implode(' AND ', $conditions);
+						} else {
+							$consulta .= " WHERE p.id_property IN (SELECT pe.id_property FROM property_extras pe WHERE pe.id_extras = " . intval($filters_shop['id_extras']) . ")";
+						}
+						break;
+					case 'minPrice':
+						$consulta .= " WHERE p.price >= " . $filters_shop['minPrice'];
+						break;
+					case 'maxPrice':
+						$consulta .= " WHERE p.price <= " . $filters_shop['maxPrice'];
+						break;
 				}
 			}
 		}
 		$consulta .= " GROUP BY p.id_property LIMIT $offset, $limit;";
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		error_log($consulta, 3, "debug.txt");
+		// error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
