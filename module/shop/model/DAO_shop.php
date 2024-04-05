@@ -22,14 +22,14 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
-	function select_all_properties($offset = 0, $limit = 3){
+	function select_all_properties($offset){
 		$sql = "SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
 		ORDER BY p.id_property DESC
-		LIMIT $offset, $limit;";
+		LIMIT $offset, 3;";
 
 		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
@@ -44,7 +44,7 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function select_order_properties($filters_shop, $offset = 0, $limit = 3){
+	function select_order_properties($filters_shop, $offset){
 		$order = 'ASC';
 		$filter = 'price';
 
@@ -106,7 +106,7 @@ class DAOShop{
 
 		$sql .= " GROUP BY p.id_property
 		ORDER BY p.$filter $order
-		LIMIT $offset, $limit;";
+		LIMIT $offset, 3;";
 		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
@@ -120,7 +120,7 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function search_filter($filters_search, $offset = 0, $limit = 3){
+	function search_filter($filters_search, $offset){
 		$id_category = isset($filters_search['id_category']) ? $filters_search['id_category'] : null;
 		$id_city = isset($filters_search['id_city']) ? $filters_search['id_city'] : null;
 		$id_type = isset($filters_search['id_type']) ? $filters_search['id_type'] : null;
@@ -138,7 +138,7 @@ class DAOShop{
 		. ($id_category ? " AND cat.id_category = '$id_category'" : "") .
 		" GROUP BY p.id_property
 		ORDER BY p.id_property ASC
-		LIMIT $offset, $limit;";
+		LIMIT $offset, 3;";
 
 		error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
@@ -360,7 +360,7 @@ class DAOShop{
 		}
 		return $imgArray;
 	}
-	function filters_shop($filters_shop, $offset = 0, $limit = 3){
+	function filters_shop($filters_shop, $offset){
 		if (is_object($filters_shop)) {
 			$filters_shop = get_object_vars($filters_shop);
 		}
@@ -456,9 +456,9 @@ class DAOShop{
 				}
 			}
 		}
-		$consulta .= " GROUP BY p.id_property LIMIT $offset, $limit;";
+		$consulta .= " GROUP BY p.id_property LIMIT $offset, 3;";
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		// error_log($consulta, 3, "debug.txt");
+		error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);

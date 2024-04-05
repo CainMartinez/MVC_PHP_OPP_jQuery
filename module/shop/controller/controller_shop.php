@@ -31,7 +31,7 @@ switch ($_GET['op']) {
     case 'all_properties':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_all_properties($_POST['offset'], $_POST['limit']);
+            $Dates_Properties = $daoshop->select_all_properties($_POST['offset']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
@@ -103,7 +103,7 @@ switch ($_GET['op']) {
             $daoshop = new DAOShop();
             // $Dates_Properties = $daoshop->select_all_properties();
 
-            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset'], $_POST['limit']);
+            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
