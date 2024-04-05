@@ -8,13 +8,11 @@ switch ($_GET['op']) {
             $daoshop = new DAOShop();
             $Dates_Properties = $daoshop->select_order_properties($_POST['filters_shop'],$_POST['offset'],$_POST['limit']);
             $Date_images = $daoshop->select_images_property();
-
             foreach ($Dates_Properties as $key => $property) {
                 $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
                     return $image['id_property'] == $property['id_property'];
                 }));
             }
-
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
             } else {
@@ -27,19 +25,16 @@ switch ($_GET['op']) {
     case 'list':
         include('module/shop/view/shop.html');
         break;
-
     case 'all_properties':
         try {
             $daoshop = new DAOShop();
             $Dates_Properties = $daoshop->select_all_properties($_POST['offset']);
             $Date_images = $daoshop->select_images_property();
-
             foreach ($Dates_Properties as $key => $property) {
                 $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
                     return $image['id_property'] == $property['id_property'];
                 }));
             }
-
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
             } else {
@@ -74,7 +69,7 @@ switch ($_GET['op']) {
     //         echo json_encode("error");
     //     }
 
-    //     break;
+        // break;
 
     case 'details_property':
         try {
@@ -102,8 +97,10 @@ switch ($_GET['op']) {
         try {
             $daoshop = new DAOShop();
             // $Dates_Properties = $daoshop->select_all_properties();
-
-            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset']);
+            error_log("filters_shop: " . print_r($_POST['filters_shop'], true), 3, "debug.txt");
+            error_log("offset: " . print_r($_POST['offset'], true), 3, "debug.txt");
+            error_log("limit: " . print_r($_POST['limit'], true), 3, "debug.txt");
+            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset'], $_POST['limit']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
