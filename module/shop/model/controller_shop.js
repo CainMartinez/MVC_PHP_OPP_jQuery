@@ -4,6 +4,10 @@ function loadProperties(offset) {
     let filters_search = localStorage.getItem('filters_search') || false;
     let filters_shop = localStorage.getItem('filters_shop') || false;
     var order = localStorage.getItem('order') || false;
+    if (order === '' || order === null || order === undefined || order === false) {
+        order = 'id_property';
+    }
+    console.log(order);
     // if (filters_home !== false) {
     //     // console.log('Envio en la URL op=home_filter');
     //     ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
@@ -14,17 +18,17 @@ function loadProperties(offset) {
         localStorage.removeItem('details_home');
     }else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
-        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search, offset);
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search);
         // pagination_shop();
         localStorage.removeItem('filters_search');
     }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
         // pagination_shop();
-        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop,offset,order);
+        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop,order);
         highlight_shop();
         // localStorage.removeItem('filters_shop');
     } else {
-        ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties',undefined,offset,order);
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties',undefined,order);
         // pagination_shop();
     }
     pagination_shop();
@@ -390,7 +394,8 @@ function order_properties() {
         if (!order) { 
             order = 'id_property'; 
         }
-        localStorage.setItem('order', order); 
+        localStorage.setItem('order', order);
+        $('#properties_shop').empty();
         loadProperties();
     });
 }
@@ -750,6 +755,7 @@ function remove_filters() {
     localStorage.removeItem('selectedOperation');
     localStorage.removeItem('selectedType');
     localStorage.removeItem('selectedLargePeople');
+    localStorage.removeItem('order');
     location.reload();
 }
 $(document).ready(function () {

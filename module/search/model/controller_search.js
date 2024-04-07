@@ -157,6 +157,7 @@ function remove_filters() {
     localStorage.removeItem('selectedLargePeople');
     localStorage.removeItem('currentPage');
     localStorage.removeItem('offset');
+    localStorage.removeItem('order');
     location.reload();
 }
 $(document).ready(function() {

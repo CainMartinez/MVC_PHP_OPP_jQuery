@@ -22,15 +22,30 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
-	function select_all_properties($offset){
+	function select_all_properties($offset,$filter){
+		if ($filter == 'price') {
+			$order = 'DESC';
+			$filter = 'price';
+		}else if ($filter == 'name') {
+			$order = 'ASC';
+			$filter = 'property_name';
+		} else if ($filter == 'visits') {
+			$order = 'DESC';
+			$filter = 'visits';
+		}else{
+			$order = 'ASC';
+			$filter = 'id_property';
+		}
 		$sql = "SELECT DISTINCT p.*,c.*,i.path_images
 		FROM property p, city c, images i
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
+		ORDER BY p.$filter $order
 		LIMIT $offset, 3;";
 
-		error_log($sql, 3, "debug.txt");
+		
+		// error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -106,7 +121,7 @@ class DAOShop{
 		$sql .= " GROUP BY p.id_property
 		ORDER BY p.$filter $order
 		LIMIT $offset, 3;";
-		error_log($sql, 3, "debug.txt");
+		// error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -140,7 +155,7 @@ class DAOShop{
 		ORDER BY p.id_property ASC
 		LIMIT $offset, 3;";
 
-		error_log($sql, 3, "debug.txt");
+		// error_log($sql, 3, "debug.txt");
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
@@ -360,28 +375,31 @@ class DAOShop{
 		}
 		return $imgArray;
 	}
-	function filters_shop($filters_shop, $offset){
+	function filters_shop($filters_shop, $offset, $filter){
 		if (is_string($filters_shop)) {
 			$filters_shop = json_decode($filters_shop, true); 
 		} elseif (is_object($filters_shop)) {
 			$filters_shop = get_object_vars($filters_shop);
 		}
 		if (!is_array($filters_shop)) {
-			error_log('El array $filters_shop no es un array', 3, "debug.txt");
+			// error_log('El array $filters_shop no es un array', 3, "debug.txt");
 			return [];
 		}
-		// if ($filter == 'price') {
-		// 	$order = 'DESC';
-		// 	$filter = 'price';
-		// }else if ($filter == 'name') {
-		// 	$order = 'ASC';
-		// 	$filter = 'property_name';
-		// } else if ($filter == 'visits') {
-		// 	$order = 'DESC';
-		// 	$filter = 'visits';
-		// }
+		if ($filter == 'price') {
+			$order = 'DESC';
+			$filter = 'price';
+		}else if ($filter == 'name') {
+			$order = 'ASC';
+			$filter = 'property_name';
+		} else if ($filter == 'visits') {
+			$order = 'DESC';
+			$filter = 'visits';
+		}else{
+			$order = 'ASC';
+			$filter = 'id_property';
+		}
 		// error_log($filters_shop, 3, "debug.txt");
-		error_log(print_r($filters_shop, true), 3, "debug.txt");
+		// error_log(print_r($filters_shop, true), 3, "debug.txt");
 		$consulta = "SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
 			(SELECT GROUP_CONCAT(t.name_type) FROM property_type pt INNER JOIN type t ON pt.id_type = t.id_type WHERE pt.id_property = p.id_property) as type_concat,
 			(SELECT GROUP_CONCAT(o.name_operation) FROM property_operation po INNER JOIN operation o ON po.id_operation = o.id_operation WHERE po.id_property = p.id_property) as operation_concat,
@@ -393,7 +411,7 @@ class DAOShop{
 			INNER JOIN large_people lp ON p.id_large_people = lp.id_large_people";
 
 		foreach ($filters_shop as $key => $value) {
-			error_log("Dentro del bucle foreach. Clave: $key, Valor: $value", 3, "debug.txt");
+			// error_log("Dentro del bucle foreach. Clave: $key, Valor: $value", 3, "debug.txt");s
 			if (strpos($consulta, 'WHERE') !== false) {
 				switch ($key) {
 					case 'id_city':
@@ -469,11 +487,12 @@ class DAOShop{
 			}
 		}
 		$consulta .= " GROUP BY p.id_property 
+		ORDER BY p.$filter $order
 		LIMIT $offset, 3;";
 		
 		// ORDER BY p.$filter $order
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
-		error_log($consulta, 3, "debug.txt");
+		// error_log($consulta, 3, "debug.txt");
 
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $consulta);
@@ -533,7 +552,7 @@ class DAOShop{
 		$conexion = connect::con();
 		$res = mysqli_query($conexion, $sql);
 		connect::close($conexion);
-		error_log($sql, 3, "debugCount.txt");
+		// error_log($sql, 3, "debugCount.txt");
 		$retrArray = array();
 		if ($res -> num_rows > 0) {
 			while ($row = mysqli_fetch_assoc($res)) {

@@ -30,7 +30,7 @@ switch ($_GET['op']) {
         // return false;
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->select_all_properties($_POST['offset']);
+            $Dates_Properties = $daoshop->select_all_properties($_POST['offset'],$_POST['order']);
             $Date_images = $daoshop->select_images_property();
             foreach ($Dates_Properties as $key => $property) {
                 $Dates_Properties[$key]['images'] = array_values(array_filter($Date_images, function ($image) use ($property) {
@@ -99,7 +99,7 @@ switch ($_GET['op']) {
             $daoshop = new DAOShop();
             error_log("filters_shop: " . print_r($_POST['filters_shop'], true), 3, "debug.txt");
             error_log("offset: " . print_r($_POST['offset'], true), 3, "debug.txt");
-            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset']);
+            $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset'],$_POST['order']);
             $Date_images = $daoshop->select_images_property();
 
             foreach ($Dates_Properties as $key => $property) {
