@@ -288,6 +288,7 @@ function loadDetails(id_property) {
             console.error(e);
             // window.location.href = "index.php?page=503";
         });
+        scroll_properties(id_property);
 }
 function print_filters() {
     $('<div class="div-filters container"></div>').appendTo('#title_property').html
@@ -746,6 +747,65 @@ function click_page() {
         $('html, body').animate({ scrollTop: $("#div_list").offset().top });
         loadProperties();
     });
+}
+
+function scroll_properties(id){
+    let limit = 2;
+    similar_properties(id, limit);
+    more_properties();
+
+    function similar_properties(id_property, limit) {
+    ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=similar_properties', { id_property })
+        .then(function (data) {
+            $('#propertyScroll').empty();
+
+            let limit_for = checkLimit(data, limit);
+            for (let i = 0; i < limit_for; i++) {
+                $('<div></div>').attr('class', 'col-md-6 wow-outer property_recomendation').attr('id', data[i].id_property).appendTo('#propertyScroll')
+                    .html(
+                        '<article class="post-modern wow slideInLeft">' +
+                        '<a class="post-modern-media">' +
+                        '<img src="' + data[i].path_images + '" alt="" width="571" height="353"/>' +
+                        '</a>' +
+                        '<h4 class="post-modern-title">' +
+                        '<a class="post-modern-title">' + data[i].property_name + '</a>' +
+                        '</h4>' +
+                        '<ul class="post-modern-meta">' +
+                        '<li><a class="button-winona">' + data[i].price + ' €</a></li>' +
+                        '<li>' + data[i].square_meters + ' Sq. Meters</li>' +
+                        '<li>' + data[i].number_of_rooms + ' Rooms</li>' +
+                        '</ul>' +
+                        '<p>' + data[i].description + '</p>' +
+                        '</article>'
+                    );
+            }
+        }).catch(function (e) {
+            console.log("Error load similar properties");
+            console.error(e);
+        });
+}
+    function more_properties(){
+        function amountscrolled(){
+            var winheight = $(window).height()
+            var docheight = $(document).height()
+            var scrollTop = $(window).scrollTop()
+            var trackLength = docheight - winheight
+            var pctScrolled = Math.floor(scrollTop/trackLength * 100) 
+                if (pctScrolled > 95){
+                    let limitIncrement = limit + 3;
+                    similar_properties(id, limitIncrement);
+                }
+            }
+        
+            $(window).on("scroll", function(){
+            amountscrolled();
+            })
+    }
+    function checkLimit(data, limit){
+        let end_for = 0;
+        end_for = data.length > limit ? limit : data.length;
+        return end_for;
+    }
 }
 function remove_filters() {
     localStorage.removeItem('filters_shop');

@@ -25,6 +25,21 @@ switch ($_GET['op']) {
     case 'list':
         include('module/shop/view/shop.html');
         break;
+    case 'similar_properties':
+        try{
+            $daoshop = new DAOShop();
+            $SelectRecomendation = $daoshop->select_similar_properties();
+        } catch(Exception $e){
+            echo json_encode("error");
+        }
+        
+        if(!empty($SelectRecomendation)){
+            echo json_encode($SelectRecomendation); 
+        }
+        else{
+            echo json_encode("error");
+        }
+    break;
     case 'all_properties':
         // error_log("order: " . print_r($_POST['order'], true), 3, "debug.txt");
         // return false;
