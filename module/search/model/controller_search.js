@@ -80,31 +80,31 @@ function autocomplete(){
 }
 function search_button() {
     $('#search_button').on('click', function() {
-        var search = [];
-        var shop = [];
+        var search = {};
+        var shop = {};
         let selectedCity = $('#search_city').val();
         let selectedType = $('#search_type').val();
 
-        // Add to search array only if value is not null or ""
+        // Add to search object only if value is not null or ""
         if(selectedCity && selectedCity != "") {
-            search.push({"id_city": selectedCity});
+            search["id_city"] = selectedCity;
         }
         if(selectedType && selectedType != "") {
-            search.push({"id_type": selectedType});
+            search["id_type"] = selectedType;
         }
         if(selectedCategory && selectedCategory != "") {
-            search.push({"id_category": selectedCategory});
+            search["id_category"] = selectedCategory;
         }
 
-        // Add to shop array only if value is not null or ""
+        // Add to shop object only if value is not null or ""
         if(selectedCity && selectedCity != "") {
-            shop.push({"id_city": selectedCity});
+            shop["id_city"] = selectedCity;
         }
         if(selectedType && selectedType != "") {
-            shop.push({"id_type": selectedType});
+            shop["id_type"] = selectedType;
         }
         if(selectedCategory && selectedCategory != "") {
-            shop.push({"id_category": selectedCategory});
+            shop["id_category"] = selectedCategory;
         }
 
         // Add to individual localStorage only if value is not null or ""
@@ -134,8 +134,7 @@ function search_button() {
         }
 
         // Save search and shop arrays to localStorage
-        if(search.length != 0){
-            localStorage.setItem('filters_search', JSON.stringify(search));
+        if(Object.keys(search).length != 0){
             localStorage.setItem('filters_shop', JSON.stringify(shop));
             setTimeout(function(){ 
                 window.location.href = 'index.php?page=shop';
@@ -143,11 +142,9 @@ function search_button() {
         }
     });
 }
-function setupHomeClick() {
-    $('#home').click(function(event) {
-        event.preventDefault();
+function clear_localstorage() {
+    $('.button_homepage').click(function(event) {
         remove_filters();
-        window.location.href = $(this).attr('href');
     });
 }
 function remove_filters() {
@@ -158,11 +155,13 @@ function remove_filters() {
     localStorage.removeItem('selectedOperation');
     localStorage.removeItem('selectedType');
     localStorage.removeItem('selectedLargePeople');
+    localStorage.removeItem('currentPage');
+    localStorage.removeItem('offset');
     location.reload();
 }
 $(document).ready(function() {
     launch_search();
     autocomplete();
     search_button();
-    setupHomeClick();
+    clear_localstorage();
 });

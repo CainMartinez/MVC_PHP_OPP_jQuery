@@ -28,7 +28,6 @@ class DAOShop{
 		WHERE p.id_city = c.id_city
 		AND p.id_property = i.id_property
         GROUP BY p.id_property
-		ORDER BY p.id_property DESC
 		LIMIT $offset, 3;";
 
 		error_log($sql, 3, "debug.txt");
@@ -44,17 +43,17 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function select_order_properties($filters_shop, $offset){
+	function select_order_properties($filters_shop, $offset,$filter){
 		$order = 'ASC';
-		$filter = 'price';
+		$filter = 'id_property';
 
-		if ($filters_shop['order'] == 'price') {
+		if ($filter == 'price') {
 			$order = 'DESC';
 			$filter = 'price';
-		}else if ($filters_shop['order'] == 'name') {
+		}else if ($filter == 'name') {
 			$order = 'ASC';
 			$filter = 'property_name';
-		} else if ($filters_shop['order'] == 'visits') {
+		} else if ($filter == 'visits') {
 			$order = 'DESC';
 			$filter = 'visits';
 		}
@@ -121,6 +120,7 @@ class DAOShop{
 		return $retrArray;
 	}
 	function search_filter($filters_search, $offset){
+		
 		$id_category = isset($filters_search['id_category']) ? $filters_search['id_category'] : null;
 		$id_city = isset($filters_search['id_city']) ? $filters_search['id_city'] : null;
 		$id_type = isset($filters_search['id_type']) ? $filters_search['id_type'] : null;
@@ -261,54 +261,54 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	// function select_filter_home($filters_home){
-	// 	$sql = "SELECT *,i.path_images
-	// 	FROM property p,large_people lp, city c, property_type pt, property_operation po, property_category pc, property_extras pe, images i
-	// 	WHERE p.id_city = c.id_city
-	// 	AND p.id_property = i.id_property
-	// 	AND p.id_large_people = lp.id_large_people
-	// 	AND p.id_property = pt.id_property 
-	// 	AND p.id_property = po.id_property 
-	// 	AND p.id_property = pc.id_property 
-	// 	AND p.id_property = pe.id_property";
+	function select_filter_home($deprecated){
+		// 	$sql = "SELECT *,i.path_images
+		// 	FROM property p,large_people lp, city c, property_type pt, property_operation po, property_category pc, property_extras pe, images i
+		// 	WHERE p.id_city = c.id_city
+		// 	AND p.id_property = i.id_property
+		// 	AND p.id_large_people = lp.id_large_people
+		// 	AND p.id_property = pt.id_property 
+		// 	AND p.id_property = po.id_property 
+		// 	AND p.id_property = pc.id_property 
+		// 	AND p.id_property = pe.id_property";
 
-	// 	if (isset($filters_home[0]['id_category'])) {
-	// 		$category = $filters_home[0]['id_category'][0];
-	// 		$sql .= " AND pc.id_category = '$category'";
-	// 	} else if (isset($filters_home[0]['id_type'])) {
-	// 		$type = $filters_home[0]['id_type'][0];
-	// 		$sql .= " AND pt.id_type = '$type'";
-	// 	} else if (isset($filters_home[0]['id_operation'])) {
-	// 		$operation = $filters_home[0]['id_operation'][0];
-	// 		$sql .= " AND po.id_operation = '$operation'";
-	// 	} else if (isset($filters_home[0]['id_extras'])) {
-	// 		$extras = $filters_home[0]['id_extras'][0];
-	// 		$sql .= " AND pe.id_extras= '$extras'";
-	// 	} else if (isset($filters_home[0]['id_city'])) {
-	// 		$city = $filters_home[0]['id_city'][0];
-	// 		$sql .= " AND c.id_city = '$city'";
-	// 	} else if (isset($filters_home[0]['id_large_people'])) {
-	// 		$large_people = $filters_home[0]['id_large_people'][0];
-	// 		$sql .= " AND lp.id_large_people = '$large_people'";
-	// 	}
-	// 	$sql .= " GROUP BY p.id_property;";
-	// 	$conexion = connect::con();
-	// 	$res = mysqli_query($conexion, $sql);
-	// 	connect::close($conexion);
-	// 	if (isset($filters_home[0]['id_category'])) {
-	// 		$id_category = (string) $filters_home[0]['id_category'];
-	// 		// error_log($id_category, 3, "debug.txt");
-	// 	} else {
-	// 		// error_log('id_category not set', 3, "debug.txt");
-	// 	}		
-	// 	$retrArray = array();
-	// 	if ($res->num_rows > 0) {
-	// 		while ($row = mysqli_fetch_assoc($res)) {
-	// 			$retrArray[] = $row;
-	// 		}
-	// 	}
-	// 	return $retrArray;
-	// }
+		// 	if (isset($filters_home[0]['id_category'])) {
+		// 		$category = $filters_home[0]['id_category'][0];
+		// 		$sql .= " AND pc.id_category = '$category'";
+		// 	} else if (isset($filters_home[0]['id_type'])) {
+		// 		$type = $filters_home[0]['id_type'][0];
+		// 		$sql .= " AND pt.id_type = '$type'";
+		// 	} else if (isset($filters_home[0]['id_operation'])) {
+		// 		$operation = $filters_home[0]['id_operation'][0];
+		// 		$sql .= " AND po.id_operation = '$operation'";
+		// 	} else if (isset($filters_home[0]['id_extras'])) {
+		// 		$extras = $filters_home[0]['id_extras'][0];
+		// 		$sql .= " AND pe.id_extras= '$extras'";
+		// 	} else if (isset($filters_home[0]['id_city'])) {
+		// 		$city = $filters_home[0]['id_city'][0];
+		// 		$sql .= " AND c.id_city = '$city'";
+		// 	} else if (isset($filters_home[0]['id_large_people'])) {
+		// 		$large_people = $filters_home[0]['id_large_people'][0];
+		// 		$sql .= " AND lp.id_large_people = '$large_people'";
+		// 	}
+		// 	$sql .= " GROUP BY p.id_property;";
+		// 	$conexion = connect::con();
+		// 	$res = mysqli_query($conexion, $sql);
+		// 	connect::close($conexion);
+		// 	if (isset($filters_home[0]['id_category'])) {
+		// 		$id_category = (string) $filters_home[0]['id_category'];
+		// 		// error_log($id_category, 3, "debug.txt");
+		// 	} else {
+		// 		// error_log('id_category not set', 3, "debug.txt");
+		// 	}		
+		// 	$retrArray = array();
+		// 	if ($res->num_rows > 0) {
+		// 		while ($row = mysqli_fetch_assoc($res)) {
+		// 			$retrArray[] = $row;
+		// 		}
+		// 	}
+		// 	return $retrArray;
+	}
 	function select_images_filter_home(){
 		$sql = "SELECT *
 			    FROM images";
@@ -361,13 +361,25 @@ class DAOShop{
 		return $imgArray;
 	}
 	function filters_shop($filters_shop, $offset){
-		if (is_object($filters_shop)) {
+		if (is_string($filters_shop)) {
+			$filters_shop = json_decode($filters_shop, true); 
+		} elseif (is_object($filters_shop)) {
 			$filters_shop = get_object_vars($filters_shop);
 		}
 		if (!is_array($filters_shop)) {
 			error_log('El array $filters_shop no es un array', 3, "debug.txt");
 			return [];
 		}
+		// if ($filter == 'price') {
+		// 	$order = 'DESC';
+		// 	$filter = 'price';
+		// }else if ($filter == 'name') {
+		// 	$order = 'ASC';
+		// 	$filter = 'property_name';
+		// } else if ($filter == 'visits') {
+		// 	$order = 'DESC';
+		// 	$filter = 'visits';
+		// }
 		// error_log($filters_shop, 3, "debug.txt");
 		error_log(print_r($filters_shop, true), 3, "debug.txt");
 		$consulta = "SELECT DISTINCT p.*, c.name_city,lp.name_large_people,i.path_images,
@@ -456,7 +468,10 @@ class DAOShop{
 				}
 			}
 		}
-		$consulta .= " GROUP BY p.id_property LIMIT $offset, 3;";
+		$consulta .= " GROUP BY p.id_property 
+		LIMIT $offset, 3;";
+		
+		// ORDER BY p.$filter $order
 		// error_log($filters_shop['id_extras'], 3, "debug.txt");
 		error_log($consulta, 3, "debug.txt");
 
@@ -493,6 +508,14 @@ class DAOShop{
 						break;
 					case 'id_category':
 						$sql .= " INNER JOIN property_category pc ON p.id_property = pc.id_property INNER JOIN category cat ON pc.id_category = cat.id_category AND cat.id_category = " . $filters_shop['id_category'];
+						break;
+					case 'minPrice':
+						$minPrice = (int)$filters_shop['minPrice'];
+						$sql .= " AND price >= $minPrice";
+						break;
+					case 'maxPrice':
+						$maxPrice = (int)$filters_shop['maxPrice'];
+						$sql .= " AND price <= $maxPrice";
 						break;
 					case 'id_extras':
 						if (is_array($filters_shop['id_extras'])) {

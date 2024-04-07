@@ -1,8 +1,9 @@
-function loadProperties() {
+function loadProperties(offset) {
     // var filters_home = localStorage.getItem('filters_home') || false;
     let details_home = localStorage.getItem('details_home') || false;
     let filters_search = localStorage.getItem('filters_search') || false;
     let filters_shop = localStorage.getItem('filters_shop') || false;
+    var order = localStorage.getItem('order') || false;
     // if (filters_home !== false) {
     //     // console.log('Envio en la URL op=home_filter');
     //     ajaxForSearch('module/shop/controller/controller_shop.php?op=home_filter');
@@ -13,28 +14,28 @@ function loadProperties() {
         localStorage.removeItem('details_home');
     }else if (filters_search !== false) {
         // if para el filtro de la barra de busqueda
-        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search);
-        pagination_shop();
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=search_filter', filters_search, offset);
+        // pagination_shop();
         localStorage.removeItem('filters_search');
     }else if (filters_shop !== false) {
         // console.log('Envio en la URL op=filters_shop');
-        pagination_shop();
-        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop);
+        // pagination_shop();
+        ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop",filters_shop,offset,order);
         highlight_shop();
         // localStorage.removeItem('filters_shop');
     } else {
-        ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties');
+        ajaxForSearch('module/shop/controller/controller_shop.php?op=all_properties',undefined,offset,order);
         // pagination_shop();
     }
     pagination_shop();
 }
-function ajaxForSearch(url, filters_shop) {
+function ajaxForSearch(url, filters_shop,order) {
     console.log(filters_shop);
     if (!localStorage.getItem('currentPage')){
         localStorage.setItem('currentPage', 1);
     }
     var offset = localStorage.getItem('offset') || 0;
-    ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop, 'offset': offset})
+    ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop, 'offset': offset, 'order': order})
         .then(function (data) {
             $('#properties_shop_details').empty();
             $('#images_properties').empty();
@@ -157,6 +158,9 @@ function clicks_shop() {
         var id_property = this.getAttribute('id');
         loadDetails(id_property);
     });
+    $(document).on("click", ".button_homepage", function () {
+        remove_pagination();
+    });
 }
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)
@@ -165,6 +169,7 @@ function loadDetails(id_property) {
             // $('#properties_shop').empty();
             // $('#images_properties').empty();
             $('#map-container').empty();
+            $('#pagination').empty();
             $('#div_list').empty();
             $('#maps_details').show();
             // console.log(data);
@@ -288,28 +293,29 @@ function print_filters() {
             <select id="id_category" class="form-control id_category">
                 <option value="" selected disabled>Select Category</option>
             </select>
-        </div>
-        <div class="col-md-4">
-            <label for="id_extras">Extras:</label>
-            <button type="button" id="button_extras" class="form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <p style="text-align:left;">Select Extras</p>
-            </button>
-            <div class="modal fade custom-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Extras</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" id="id_extras"></div>
-                        <div class="modal-footer">
-                            <button id="apply_extras" type="button" class="btn btn-info">Apply Filters</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>`+
+        // <div class="col-md-4">
+        //     <label for="id_extras">Extras:</label>
+        //     <button type="button" id="button_extras" class="form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        //         <p style="text-align:left;">Select Extras</p>
+        //     </button>
+        //     <div class="modal fade custom-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        //         <div class="modal-dialog">
+        //             <div class="modal-content">
+        //                 <div class="modal-header">
+        //                     <h1 class="modal-title fs-5" id="exampleModalLabel">Extras</h1>
+        //                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        //                 </div>
+        //                 <div class="modal-body" id="id_extras"></div>
+        //                 <div class="modal-footer">
+        //                     <button id="apply_extras" type="button" class="btn btn-info">Apply Filters</button>
+        //                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
+        `
         <div class="col-md-4">
             <label for="id_city">City:</label>
             <select id="id_city" class="form-control id_city">
@@ -381,66 +387,11 @@ function print_filters() {
 function order_properties() {
     $('#order').change(function () {
         var order = $(this).val();
-        var filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
-        var offset = localStorage.getItem('offset') || 0;
-        filters_shop['order'] = order;
-        localStorage.setItem('filters_shop', JSON.stringify(filters_shop));
-        
-        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=order_properties', {filters_shop,offset})
-        .then(function (data) {
-            $('#properties_shop').empty();
-            $('#images_properties').empty();
-            for (let row in data) {
-                let property = data[row];
-                let propertyDiv = $('<div></div>').attr({ 'class': 'col-md-6 wow-outer carrousel_list' }).appendTo('#properties_shop');
-                let owlCarouselDiv = $('<div></div>').addClass('owl-carousel owl-theme carrousel_details').appendTo(propertyDiv);
-                for (let image of property.images) {
-                    $("<div></div>").addClass("item").appendTo(owlCarouselDiv).html(
-                        "<article class='thumbnail-light'>" +
-                        "<a class='thumbnail-light-media' href='#'><img class='thumbnail-light-image' src='" +
-                        image.path_images +
-                        "' alt='Image " + (parseInt(row) + 1) + "' width='100%' heiht='100%'/></a>" +
-                        "</article>"
-                    );
-                }
-                owlCarouselDiv.owlCarousel({
-                    loop: true,
-                    margin: 100,
-                    nav: true,
-                    responsive: {
-                        0: {
-                            items: 1
-                        },
-                    }
-                });
-                propertyDiv.append(`
-                        <article class='post-modern wow slideInLeft '><br>
-                            <h4 class='post-modern-title'>
-                                <a class='post-modern-title' href='#'>${property.property_name}</a>
-                            </h4>
-                            <ul class='post-modern-meta'>
-                                <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-                                <li>City: ${property.name_city}</li>
-                                <li>Square meters: ${property.square_meters}</li>
-                            </ul>
-                            <p>${property.description}</p><br>
-                            <div class='buttons'>
-                                <table id='table-shop'> 
-                                    <tr>
-                                        <td>
-                                            <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </article>
-                    `)
-            }
-        }).catch(function (error) {
-            console.error(error);
-            // window.location.href = "index.php?page=503";
-        });
-    
+        if (!order) { 
+            order = 'id_property'; 
+        }
+        localStorage.setItem('order', order); 
+        loadProperties();
     });
 }
 function load_city() {
@@ -753,7 +704,7 @@ function highlight_shop() {
     }
 }
 function pagination_shop() {
-    let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || {};
+    let filters_shop = JSON.parse(localStorage.getItem('filters_shop')) || false;
 
     let url = 'module/shop/controller/controller_shop.php?op=';
     if (filters_shop && Object.keys(filters_shop).length > 0) {
@@ -761,7 +712,6 @@ function pagination_shop() {
     } else {
         url += 'pagination';
     }
-
     ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop })
     .then(function(data) {
         var total_pages;
@@ -771,30 +721,25 @@ function pagination_shop() {
             total_pages = 1;
         }
         $('#pagination .pagination').empty();
-        // $('#pagination .pagination').append('<li class="page-item"><a class="page-link prev-page" href="#">&lt;</a></li>');
+        var currentPage = localStorage.getItem('currentPage'); 
         for (var i = 1; i <= total_pages; i++) {
-            $('#pagination .pagination').append('<li class="page-item"><a class="page-link page-number" id="' + i + '" href="#" data-page="' + i + '">' + i + '</a></li>');
+            var activeClass = i == currentPage ? ' active' : ''; 
+            $('#pagination .pagination').append('<li class="page-item' + activeClass + '"><a class="page-link page-number" id="' + i + '" href="#" data-page="' + i + '">' + i + '</a></li>');
         }
-        // $('#pagination .pagination').append('<li class="page-item"><a class="page-link next-page" href="#">&gt;</a></li>'); 
         $('#pagination').append('<br>');
+        click_page();
     });
 }
 function click_page() {
     $('.page-number').click(function(e) {
         e.preventDefault();
         var page = $(this).data('page');
-        localStorage.setItem('currentPage', page); // Almacenar el número de página en localStorage
-        localStorage.setItem('offset', 3 * (page - 1)); // Almacenar el offset en localStorage
-        // var offset = 3 * (page - 1);
-        // if (filters_shop && Object.keys(filters_shop).length > 0) {
-        //     $("#properties_shop").empty();
-        //     ajaxForSearch("module/shop/controller/controller_shop.php?op=filters_shop", filters_shop, offset, 3);
-        // } else {
-        //     $("#properties_shop").empty();
-        //     ajaxForSearch("module/shop/controller/controller_shop.php?op=all_properties", filters_shop, offset, 3);
-        // }
-        location.reload();
+        localStorage.setItem('currentPage', page); 
+        localStorage.setItem('offset', 3 * (page - 1));
+        $('#current-page').text(page);
+        $('#properties_shop').empty();
         $('html, body').animate({ scrollTop: $("#div_list").offset().top });
+        loadProperties();
     });
 }
 function remove_filters() {
@@ -812,6 +757,4 @@ $(document).ready(function () {
     print_filters();
     filters_shop();
     clicks_shop();
-    click_page();
-    // pagination_shop(); Lo llamo en loadProperties
 });
