@@ -749,18 +749,17 @@ function click_page() {
     });
 }
 
-function scroll_properties(id){
-    let limit = 2;
-    similar_properties(id, limit);
-    more_properties();
+let limit_property = 2;
 
-    function similar_properties(id_property, limit) {
+function scroll_properties(id){
+    similar_properties(id, limit_property);
+    more_properties();
+    function similar_properties(id_property, limit_property) {
     ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=similar_properties', { id_property })
         .then(function (data) {
             $('#propertyScroll').empty();
-
-            let limit_for = checkLimit(data, limit);
-            for (let i = 0; i < limit_for; i++) {
+            let end_loop = determineLimit(data, limit_property);
+            for (let i = 0; i < end_loop; i++) {
                 $('<div></div>').attr('class', 'col-md-6 wow-outer property_recomendation').attr('id', data[i].id_property).appendTo('#propertyScroll')
                     .html(
                         '<article class="post-modern wow slideInLeft">' +
@@ -780,32 +779,34 @@ function scroll_properties(id){
                     );
             }
         }).catch(function (e) {
-            console.log("Error load similar properties");
             console.error(e);
         });
-}
+    }
     function more_properties(){
-        function amountscrolled(){
-            var winheight = $(window).height()
-            var docheight = $(document).height()
-            var scrollTop = $(window).scrollTop()
-            var trackLength = docheight - winheight
-            var pctScrolled = Math.floor(scrollTop/trackLength * 100) 
-                if (pctScrolled > 95){
-                    let limitIncrement = limit + 3;
-                    similar_properties(id, limitIncrement);
+        function calculateScrollPercentage(){
+            var viewportHeight = $(window).height()
+            var documentHeight = $(document).height()
+            var scrolledTop = $(window).scrollTop()
+            var scrollableLength = documentHeight - viewportHeight
+            var percentageScrolled = Math.floor(scrolledTop/scrollableLength * 100) 
+                if (percentageScrolled > 99){
+                    limit_property += 2;
+                    similar_properties(id, limit_property);
                 }
             }
-        
             $(window).on("scroll", function(){
-            amountscrolled();
+                calculateScrollPercentage();
             })
     }
-    function checkLimit(data, limit){
-        let end_for = 0;
-        end_for = data.length > limit ? limit : data.length;
-        return end_for;
+}
+function determineLimit(data, limit_property){
+    let loopEnd = 0;
+    if (data.length > limit_property) {
+        loopEnd = limit_property;
+    } else {
+        loopEnd = data.length;
     }
+    return loopEnd;
 }
 function remove_filters() {
     localStorage.removeItem('filters_shop');
