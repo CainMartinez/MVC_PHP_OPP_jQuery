@@ -506,12 +506,14 @@ class DAOShop{
 		}
 		return $retrArray;
 	}
-	function select_similar_properties(){
+	function select_similar_properties($id_large_people){
 		$sql= "SELECT * ,i.path_images
 			FROM property p, images i
 			WHERE p.id_property = i.id_property
             AND i.path_images LIKE '%-1%'
+			AND $id_large_people = p.id_large_people
             GROUP BY i.path_images";
+			// error_log($sql, 3, "debug.txt");
 
 			$conexion = connect::con();
 			$res = mysqli_query($conexion, $sql);

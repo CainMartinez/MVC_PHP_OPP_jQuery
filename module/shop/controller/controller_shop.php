@@ -28,7 +28,7 @@ switch ($_GET['op']) {
     case 'similar_properties':
         try{
             $daoshop = new DAOShop();
-            $SelectRecomendation = $daoshop->select_similar_properties();
+            $SelectRecomendation = $daoshop->select_similar_properties($_POST['id']);
         } catch(Exception $e){
             echo json_encode("error");
         }
