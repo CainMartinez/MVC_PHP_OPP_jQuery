@@ -1,0 +1,1 @@
+filters_shop: {"id_large_people":"2"}offset: 0filters_shop: {"id_large_people":"2"}offset: 3filters_shop: {"id_large_people":"2"}offset: 0filters_shop: {"id_large_people":"2"}offset: 0filters_shop: {"id_large_people":"2"}offset: 3filters_shop: {"id_large_people":"2"}offset: 3filters_shop: {"id_city":"1"}offset: 0filters_shop: {"id_city":"1","id_category":"1"}offset: 0

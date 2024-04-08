@@ -721,36 +721,28 @@ function pagination_shop() {
     ajaxPromise('POST', 'JSON', url, { 'filters_shop': filters_shop })
     .then(function(data) {
         var total_pages;
-        if (data[0].total >= 3) {
+        if (data[0].total > 2) {
             total_pages = Math.ceil(data[0].total / 3);
         } else {
-            total_pages = 1;
+            $('#pagination').hide();
+            return;
         }
         $('#pagination .pagination').empty();
         var currentPage = localStorage.getItem('currentPage'); 
+        var prevClass = currentPage == 1 ? ' disabled' : '';
+        var nextClass = currentPage == total_pages ? ' disabled' : '';
+        $('#pagination .pagination').append('<li class="page-item' + prevClass + '"><a class="page-link" id="prev-page" href="#">Previous</a></li>');
         for (var i = 1; i <= total_pages; i++) {
             var activeClass = i == currentPage ? ' active' : ''; 
             $('#pagination .pagination').append('<li class="page-item' + activeClass + '"><a class="page-link page-number" id="' + i + '" href="#" data-page="' + i + '">' + i + '</a></li>');
         }
+        $('#pagination .pagination').append('<li class="page-item' + nextClass + '"><a class="page-link" id="next-page" href="#">Next</a></li>');
         $('#pagination').append('<br>');
         click_page();
+        click_prev_next(total_pages);
     });
 }
-function click_page() {
-    $('.page-number').click(function(e) {
-        e.preventDefault();
-        var page = $(this).data('page');
-        localStorage.setItem('currentPage', page); 
-        localStorage.setItem('offset', 3 * (page - 1));
-        $('#current-page').text(page);
-        $('#properties_shop').empty();
-        $('html, body').animate({ scrollTop: $("#div_list").offset().top });
-        loadProperties();
-    });
-}
-
 let limit_property = 2;
-
 function scroll_properties(id){
     similar_properties(id, limit_property);
     more_properties();
