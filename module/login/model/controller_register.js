@@ -87,3 +87,8 @@ function userRegister() {
         });
     }
 }
+
+$(document).ready(function (){
+    keyRegister();
+    buttonRegister();
+});
