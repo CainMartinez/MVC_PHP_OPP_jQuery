@@ -1,4 +1,3 @@
-quitar reload en los filtros, hacer un empty y repintar.
+Quitar reload en los filtros, hacer un empty y repintar.
 Hacer funcional la paginacion con el filtro del precio y del checkbox.
-Añadir next y prev a la paginacion
 Borrar el order de localstorage cada vez que se haga una búsqueda nueva.

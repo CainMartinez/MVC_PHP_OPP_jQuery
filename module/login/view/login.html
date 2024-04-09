@@ -1,0 +1,29 @@
+<section class="section novi-background section-1 bg-primary-darker text-center" id="title_property">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-sm-10 col-lg-7 col-xl-6"><br><br>
+            <h3 class="wow-outer"><span class="wow slideInDown text-uppercase">- - - - - - - - - - - - -</span></h3>
+            <h2 class="wow-outer"><span class="wow slideInDown text-uppercase">Login</span></h2>
+            <h3 class="wow-outer"><span class="wow slideInDown text-uppercase">- - - - - - - - - - - - -</span></h3>
+            <br>
+        <form id="LoginForm" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="usernameLogin">Username</label>
+                <input type="text" class="form-control" id="usernameLogin" pattern="^[a-zA-Z0-9]{6,}$" required>
+                <div class="invalid-feedback">
+                    Please enter a valid username (at least 6 alphanumeric characters).
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="passwordLogin">Password</label>
+                <input type="password" class="form-control" id="passwordLogin" pattern="^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$" required>
+                <div class="invalid-feedback">
+                    Please enter a valid password (at least 8 characters, including uppercase, lowercase, number and special character).
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+    </div>
+</section>

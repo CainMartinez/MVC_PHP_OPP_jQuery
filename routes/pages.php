@@ -17,14 +17,14 @@
 		case "controller_home";
 			include("module/home/controller/".$_GET['page'].".php");
 			break;
-		case "typography";
-			include("typography.html");
+		case "register";
+			include("module/login/view/register.html");
 			break;
 		case "index";
 			include("index.html");
 			break;
-		case "aboutus";
-			include("about-us.html");
+		case "login";
+			include("module/login/view/login.html");
 			break;
 		case "contactus";
 			include("contacts.html");
