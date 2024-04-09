@@ -112,8 +112,8 @@ switch ($_GET['op']) {
     case 'filters_shop':
         try {
             $daoshop = new DAOShop();
-            error_log("filters_shop: " . print_r($_POST['filters_shop'], true), 3, "debug.txt");
-            error_log("offset: " . print_r($_POST['offset'], true), 3, "debug.txt");
+            // error_log("filters_shop: " . print_r($_POST['filters_shop'], true), 3, "debug.txt");
+            // error_log("offset: " . print_r($_POST['offset'], true), 3, "debug.txt");
             $Dates_Properties = $daoshop->filters_shop($_POST['filters_shop'], $_POST['offset'],$_POST['order']);
             $Date_images = $daoshop->select_images_property();
 

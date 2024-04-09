@@ -3,14 +3,12 @@ function keyRegister() {
         e.which == 13 ? ( e.preventDefault(), userRegister() ) : undefined;
     });
 }
-
 function buttonRegister() {
     $('#register').on('click', function(e) {
         e.preventDefault();
         userRegister();
     });
 }
-
 function validateRegister() {
     var usernamePattern = /^[a-zA-Z0-9]{6,}$/;
     var emailPattern = /^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$/;
@@ -21,12 +19,12 @@ function validateRegister() {
         $('#errorUsername').html('<br>Add a username, please.');
         error = true;
     } else {
-        if($('#usernameRegister').val().length < 6) {
-            $('#errorUsername').html('<br>The user must have at least 6 characters.');
+        if($('#usernameRegister').val().length < 8) {
+            $('#errorUsername').html('<br>The user must have at least 8 characters.');
             error = true;
         } else {
             if(!usernamePattern.test($('#usernameRegister').val())) {
-                $('#errorUsername').html('<br>Invalid username format. Example: user12');
+                $('#errorUsername').html('<br>Invalid username format. Example: user1234');
                 error = true;
             }else{
                 $('#errorUsername').html('');

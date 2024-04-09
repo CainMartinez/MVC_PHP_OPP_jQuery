@@ -1,4 +1,4 @@
-function loadProperties(offset) {
+function loadProperties() {
     // var filters_home = localStorage.getItem('filters_home') || false;
     let details_home = localStorage.getItem('details_home') || false;
     let filters_search = localStorage.getItem('filters_search') || false;
@@ -755,7 +755,6 @@ function click_page() {
         loadProperties();
     });
 }
-
 function click_prev_next(total_pages) {
     $('#prev-page').click(function(e) {
         e.preventDefault();
@@ -769,7 +768,6 @@ function click_prev_next(total_pages) {
             loadProperties();
         }
     });
-
     $('#next-page').click(function(e) {
         e.preventDefault();
         var currentPage = localStorage.getItem('currentPage');
@@ -823,7 +821,7 @@ function scroll_properties(id_large_people){
             var scrolledTop = $(window).scrollTop()
             var scrollableLength = documentHeight - viewportHeight
             var percentageScrolled = Math.floor(scrolledTop/scrollableLength * 100) 
-                if (percentageScrolled > 99){
+                if (percentageScrolled > 95){
                     limit_property += 2;
                     similar_properties(id_large_people, limit_property);
                 }

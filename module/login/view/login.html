@@ -9,14 +9,14 @@
         <form id="LoginForm" class="needs-validation" novalidate>
             <div class="form-group">
                 <label for="usernameLogin">Username</label>
-                <input type="text" class="form-control" id="usernameLogin" pattern="^[a-zA-Z0-9]{6,}$" required>
+                <input type="text" class="form-control" id="usernameLogin" pattern="^[a-zA-Z0-9]{6,}$" required placeholder="Enter your username...">
                 <div class="invalid-feedback">
                     Please enter a valid username (at least 6 alphanumeric characters).
                 </div>
             </div>
             <div class="form-group">
                 <label for="passwordLogin">Password</label>
-                <input type="password" class="form-control" id="passwordLogin" pattern="^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$" required>
+                <input type="password" class="form-control" id="passwordLogin" pattern="^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$" required placeholder="Enter your password...">
                 <div class="invalid-feedback">
                     Please enter a valid password (at least 8 characters, including uppercase, lowercase, number and special character).
                 </div>
