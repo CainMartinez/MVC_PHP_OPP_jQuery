@@ -7,7 +7,7 @@
         case 'register':
             try{
                 $daoRegister = new DAOLogin();
-                $rdo = $daoRegister -> registerUser($_POST['usernameRegister'],$_POST['emailRegister'],$_POST['passwordRegister'],$_POST['f_nacimientoRegister']);
+                $rdo = $daoRegister -> registerUser($_POST['usernameRegister'],$_POST['emailRegister'],$_POST['passwordRegister']);
             } catch (Exception $e){
                 echo json_encode("error");
             }
