@@ -1,8 +1,10 @@
 function buttonRegister() {
-//     $('#register').on('click', function(e) {
-//         e.preventDefault();
-//         userRegister();
-//     });
+    $("#register").keydown(function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            userRegister();
+        }
+    });
     $('#registerForm').on('submit', function(e) {
         e.preventDefault();
         userRegister();
