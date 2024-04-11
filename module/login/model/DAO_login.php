@@ -9,7 +9,7 @@
             $avatar = "https://i.pravatar.cc/500?u=$hashavatar";
             $sql = "INSERT INTO `users`(`username`, `password`, `email`, `type_user`, `avatar`) 
             VALUES ('$username','$hashed_pass','$email','client','$avatar')";
-            error_log($sql, 3, "debug.txt");
+            //error_log($sql, 3, "debug.txt");
             $conexion = connect::con();
             $res = mysqli_query($conexion, $sql);
             connect::close($conexion);

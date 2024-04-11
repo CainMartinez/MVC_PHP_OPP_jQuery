@@ -90,8 +90,9 @@ function userRegister() {
                     icon: "success",
                     timer: 10000, 
                     buttons: false
+                }).then(() => {
+                    window.location.href = "index.php?page=login";
                 });
-                window.location.href = "ruta_a_tu_pagina_de_login";
             } else {
                 Swal.fire({
                     title: "Register Error!",
