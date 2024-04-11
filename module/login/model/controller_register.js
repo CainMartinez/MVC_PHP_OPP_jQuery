@@ -1,12 +1,17 @@
 function buttonRegister() {
-    $('#register').on('click', function(e) {
+//     $('#register').on('click', function(e) {
+//         e.preventDefault();
+//         userRegister();
+//     });
+    $('#registerForm').on('submit', function(e) {
         e.preventDefault();
         userRegister();
     });
 }
+
 function validateRegister() {
     console.log("validateRegister");
-    var usernamePattern = /^[a-zA-Z0-9]{6,}$/;
+    var usernamePattern = /^[a-zA-Z0-9]{8,}$/;
     var emailPattern = /^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$/;
     var passwordPattern = /^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
     var error = false;
@@ -53,6 +58,7 @@ function validateRegister() {
         } else {
             if ($('#passwordRegister').val() != $('#passwordRepeatRegister').val()) { 
                 $('#errorRepeatPassword').html('<br>Passwords do not match, please try again.');
+                error = true;
             }else { 
                 $('#errorRepeatPassword').html('<br>');
                 if(!passwordPattern.test($('#passwordRegister').val())) {
@@ -75,11 +81,26 @@ function userRegister() {
         let formData = $('#registerForm').serialize();
         console.log("click register");
         console.log(formData);
-        ajaxPromise("module/login/controller/controller_login.php?op=register", 'POST', 'JSON', formData)
+        ajaxPromise('POST','JSON','module/login/controller/controller_login.php?op=register', formData)
         .then(function(data) {  
-            data == "error_mail" ? $('#errorMail').html('<br>The email entered is already in use.') : undefined;
-            data == "error_username" ? $('#errorUsername').html('<br>The username entered is not available.') : undefined;
-            data == "ok_insert" ? (toastr.success("Registration successful"), setTimeout($('#selecForm').text('Register'), $('#form_register').hide(), $('#form_login').show() ,1000)) : undefined;
+            if (data === true) {
+                Swal.fire({
+                    title: "WELCOME to Living Mobility!",
+                    text: "Registration successful",
+                    icon: "success",
+                    timer: 10000, 
+                    buttons: false
+                });
+                window.location.href = "ruta_a_tu_pagina_de_login";
+            } else {
+                Swal.fire({
+                    title: "Register Error!",
+                    text: "Username or email already in use. Try again!",
+                    icon: "error",
+                    timer: 10000, 
+                    buttons: false  
+                });
+            }
         }).catch(function(e) {
             console.error(e);
         });

@@ -5,13 +5,14 @@
     @session_start();
     switch ($_GET['op']) {
         case 'register':
+            // error_log('ctlr reg', 3, "debug.txt");
             try{
                 $daoRegister = new DAOLogin();
                 $rdo = $daoRegister -> registerUser($_POST['usernameRegister'],$_POST['emailRegister'],$_POST['passwordRegister']);
+                
             } catch (Exception $e){
                 echo json_encode("error");
             }
-    
             echo json_encode($rdo); 
     
         break;

@@ -9,34 +9,23 @@
             <form id="registerForm" class="needs-validation" novalidate>
                 <div class="form-group">
                     <label for="usernameRegister">Username</label>
-                    <input type="text" class="form-control" id="usernameRegister" pattern="^[a-zA-Z0-9]{8,}$" required placeholder="Enter an username..." autocomplete="username">
+                    <input type="text" class="form-control" id="usernameRegister" name="usernameRegister" required placeholder="Enter an username..." autocomplete="username">
                     <span id="errorUsername" class="error text-danger"></span>
-                    <div class="invalid-feedback">
-                        Please enter a valid username (at least 8 alphanumeric characters).
-                    </div>
                 </div>
                 <div class="form-group">
                     <label for="emailRegister">Email</label>
-                    <input type="email" class="form-control" id="emailRegister" pattern="^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$" required placeholder="Enter an email...">
+                    <input type="email" class="form-control" id="emailRegister" name="emailRegister" required placeholder="Enter an email...">
                     <span id="errorMail" class="error text-danger"></span>
-                    <div class="invalid-feedback">
-                        Please enter a valid email.
-                    </div>
                 </div>
                 <div class="form-group">
                     <label for="passwordRegister">Password</label>
-                    <input type="password" class="form-control" id="passwordRegister" pattern="^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$" required placeholder="Enter a password..." autocomplete="new-password">
-                    <span id="errorPassword" class="error text-danger"></span>                    <div class="invalid-feedback">
-                        Please enter a valid password (at least 8 characters, including uppercase, lowercase, number and special character).
-                    </div>
+                    <input type="password" class="form-control" id="passwordRegister" name="passwordRegister" required placeholder="Enter a password..." autocomplete="new-password">
+                    <span id="errorPassword" class="error text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="passwordRepeatRegister">Repeat Password</label>
-                    <input type="password" class="form-control" id="passwordRepeatRegister" pattern="^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$" required placeholder="Repeat a password..." autocomplete="new-password">
+                    <input type="password" class="form-control" id="passwordRepeatRegister" required placeholder="Repeat a password..." autocomplete="new-password">
                     <span id="errorRepeatPassword" class="error text-danger"></span>
-                    <div class="invalid-feedback">
-                        Please repeat the password.
-                    </div>
                 </div>
                 <br>
                 <input type="submit" id="register" class="btn btn-primary" value="Register">
