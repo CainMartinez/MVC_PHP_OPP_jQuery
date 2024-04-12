@@ -43,17 +43,24 @@ function login() {
     function promiseLogin() {
         let dataForm = $('#loginForm').serialize();
         console.log(dataForm);
-        ajaxPromise('POST', 'JSON','module/login/ctrl/ctrl_login.php?op=login', dataForm)
+        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=login', dataForm)
         .then(function (data) {
-            // console.log(data);
-            // console.log(data['token_large']);
-            // console.log(data['token_refresh']);
-            let error = false;
             data == "error_user" ? ( $('#errorUsernameLogin').html('<br>The user name entered does not exist.'), error = true) : undefined;
-            data == "error_password" ? ( $('#errorPasswordLogin').html('<br>Erroneous data, check username and password.'), error = true) : undefined;
-            error == false ? ( localStorage.setItem("token", data['token_large']), localStorage.setItem("token_refresh", data['token_refresh']), toastr.success("Welcome back"), setTimeout(' window.location.href = "index.php?page=shop"; ', 1000) ) : undefined;
-        }).catch(function() {
-            console.log("error ajaxForSearch Login");
+            data == "error_password" ? ( $('#errorPasswordLogin').html('<br>Data error, check username and password.'), error = true) : undefined;
+            if (data != "error_user" && data != "error_password" && data != "error") {
+                localStorage.setItem("token", data);
+                Swal.fire({
+                    title: "Welcome back!",
+                    text: "Login Successful!",
+                    icon: "success",
+                    timer: 10000, 
+                    buttons: false
+                }).then(() => {
+                    window.location.href = "index.php?page=homepage";
+                })
+            }
+        }).catch(function(e) {
+            console.error(e);
         });
     }
 }

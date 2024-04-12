@@ -1,6 +1,8 @@
 <?php
     $path = $_SERVER['DOCUMENT_ROOT'];
     include($path . "/module/login/model/DAO_login.php");
+    include($path . "/model/middleware_auth.php");
+
 
     @session_start();
     switch ($_GET['op']) {
@@ -13,16 +15,17 @@
             } catch (Exception $e){
                 echo json_encode("error");
             }
-            echo json_encode($rdo); 
+            echo json_encode($rdo);     
     
         break;
         
         case 'login':
-            // echo json_encode($_POST['passwordLogin']);
+            // echo json_encode($_POST['usernameLogin']);
             try {
+                error_log($_POST['usernameLogin'] . "\n", 3, "debug.txt");
+                error_log($_POST['passwordLogin'] . "\n", 3, "debug.txt");
                 $daoLog = new DAOLogin();
                 $rdo = $daoLog->select_user($_POST['usernameLogin']);
-    
                 if ($rdo == "error_user") {
                     echo json_encode("error_user");
                     exit;
@@ -74,7 +77,6 @@
                 }
             }
             break;
-    
         case 'controluser':
             $token_dec = decode_token($_POST['token']);
     

@@ -20,7 +20,7 @@
 			$conexion = connect::con();
             $res = mysqli_query($conexion, $sql)->fetch_object();
             connect::close($conexion);
-
+            // error_log($sql . "\n", 3, "debug.txt");
             if ($res) {
                 $value = get_object_vars($res);
                 return $value;

@@ -17,25 +17,20 @@ function load_menu() {
     if (token) {
         ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'token': token })
             .then(function(data) {
-                if (data.type_user == "client") {
-                    console.log("Client loged");
-                    $('.opc_CRUD').empty();
-                    $('.opc_exceptions').empty();
-                } else {
-                    console.log("Admin loged");
-                    $('.opc_CRUD').show();
-                    $('.opc_exceptions').show();
-                }
-                $('.log-icon').empty();
-                $('#user_info').empty();
-                $('<img src="' + data.avatar + '"alt="Robot">').appendTo('.log-icon');
-                $('<p></p>').attr({ 'id': 'user_info' }).appendTo('#des_inf_user')
-                    .html(
-                        '<a id="logout"><i id="icon-logout" class="fa-solid fa-right-from-bracket"></i></a>' +
-                        '<a>' + data.username + '<a/>'
-                    )
-            }).catch(function() {
-                console.log("Error loading user data");
+            console.log("Client logged");
+            // Ocultar los botones de registro y login
+            $('a[href="index.php?page=register"]').hide();
+            $('a[href="index.php?page=login"]').hide();
+            // Agregar el nombre de usuario, la imagen y el botón de logout al menú
+            $('.rd-navbar-nav').append(
+                '<li class="rd-nav-item">' +
+                    '<img src="' + data.avatar + '" alt="User Avatar" class="img-thumbnail">' +
+                    '<span class="username">' + data.username + '</span>' +
+                    '<a id="logout" class="btn btn-danger">Logout</a>' +
+                '</li>'
+            );
+            }).catch(function(e) {
+                console.error(e);
             });
     } else {
         console.log("No token available");

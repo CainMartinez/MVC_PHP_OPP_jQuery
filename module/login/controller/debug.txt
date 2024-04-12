@@ -1,0 +1,32 @@
+
+
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username=''
+user1233
+Password1!
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1233'
+user1234
+Password1!1
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1234'
+user1234
+Password1!
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1234'
+user1234
+Password1!
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1234'
+eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpYXQiOiIxNzEyOTQwNjc4IiwiZXhwIjoiMTcxMjk0MTI3OCIsInVzZXJuYW1lIjoidXNlcjEyMzQifQ.Jeo5J76rk-Uj4v2DVRqaSjGA2tOLx3D9Od1iwTmjEsQ
+user1234
+Password1!
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1234'
+eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpYXQiOiIxNzEyOTQwNzQyIiwiZXhwIjoiMTcxMjk0MTM0MiIsInVzZXJuYW1lIjoidXNlcjEyMzQifQ.-6qYowX4cCIAm7t4ffJmUtPUKMAPH0t2sXzrADfilTY
+user1234
+Password1!
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1234'
+eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpYXQiOiIxNzEyOTQxMTkyIiwiZXhwIjoiMTcxMjk0MTc5MiIsInVzZXJuYW1lIjoidXNlcjEyMzQifQ.smy2TMz4aBFuzmqcf-ADIzTJ-q-gBsriw-F9XKCUtWU
+user1234
+Password1!
+SELECT `username`, `password`, `email`, `type_user`, `avatar` FROM `users` WHERE username='user1234'
+eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpYXQiOiIxNzEyOTQxMjE2IiwiZXhwIjoiMTcxMjk0MTgxNiIsInVzZXJuYW1lIjoidXNlcjEyMzQifQ.3qNeQLXpjhriO-cRFjwjpeLGsqlM-w4dZ-5Ht6_J9Ek
+user1234
+Password1!
+user1234
+Password1!
