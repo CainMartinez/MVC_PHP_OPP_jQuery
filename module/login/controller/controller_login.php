@@ -20,66 +20,47 @@
         case 'login':
             // echo json_encode($_POST['passwordLogin']);
             try {
-                $daoLogin = new DAOLogin();
-                $rdo = $daoLogin -> loginUser($_POST['usernameLogin'],$_POST['passwordLogin']);
-            } catch(Exception $e) {
+                $daoLog = new DAOLogin();
+                $rdo = $daoLog->select_user($_POST['usernameLogin']);
+    
+                if ($rdo == "error_user") {
+                    echo json_encode("error_user");
+                    exit;
+                } else {
+                    if (password_verify($_POST['passwordLogin'], $rdo['password'])) {
+                        $token= create_token($rdo["username"]);
+                        $_SESSION['usernameLogin'] = $rdo['username']; //Guardamos el usario 
+                        $_SESSION['tiempo'] = time(); //Guardamos el tiempo que se logea
+                        echo json_encode($token);
+                        exit;
+                    } else {
+                        echo json_encode("error_password");
+                        exit;
+                    }
+                }
+            } catch (Exception $e) {
                 echo json_encode("error");
-            }
-    
-            if($rdo == "error_username"){ 
-                echo json_encode("error_username");
-                exit;
-            } else if(password_verify($_POST['passwordLogin'], $rdo)) {
-                $token = create_token_refresh($_POST['usernameLogin']);
-                $_SESSION['username'] = $_POST['usernameLogin'];
-                $_SESSION['tiempo'] = time();
-                $token_large = create_token($_POST['usernameLogin']);
-                $output = [
-                    'token_large' => $token_large,
-                    'token_refresh' => $token,
-                ];
-            } else {
-                echo json_encode("error_password");
                 exit;
             }
-    
-            echo json_encode($rdo);
         break;
             
         case 'logout':
             unset($_SESSION['username']);
-            unset($_SESSION['time_out']);
+            unset($_SESSION['tiempo']);
             session_destroy();
     
             echo json_encode('Done');
-        break;
-        
-        case 'dataUser':
+            break;
+    
+        case 'data_user':
             $json = decode_token($_POST['token']);
-            $daoLogin = new DAOLogin();
-            $rdo = $daoLogin -> selectDataUser($json['username']);
+            $daoLog = new DAOLogin();
+            $rdo = $daoLog->select_data_user($json['username']);
             echo json_encode($rdo);
             exit;
-        break;
+            break;
     
-        case 'controlUser':
-            $parseToken = decode_token($_POST['token']);
-    
-            if($parseToken['exp'] < time()){
-                echo json_encode("wrongUser");
-                exit;
-            }
-    
-            if(isset($_SESSION['username']) && ($_SESSION['username']) == $parseToken['username']){
-                echo json_encode("correctUser");
-                exit;
-            } else {
-                echo json_encode("wrongUser");
-                exit;
-            }
-        break;
-    
-        case 'controlActivity':
+        case 'actividad':
             if (!isset($_SESSION["tiempo"])) {
                 echo json_encode("inactivo");
                 exit();
@@ -92,39 +73,36 @@
                     exit();
                 }
             }
-        break;
+            break;
     
-        case 'checkExpirationTokenRefresh':
-            $tokenRefreshDec = decode_token($_POST['token_refresh']);
-            $tokenLargeDec = decode_token($_POST['token_large']);
+        case 'controluser':
+            $token_dec = decode_token($_POST['token']);
     
-            
-            // Comprobamos si Token Refresh ha caducado
-            if ($tokenRefreshDec['exp'] < time()) {
-                if ($tokenLargeDec['exp'] > time()) {
-                    // Devolvemos que hay que generar token nuevo
-                    echo json_encode("ExpiredJWTRefresh");
-                } else {
-                    // Devolvemos que han caducado los dos y hay que hacer logout
-                    echo json_encode("ExpiredJWTToken");
-                }
-            } else {
-                echo json_encode("NotExpiredJWTRefresh");
-            }
-        break;
-        
-        case 'changeTokenRefres':
-            // Comprobamos que el usuario del token es el mismo que el de la session
-            $parseToken = decode_token($_POST['token']);
-            if(isset($_SESSION['username']) && ($_SESSION['username']) == $parseToken['username']){
-                $token = create_token_refresh($_SESSION['username']);
-                echo json_encode($token);
-                exit;
-            } else {
-                echo json_encode("wrongUser");
-                exit;
+            if ($token_dec['exp'] < time()) {
+                echo json_encode("Wrong_User");
+                exit();
             }
     
-        break;
+            if (isset($_SESSION['username']) && ($_SESSION['username']) == $token_dec['username']) {
+                echo json_encode("Correct_User");
+                exit();
+            } else {
+                echo json_encode("Wrong_User");
+                exit();
+            }
+            break;
+    
+        case 'refresh_token':
+            $old_token = decode_token($_POST['token']);
+            $new_token = create_token($old_token['username']);
+            echo json_encode($new_token);
+            break;
+    
+        case 'refresh_cookie':
+            session_regenerate_id();
+            echo json_encode("Done");
+            exit;
+            break;
+    
     }
 ?>

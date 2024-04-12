@@ -9,11 +9,13 @@
             <form id="loginForm" class="needs-validation" novalidate>
                 <div class="form-group">
                     <label for="usernameLogin">Username</label>
-                    <input type="text" class="form-control" id="usernameLogin" name="usernameLogin" required placeholder="Enter your username...">
+                    <input type="text" class="form-control" id="usernameLogin" name="usernameLogin" required placeholder="Enter your username..." autocomplete="username">
+                    <span id="errorUsernameLogin" class="error text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="passwordLogin">Password</label>
-                    <input type="password" class="form-control" id="passwordLogin" name="passwordLogin" required placeholder="Enter your password...">
+                    <input type="password" class="form-control" id="passwordLogin" name="passwordLogin" required placeholder="Enter your password..." autocomplete="off">
+                    <span id="errorPasswordLogin" class="error text-danger"></span>
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary">Login</button>
