@@ -14,8 +14,8 @@
         return $token;
     }
     function decode_token($token){
-        $jwt = parse_ini_file('jwt.ini');
-        $secret = $jwt['secret'];
+        $jwt_local = parse_ini_file('C:/sites/.env.ini');
+        $secret = $jwt_local['JWT_SECRET'];
         
         $JWT = new JWT;
         $token_dec = $JWT->decode($token, $secret);

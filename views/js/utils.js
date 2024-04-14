@@ -15,15 +15,16 @@ function ajaxPromise(sType, sTData, sUrl, sData = undefined) {
 function load_menu() {
     var token = localStorage.getItem('token');
     if (token) {
+        console.log(token);
         ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'token': token })
             .then(function(data) {
             console.log("Client logged");
             // Ocultar los botones de registro y login
-            $('a[href="index.php?page=register"]').hide();
-            $('a[href="index.php?page=login"]').hide();
+            $('#register_button').hide();
+            $('#login_button').hide();
             // Agregar el nombre de usuario, la imagen y el botón de logout al menú
             $('.rd-navbar-nav').append(
-                '<li class="rd-nav-item">' +
+                '<li id="login_ok" class="rd-nav-item">' +
                     '<img src="' + data.avatar + '" alt="User Avatar" class="img-thumbnail">' +
                     '<span class="username">' + data.username + '</span>' +
                     '<a id="logout" class="btn btn-danger">Logout</a>' +
@@ -34,11 +35,9 @@ function load_menu() {
             });
     } else {
         console.log("No token available");
-        $('.opc_CRUD').empty();
-        $('.opc_exceptions').empty();
-        $('#user_info').hide();
-        $('.log-icon').empty();
-        $('<a href="index.php?page=register"><i id="col-ico" class="fa-solid fa-user fa-2xl"></i></a>').appendTo('.log-icon');
+        $('#login_ok').empty();
+        $('#register_button').show();
+        $('#login_button').show();
     }
 }
 //================CLICK-LOGIUT================
