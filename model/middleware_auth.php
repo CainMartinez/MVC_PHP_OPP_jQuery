@@ -21,10 +21,6 @@
         $token_dec = $JWT->decode($token, $secret);
         
         $rt_token = json_decode($token_dec, TRUE);
-        return $rt_token["username"];
+        return $rt_token;
     }
-    // $token = create_token("yomogan");
-    // echo $token; echo '<br>';
-    // $username = decode_token($token);
-    // echo $username;
 ?>

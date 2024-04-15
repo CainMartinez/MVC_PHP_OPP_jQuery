@@ -30,7 +30,7 @@
         }
         function select_data_user($username){
 			$sql = "SELECT * FROM users WHERE username='$username'";
-            error_log($sql . "\n", 3, "debug.txt");
+            // error_log($sql . "\n", 3, "debug.txt");
 			$conexion = connect::con();
             $res = mysqli_query($conexion, $sql)->fetch_object();
             connect::close($conexion);

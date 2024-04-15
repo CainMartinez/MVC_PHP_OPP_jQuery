@@ -46,7 +46,7 @@ function login() {
         ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=login', dataForm)
         .then(function (data) {
             data == "error_user" ? ( $('#errorUsernameLogin').html('<br>The user name entered does not exist.'), error = true) : undefined;
-            data == "error_password" ? ( $('#errorPasswordLogin').html('<br>Data error, check username and password.'), error = true) : undefined;
+            data == "error_password" ? ( $('#errorPasswordLogin').html('<br>The password does not match this user, please try again.'), error = true) : undefined;
             if (data != "error_user" && data != "error_password" && data != "error") {
                 localStorage.setItem("token", data);
                 Swal.fire({

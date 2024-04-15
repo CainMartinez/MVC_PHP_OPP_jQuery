@@ -25,9 +25,9 @@ function load_menu() {
             // Agregar el nombre de usuario, la imagen y el botón de logout al menú
             $('.rd-navbar-nav').append(
                 '<li id="login_ok" class="rd-nav-item">' +
-                    '<img src="' + data.avatar + '" alt="User Avatar" class="img-thumbnail">' +
-                    '<span class="username">' + data.username + '</span>' +
-                    '<a id="logout" class="btn btn-danger">Logout</a>' +
+                    '<img src="' + data.avatar + '" alt="User Avatar" class="img-thumbnail" style="width:50px; height:50px;">&nbsp;&nbsp;&nbsp;' + 
+                    '<span class="username btn btn-info">' + data.username + '</span>&nbsp;&nbsp;&nbsp;' + 
+                    '<a id="logout" class="btn btn-warning ml-auto">Logout</a>'+
                 '</li>'
             );
             }).catch(function(e) {
@@ -44,8 +44,16 @@ function load_menu() {
 function click_logout() {
     $(document).on('click', '#logout', function() {
         localStorage.removeItem('total_prod');
-        toastr.success("Logout succesfully");
-        setTimeout('logout(); ', 1000);
+        Swal.fire({
+            icon: 'success',
+            title: 'Logout successfully',
+            text: "Come back soon!",
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+            timer: 3000
+        }).then(() => {
+            logout();
+        })
     });
 }
 //================LOG-OUT================

@@ -56,9 +56,9 @@
             break;
     
         case 'data_user':
-            error_log($_POST['token']."token" . "\n", 3, "debug.txt");
+            // error_log($_POST['token']."token" . "\n", 3, "debug.txt");
             $json = decode_token($_POST['token']);
-            error_log($json['username']."username" . "\n", 3, "debug.txt");
+            // error_log($json['username']."username" . "\n", 3, "debug.txt");
             $daoLog = new DAOLogin();
             $rdo = $daoLog->select_data_user($json['username']);
             echo json_encode($rdo);
