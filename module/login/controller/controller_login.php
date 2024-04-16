@@ -65,12 +65,12 @@
             exit;
             break;
     
-        case 'actividad':
+        case 'activity':
             if (!isset($_SESSION["tiempo"])) {
                 echo json_encode("inactivo");
                 exit();
             } else {
-                if ((time() - $_SESSION["tiempo"]) >= 1800) { //1800s=30min
+                if ((time() - $_SESSION["tiempo"]) >= 6) { //1 min
                     echo json_encode("inactivo");
                     exit();
                 } else {
@@ -81,12 +81,7 @@
             break;
         case 'controluser':
             $token_dec = decode_token($_POST['token']);
-    
-            if ($token_dec['exp'] < time()) {
-                echo json_encode("Wrong_User");
-                exit();
-            }
-    
+
             if (isset($_SESSION['username']) && ($_SESSION['username']) == $token_dec['username']) {
                 echo json_encode("Correct_User");
                 exit();
@@ -95,18 +90,31 @@
                 exit();
             }
             break;
+
+        case 'check_token':
+            $token_dec = decode_token($_POST['token']);
+
+            if ($token_dec['exp'] < time()) {
+                echo json_encode("Token_Expired");
+                exit();
+            } else {
+                echo json_encode("Token_Valid");
+                exit();
+            }
+            break;
     
         case 'refresh_token':
             $old_token = decode_token($_POST['token']);
             $new_token = create_token($old_token['username']);
+            $_SESSION['tiempo'] = time(); 
             echo json_encode($new_token);
             break;
-    
+
         case 'refresh_cookie':
             session_regenerate_id();
+            $_SESSION['tiempo'] = time(); 
             echo json_encode("Done");
             exit;
             break;
-    
     }
 ?>
