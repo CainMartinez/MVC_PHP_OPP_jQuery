@@ -1,7 +1,10 @@
 <?php
     $path = $_SERVER['DOCUMENT_ROOT'];
     include($path . "/module/home/model/DAO_home.php");
-
+    @session_start();
+    if (isset($_SESSION["tiempo"])) {  
+        $_SESSION["tiempo"] = time();
+    }
     switch ($_GET['op']) {
         case 'list';
             include ('module/home/view/home.html');

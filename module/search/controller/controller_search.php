@@ -1,7 +1,10 @@
 <?php
-$path = $_SERVER['DOCUMENT_ROOT'];
-include($path . "/module/search/model/DAO_search.php");
-
+    $path = $_SERVER['DOCUMENT_ROOT'];
+    include($path . "/module/search/model/DAO_search.php");
+    @session_start();
+    if (isset($_SESSION["tiempo"])) {  
+        $_SESSION["tiempo"] = time();
+    }
 switch ($_GET['op']) {
     case 'dynamic_search_city':
         try {

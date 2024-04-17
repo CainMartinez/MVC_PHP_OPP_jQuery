@@ -3,7 +3,6 @@
     include($path . "/module/login/model/DAO_login.php");
     include($path . "/model/middleware_auth.php");
 
-
     @session_start();
     switch ($_GET['op']) {
         case 'register':
@@ -32,9 +31,14 @@
                 } else {
                     if (password_verify($_POST['passwordLogin'], $rdo['password'])) {
                         $token= create_token($rdo["username"]);
+                        $refresh_token = refresh_token($rdo["username"]);
                         $_SESSION['usernameLogin'] = $rdo['username']; //Guardamos el usario 
                         $_SESSION['tiempo'] = time(); //Guardamos el tiempo que se logea
-                        echo json_encode($token);
+                        $tokens = [
+                            'token' => $token,
+                            'refresh_token' => $refresh_token,
+                        ];
+                        echo json_encode($tokens);
                         exit;
                     } else {
                         echo json_encode("error_password");

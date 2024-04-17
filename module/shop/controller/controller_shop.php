@@ -1,7 +1,10 @@
 <?php
-$path = $_SERVER['DOCUMENT_ROOT'];
-include($path . "/module/shop/model/DAO_shop.php");
-
+    $path = $_SERVER['DOCUMENT_ROOT'];
+    include($path . "/module/shop/model/DAO_shop.php");
+    @session_start();
+    if (isset($_SESSION["tiempo"])) {  
+        $_SESSION["tiempo"] = time();
+    }
 switch ($_GET['op']) {
     case 'order_properties':
         try {

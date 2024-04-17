@@ -77,7 +77,6 @@ function protecturl() {
         })
         .catch(function() { console.log("ANONYMOUS_user") });
 }
-
 function checkToken() {
     var token = localStorage.getItem('token');
     ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=check_token', { 'token': token })
@@ -125,16 +124,21 @@ function refresh_cookie() {
         });
 }
 function logout_auto() {
+    ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=logout')
+        .then(function(data) {
+            localStorage.removeItem('token');Swal.fire({
+                icon: 'warning',
+                title: 'Account closed for security reasons!',
+                showConfirmButton: true,
+                confirmButtonText: 'Log in again.',
+                timer: 3000
+            }).then(() => {
+                window.location.href = "index.php?page=login";
+            });;
+        }).catch(function(d) {
+            console.log(d);
+        });
     localStorage.removeItem('token');
-    Swal.fire({
-        icon: 'warning',
-        title: 'Account closed for security reasons!',
-        showConfirmButton: true,
-        confirmButtonText: 'Log in again.',
-        timer: 3000
-    }).then(() => {
-        window.location.href = "index.php?page=login";
-    });;
 }
 $(document).ready(function() {
     load_menu();
