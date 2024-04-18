@@ -32,12 +32,9 @@
                     if (password_verify($_POST['passwordLogin'], $rdo['password'])) {
                         $token= create_token($rdo["username"]);
                         $refresh_token = refresh_token($rdo["username"]);
-                        $_SESSION['usernameLogin'] = $rdo['username']; //Guardamos el usario 
-                        $_SESSION['tiempo'] = time(); //Guardamos el tiempo que se logea
-                        $tokens = [
-                            'token' => $token,
-                            'refresh_token' => $refresh_token,
-                        ];
+                        $_SESSION['usernameLogin'] = $rdo['username']; 
+                        $_SESSION['tiempo'] = time();
+                        $tokens = [$token,$refresh_token];
                         echo json_encode($tokens);
                         exit;
                     } else {
