@@ -165,6 +165,36 @@ function clicks_shop() {
     $(document).on("click", ".button_homepage", function () {
         remove_pagination();
     });
+    $(document).on("click","#like_button",function(){
+        var id_property = this.getAttribute('id');
+        var user = localStorage.getItem('access_token');
+        if (user) {
+            ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=like_property&id=' + {id_property, user})
+            .then(function (data) {
+                if (data == 'ok') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Property added to favorites'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Info',
+                        text: 'Property already added to favorites'
+                    });
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+        } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'You must be logged in to add a property to favorites',
+            })
+        }
+    });
 }
 function loadDetails(id_property) {
     ajaxPromise('GET', 'JSON', 'module/shop/controller/controller_shop.php?op=details_property&id=' + id_property)

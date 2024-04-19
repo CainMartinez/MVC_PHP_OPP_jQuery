@@ -13,6 +13,15 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
+	function like_property($id_property, $id_user) {
+		$sql = "INSERT INTO likes (id_property, id_user) VALUES (?, ?)";
+	
+		$conexion = connect::con();
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("ii", $id_property, $id_user);
+		$stmt->execute();
+		connect::close($conexion);
+	}
 	function insertCurrentDate($id_property) {
 		$sql = "UPDATE property SET currently_date = NOW() WHERE id_property = ?";
 

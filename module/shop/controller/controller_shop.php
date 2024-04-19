@@ -25,6 +25,19 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
+    case 'like_property':
+        try {
+            $daoshop = new DAOShop();
+            $Dates_Properties = $daoshop->like_property($_POST['id'],$_POST['user'['username']]);
+            if (!empty($Dates_Properties)) {
+                echo json_encode($Dates_Properties);
+            } else {
+                echo json_encode("error");
+            }
+        } catch (Exception $e) {
+            echo json_encode("error");
+        }
+        break;
     case 'list':
         include('module/shop/view/shop.html');
         break;
@@ -42,7 +55,7 @@ switch ($_GET['op']) {
         else{
             echo json_encode("error");
         }
-    break;
+        break;
     case 'all_properties':
         // error_log("order: " . print_r($_POST['order'], true), 3, "debug.txt");
         // return false;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-04-2024 a las 20:34:42
+-- Tiempo de generación: 09-04-2024 a las 13:52:40
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -248,17 +248,6 @@ INSERT INTO `large_people` (`id_large_people`, `name_large_people`, `is_active`,
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `likes`
---
-
-CREATE TABLE `likes` (
-  `id_property` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `operation`
 --
 
@@ -311,17 +300,17 @@ CREATE TABLE `property` (
 --
 
 INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `id_large_people`, `is_active`, `creation_date`, `update_date`, `id_city`, `visits`, `currently_date`, `latitude`, `longitude`) VALUES
-(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1, 27, '2024-04-19 18:01:13', 38.8167, -0.61667),
-(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2, 12, '2024-04-09 19:00:43', 38.9667, -0.18333),
+(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1, 23, '2024-04-07 22:10:25', 38.8167, -0.61667),
+(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2, 10, '2024-03-18 20:52:41', 38.9667, -0.18333),
 (3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 3, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3, 15, '2024-03-18 20:38:31', 38.838, -0.51721),
 (4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4, 7, '2024-03-26 21:31:14', 38.7054, -0.47432),
-(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5, 36, '2024-04-19 17:28:45', 38.9833, -0.51667),
+(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5, 29, '2024-03-18 20:47:48', 38.9833, -0.51667),
 (34, 'Sunny Villa', 'CR1', 200, 4, 'A beautiful villa with a sunny garden', 300000, 1, 1, '2022-01-01', '2022-01-01', 1, 0, '2024-03-24 00:11:52', 38.8276, -0.61876),
 (35, 'Modern Loft', 'CR2', 100, 2, 'A modern loft in the city center', 250000, 2, 1, '2022-01-02', '2022-01-02', 2, 1, '2024-03-25 21:20:58', 34.0522, -118.244),
 (36, 'Cozy Cottage', 'CR3', 150, 3, 'A cozy cottage in the countryside', 200000, 3, 1, '2022-01-03', '2022-01-03', 3, 1, '2024-03-25 21:18:27', 51.5074, -0.127758),
 (37, 'Luxury Penthouse', 'CR4', 250, 3, 'A luxury penthouse with a city view', 500000, 2, 1, '2022-01-04', '2022-01-04', 4, 1, '2024-03-25 21:16:47', 48.8566, 2.35222),
 (38, 'Charming Bungalow', 'CR5', 120, 2, 'A charming bungalow near the beach', 220000, 3, 1, '2022-01-05', '2022-01-05', 5, 1, '2024-03-25 21:15:54', 52.52, 13.405),
-(39, 'Elegant Mansion', 'CR6', 400, 5, 'An elegant mansion with a large pool', 800000, 1, 1, '2022-01-06', '2022-01-06', 1, 5, '2024-04-09 17:04:33', 41.9028, 12.4964),
+(39, 'Elegant Mansion', 'CR6', 400, 5, 'An elegant mansion with a large pool', 800000, 1, 1, '2022-01-06', '2022-01-06', 1, 3, '2024-04-07 22:09:14', 41.9028, 12.4964),
 (40, 'Stylish Studio', 'CR7', 80, 1, 'A stylish studio in the hip neighborhood', 180000, 2, 1, '2022-01-07', '2022-01-07', 2, 3, '2024-03-25 21:14:14', 40.4168, -3.70379),
 (41, 'Classic Townhouse', 'CR8', 200, 3, 'A classic townhouse with a modern interior', 350000, 3, 1, '2022-01-08', '2022-01-08', 3, 9, '2024-04-07 22:08:47', 35.6895, 139.692),
 (42, 'Rustic Cabin', 'CR9', 100, 2, 'A rustic cabin in the woods', 150000, 1, 1, '2022-01-09', '2022-01-09', 4, 1, '2024-03-25 21:09:23', 37.7749, -122.419),
@@ -530,13 +519,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`id_user`, `username`, `password`, `email`, `avatar`, `type_user`) VALUES
-(1, 'user1234', '$2y$12$mY7G3WbR/KRdn9oruNP0gu5VXJI1RkFMUyofz32.6AYVh3pnuzNLm', 'user@user.es', 'https://i.pravatar.cc/500?u=305d5031352dd282cd20e3d64af291c5', 'client');
-
---
 -- Índices para tablas volcadas
 --
 
@@ -570,14 +552,6 @@ ALTER TABLE `images`
 --
 ALTER TABLE `large_people`
   ADD PRIMARY KEY (`id_large_people`);
-
---
--- Indices de la tabla `likes`
---
-ALTER TABLE `likes`
-  ADD PRIMARY KEY (`id_property`,`id_user`),
-  ADD KEY `id_property` (`id_property`),
-  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indices de la tabla `operation`
@@ -691,7 +665,7 @@ ALTER TABLE `type`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int(30) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -702,14 +676,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `images`
   ADD CONSTRAINT `fk_property` FOREIGN KEY (`id_property`) REFERENCES `property` (`id_property`);
-
---
--- Filtros para la tabla `likes`
---
-ALTER TABLE `likes`
-  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`id_property`) REFERENCES `property` (`id_property`),
-  ADD CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`id_property`) REFERENCES `property` (`id_property`),
-  ADD CONSTRAINT `likes_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
 
 --
 -- Filtros para la tabla `property`
