@@ -13,10 +13,10 @@ function ajaxPromise(sType, sTData, sUrl, sData = undefined) {
     });
 };
 function load_menu() {
-    var token = localStorage.getItem('token');
-    if (token) {
-        console.log(token);
-        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'token': token })
+    var refresh_token = localStorage.getItem('refresh_token');
+    if (refresh_token) {
+        console.log(refresh_token);
+        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'refresh_token': refresh_token })
             .then(function(data) {
             console.log("Client logged");
             // Ocultar los botones de registro y login
@@ -42,7 +42,6 @@ function load_menu() {
 }
 function click_logout() {
     $(document).on('click', '#logout', function() {
-        localStorage.removeItem('total_prod');
         Swal.fire({
             icon: 'success',
             title: 'Logout successfully',
@@ -58,28 +57,27 @@ function click_logout() {
 function logout() {
     ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=logout')
         .then(function(data) {
-            localStorage.removeItem('token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('access_token');
             window.location.href = "index.php?page=homepage";
         }).catch(function(d) {
             console.log(d);
         });
 }
 function protecturl() {
-    var token = localStorage.getItem('token');
-    ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=controluser', { 'token': token })
+    var refresh_token = localStorage.getItem('refresh_token');
+    ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=controluser', { 'refresh_token': refresh_token })
         .then(function(data) {
             if (data == "Correct_User") {
-                console.log("CORRECT! The user coincides with the session.");
             } else if (data == "Wrong_User") {
-                console.log("INCORRECT! You are trying to access an account.");
                 checkToken();
             }
         })
         .catch(function() { console.log("ANONYMOUS_user") });
 }
 function checkToken() {
-    var token = localStorage.getItem('token');
-    ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=check_token', { 'token': token })
+    var refresh_token = localStorage.getItem('refresh_token');
+    ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=check_token', { 'refresh_token': refresh_token })
         .then(function(data) {
             if (data == "Token_Expired") {
                 console.log("Token has expired.");
@@ -91,8 +89,8 @@ function checkToken() {
         .catch(function() { console.log("Error checking token") });
 }
 function control_activity() {
-    var token = localStorage.getItem('token');
-    if (token) {
+    var refresh_token = localStorage.getItem('refresh_token');
+    if (refresh_token) {
         ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=activity')
             .then(function(response) {
                 if (response == "inactivo") {
@@ -107,15 +105,25 @@ function control_activity() {
     }
 }
 function refresh_token() {
-    var token = localStorage.getItem('token');
+    var token = localStorage.getItem('refresh_token');
     if (token) {
-        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=refresh_token', { 'token': token })
+        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=refresh_token', { 'refresh_token': refresh_token })
             .then(function(data_token) {
                 console.log("Refresh token correctly");
                 localStorage.setItem("token", data_token);
                 load_menu();
             });
     }
+}
+function check_tokens() {
+    let token_refresh = localStorage.getItem('refresh_token');
+    let token_large = localStorage.getItem('access_token');
+    ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=check_tokens', { 'access_token': access_token, 'refresh_token': refresh_token })
+    .then(function(data) {
+        data == "not_exp" ? undefined : ( data == "refresh_token_exp" ? (console.log("Token refresh expired"), refresh_token()) : logout_auto() );
+    }).catch(function(e) {
+        console.log(e);
+    });
 }
 function refresh_cookie() {
     ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=refresh_cookie')
@@ -126,11 +134,13 @@ function refresh_cookie() {
 function logout_auto() {
     ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=logout')
         .then(function(data) {
-            localStorage.removeItem('token');Swal.fire({
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('access_token');
+            Swal.fire({
                 icon: 'warning',
                 title: 'Account closed for security reasons!',
                 showConfirmButton: true,
-                confirmButtonText: 'Log in again.',
+                confirmButtonText: 'Log in again',
                 timer: 3000
             }).then(() => {
                 window.location.href = "index.php?page=login";
@@ -138,12 +148,11 @@ function logout_auto() {
         }).catch(function(d) {
             console.log(d);
         });
-    localStorage.removeItem('token');
 }
 $(document).ready(function() {
     load_menu();
     click_logout();
-    setInterval(function() { control_activity() }, 6000); //1min = 60000ms
+    setInterval(function() { control_activity() }, 60000); //1min = 60000ms
     protecturl();
     setInterval(function() { refresh_token() }, 600000);
     setInterval(function() { refresh_cookie() }, 600000);

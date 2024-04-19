@@ -6,7 +6,7 @@
         $header = $jwt['JWT_HEADER'];
         $secret = $jwt['JWT_SECRET'];
         
-        $payload = '{"iat":"' . time() . '","exp":"' . time() + (600) . '","username":"' . $username . '"}';
+        $payload = '{"iat":"' . time() . '","exp":"' . time() + (30) . '","username":"' . $username . '"}';
         
         $JWT = new JWT;
         $token = $JWT->encode($header, $payload, $secret);
@@ -28,7 +28,7 @@
         $header = $jwt['JWT_HEADER'];
         $secret = $jwt['JWT_SECRET'];
         
-        $payload = '{"iat":"' . time() . '","exp":"' . time() + (30) . '","username":"' . $username . '"}';
+        $payload = '{"iat":"' . time() . '","exp":"' . time() + (600) . '","username":"' . $username . '"}';
         
         $JWT = new JWT;
         $token = $JWT->encode($header, $payload, $secret);

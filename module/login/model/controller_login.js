@@ -48,7 +48,8 @@ function login() {
             data == "error_user" ? ( $('#errorUsernameLogin').html('<br>The user name entered does not exist.'), error = true) : undefined;
             data == "error_password" ? ( $('#errorPasswordLogin').html('<br>The password does not match this user, please try again.'), error = true) : undefined;
             if (data != "error_user" && data != "error_password" && data != "error") {
-                localStorage.setItem("token", data);
+            localStorage.setItem("refresh_token", data[0]);
+            localStorage.setItem("access_token", data[1]); 
                 Swal.fire({
                     title: "Welcome back!",
                     text: "Login Successful!",

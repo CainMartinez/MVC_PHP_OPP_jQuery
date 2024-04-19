@@ -58,7 +58,7 @@
     
         case 'data_user':
             // error_log($_POST['token']."token" . "\n", 3, "debug.txt");
-            $json = decode_token($_POST['token']);
+            $json = decode_token($_POST['refresh_token']);
             // error_log($json['username']."username" . "\n", 3, "debug.txt");
             $daoLog = new DAOLogin();
             $rdo = $daoLog->select_data_user($json['username']);
@@ -71,7 +71,7 @@
                 echo json_encode("inactivo");
                 exit();
             } else {
-                if ((time() - $_SESSION["tiempo"]) >= 6) { //1 min
+                if ((time() - $_SESSION["tiempo"]) >= 60) { //1 min
                     echo json_encode("inactivo");
                     exit();
                 } else {
@@ -81,7 +81,7 @@
             }
             break;
         case 'controluser':
-            $token_dec = decode_token($_POST['token']);
+            $token_dec = decode_token($_POST['refresh_token']);
 
             if (isset($_SESSION['username']) && ($_SESSION['username']) == $token_dec['username']) {
                 echo json_encode("Correct_User");
@@ -93,7 +93,7 @@
             break;
 
         case 'check_token':
-            $token_dec = decode_token($_POST['token']);
+            $token_dec = decode_token($_POST['refresh_token']);
 
             if ($token_dec['exp'] < time()) {
                 echo json_encode("Token_Expired");
@@ -103,9 +103,23 @@
                 exit();
             }
             break;
-    
+        
+        case 'check_tokens':
+                $tokenRefreshDec = decode_token($_POST['refresh_token']);
+                $tokenLargeDec = decode_token($_POST['access_token']);
+        
+                if ($tokenRefreshDec['exp'] < time()) {
+                    if ($tokenLargeDec['exp'] > time()) {
+                        echo json_encode("refresh_token_exp");
+                    } else {
+                        echo json_encode("acces_token_exp");
+                    }
+                } else {
+                    echo json_encode("not_exp");
+                }
+                break;
         case 'refresh_token':
-            $old_token = decode_token($_POST['token']);
+            $old_token = decode_token($_POST['refresh_token']);
             $new_token = create_token($old_token['username']);
             $_SESSION['tiempo'] = time(); 
             echo json_encode($new_token);
