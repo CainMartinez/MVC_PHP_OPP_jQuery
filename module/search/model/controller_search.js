@@ -9,7 +9,6 @@ function load_search_city() {
             // console.log(data);
         }).catch(function (e) {
             console.error(e);
-            // window.location.href = "index.php?page=503";
         });
 }
 function load_search_type(data = undefined) {
@@ -28,7 +27,6 @@ function load_search_type(data = undefined) {
             }
         }).catch(function (e) {
             console.error(e);
-            // window.location.href = "index.php?page=503";
         });
 }
 function launch_search(){
@@ -84,8 +82,6 @@ function search_button() {
         var shop = {};
         let selectedCity = $('#search_city').val();
         let selectedType = $('#search_type').val();
-
-        // Add to search object only if value is not null or ""
         if(selectedCity && selectedCity != "") {
             search["id_city"] = selectedCity;
         }
@@ -95,8 +91,6 @@ function search_button() {
         if(selectedCategory && selectedCategory != "") {
             search["id_category"] = selectedCategory;
         }
-
-        // Add to shop object only if value is not null or ""
         if(selectedCity && selectedCity != "") {
             shop["id_city"] = selectedCity;
         }
@@ -106,8 +100,6 @@ function search_button() {
         if(selectedCategory && selectedCategory != "") {
             shop["id_category"] = selectedCategory;
         }
-
-        // Add to individual localStorage only if value is not null or ""
         if(selectedCity && selectedCity != "") {
             localStorage.setItem('selectedCity', selectedCity);
             $('#search_city').val(selectedCity);
@@ -132,8 +124,6 @@ function search_button() {
             localStorage.removeItem('selectedCategory');
             $('#autocom').removeClass('selected_filters');
         }
-
-        // Save search and shop arrays to localStorage
         if(Object.keys(search).length != 0){
             localStorage.setItem('filters_shop', JSON.stringify(shop));
             setTimeout(function(){ 
@@ -145,7 +135,11 @@ function search_button() {
 function clear_localstorage() {
     $('.button_homepage').click(function(event) {
         remove_filters();
+        location.reload();
     });
+    if(window.location.href.indexOf('index.php?page=homepage') != -1) {
+        remove_filters();
+    }
 }
 function remove_filters() {
     localStorage.removeItem('filters_shop');
@@ -158,7 +152,7 @@ function remove_filters() {
     localStorage.removeItem('currentPage');
     localStorage.removeItem('offset');
     localStorage.removeItem('order');
-    location.reload();
+    localStorage.removeItem('details_home');
 }
 $(document).ready(function() {
     launch_search();
