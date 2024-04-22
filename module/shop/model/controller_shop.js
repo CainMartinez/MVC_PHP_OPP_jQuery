@@ -76,27 +76,32 @@ function ajaxForSearch(url, filters_shop,order) {
                         }
                     });
                     propertyDiv.append(`
-                            <article class='post-modern wow slideInLeft '><br>
-                                <h4 class='post-modern-title'>
-                                    <a class='post-modern-title' href='#'>${property.property_name}</a>
-                                </h4>
-                                <ul class='post-modern-meta'>
-                                    <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
-                                    <li>City: ${property.name_city}</li>
-                                    <li>Square meters: ${property.square_meters}</li>
-                                </ul>
-                                <p>${property.description}</p><br>
-                                <div class='buttons'>
-                                    <table id='table-shop'> 
-                                        <tr>
-                                            <td>
-                                                <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </article>
-                        `)
+                        <article class='post-modern wow slideInLeft '><br>
+                            <h4 class='post-modern-title'>
+                                <a class='post-modern-title' href='#'>${property.property_name}</a>
+                            </h4>
+                            <ul class='post-modern-meta'>
+                                <li><a class='button-winona' href='#'>${property.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</a></li>
+                                <li>City: ${property.name_city}</li>
+                                <li>Square meters: ${property.square_meters}</li>
+                            </ul>
+                            <p>${property.description}</p><br>
+                            <div class='buttons'>
+                                <table id='table-shop'> 
+                                    <tr>
+                                        <td>
+                                            <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
+                                        </td>
+                                        <td>
+                                            <button class="like_button">
+                                                <i class='fas fa-heart'></i> Like
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </article>
+                    `);
                 }
                 load_map(data);
             }
@@ -171,28 +176,11 @@ function clicks_shop() {
         if (user) {
             ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=like_property&id=' + {id_property, user})
             .then(function (data) {
-                if (data == 'ok') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Property added to favorites'
-                    });
-                } else {
-                    ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=dislike_property&id=' + {id_property, user})
-                    .then(function (data) {
-                        if (data == 'ok') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Removed',
-                                text: 'Property removed from favorites'
-                            });
-                        } else {
-                            console.error('Failed to remove property from favorites');
-                        }
-                    }).catch(function (e) {
-                        console.error(e);
-                    });
-                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Property added to favorites'
+                });
             }).catch(function (e) {
                 console.error(e);
             });
@@ -201,10 +189,9 @@ function clicks_shop() {
                 icon: 'error',
                 title: 'Oops...',
                 text: 'You must be logged in to add a property to favorites',
-                }).then((result) => {
-                    localStorage.setItem('likes_property', id_property);
-                    window.location.href = 'index.php?page=login';
-                });
+            }).then((result) => {
+                window.location.href = 'index.php?page=login';
+            });
         }   
     });
 }
