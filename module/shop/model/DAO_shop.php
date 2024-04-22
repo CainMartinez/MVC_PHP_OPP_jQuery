@@ -22,6 +22,15 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
+	function dislike_property($id_property, $id_user) {
+		$sql = "UPDATE likes SET active = 0 WHERE id_property = ? AND id_user = ?";
+
+		$conexion = connect::con();
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("ii", $id_property, $id_user);
+		$stmt->execute();
+		connect::close($conexion);
+	}
 	function insertCurrentDate($id_property) {
 		$sql = "UPDATE property SET currently_date = NOW() WHERE id_property = ?";
 

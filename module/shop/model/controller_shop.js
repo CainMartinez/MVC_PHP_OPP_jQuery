@@ -165,7 +165,7 @@ function clicks_shop() {
     $(document).on("click", ".button_homepage", function () {
         remove_pagination();
     });
-    $(document).on("click","#like_button",function(){
+    $(document).on("click",".like_button",function(){
         var id_property = this.getAttribute('id');
         var user = localStorage.getItem('access_token');
         if (user) {
@@ -178,22 +178,34 @@ function clicks_shop() {
                         text: 'Property added to favorites'
                     });
                 } else {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Info',
-                        text: 'Property already added to favorites'
+                    ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=dislike_property&id=' + {id_property, user})
+                    .then(function (data) {
+                        if (data == 'ok') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Removed',
+                                text: 'Property removed from favorites'
+                            });
+                        } else {
+                            console.error('Failed to remove property from favorites');
+                        }
+                    }).catch(function (e) {
+                        console.error(e);
                     });
                 }
             }).catch(function (e) {
                 console.error(e);
             });
         } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'You must be logged in to add a property to favorites',
-            })
-        }
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'You must be logged in to add a property to favorites',
+                }).then((result) => {
+                    localStorage.setItem('likes_property', id_property);
+                    window.location.href = 'index.php?page=login';
+                });
+        }   
     });
 }
 function loadDetails(id_property) {
@@ -277,7 +289,7 @@ function loadDetails(id_property) {
             var cell2 = $("<td></td>").appendTo(row);
 
             var likeButton = $("<button></button>")
-                .addClass("like-button")
+                .addClass("like_button")
                 .html("<i class='fas fa-heart'></i> Like")
                 .css({
                     'background-color': 'red',
