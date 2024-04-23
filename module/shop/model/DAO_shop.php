@@ -13,8 +13,8 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
+	
 	function like_property($id_property, $username) {
-
 		$conexion = connect::con();
 
 		$sql = "SELECT id_user FROM users WHERE username = ?";
@@ -27,20 +27,21 @@ class DAOShop{
 		if ($user) {
 			$id_user = $user['id_user'];
 
-			$sql = "INSERT INTO likes (id_property, id_user, active) VALUES (?, ?, 1)";
+			$sql = "UPDATE likes SET active = 1 WHERE id_property = ? AND id_user = ?";
 			$stmt = $conexion->prepare($sql);
 			$stmt->bind_param("ii", $id_property, $id_user);
 			$stmt->execute();
-
+			
 			$sql = "UPDATE property SET likes = likes + 1 WHERE id_property = ?";
 			$stmt = $conexion->prepare($sql);
 			$stmt->bind_param("i", $id_property);
 			$stmt->execute();
+			
 		}
-
 		connect::close($conexion);
 	}
-	function check_like($id_property,$username){
+	
+	function check_like($id_property, $username){
 		$conexion = connect::con();
 
 		$sql = "SELECT id_user FROM users WHERE username = ?";
@@ -60,12 +61,22 @@ class DAOShop{
 			$result = $stmt->get_result();
 			$like = $result->fetch_assoc();
 
-			connect::close($conexion);
-			return "1";
-		}
+			if ($like) {
+				connect::close($conexion);
+				return "1";
+			} else {
+				$sql = "INSERT INTO likes (id_property, id_user, active) VALUES (?, ?, 0)";
+				$stmt = $conexion->prepare($sql);
+				$stmt->bind_param("ii", $id_property, $id_user);
+				$stmt->execute();
 
-		connect::close($conexion);
-		return "0";
+				connect::close($conexion);
+				return "0";
+			}
+		} else {
+			connect::close($conexion);
+			return "0";
+		}
 	}
 	function dislike_property($id_property, $username) {
 

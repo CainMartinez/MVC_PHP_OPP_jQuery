@@ -37,56 +37,57 @@ function likes() {
     $(document).on("click",".like_button",function(){
         var id_property = this.getAttribute('id');
         token = localStorage.getItem('refresh_token');
-        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'refresh_token': token })
-        .then(function(data) {
-            var username = data.username;
-            if (username) {
-                ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=check_like', {id_property, username})
-                .then(function (data) {
-                    data = JSON.parse(data);
-                    if (data == 1) {
-                        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=dislike_property', {id_property, username})
-                        .then(function (data) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Property removed from favorites'
-                            }).then(function() {
-                                location.reload();
+        if (token){
+            ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'refresh_token': token })
+            .then(function(data) {
+                var username = data.username;
+                if (username) {
+                    ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=check_like', {id_property, username})
+                    .then(function (data) {
+                        data = JSON.parse(data);
+                        if (data == 1) {
+                            ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=dislike_property', {id_property, username})
+                            .then(function (data) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Property removed from favorites'
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            }).catch(function (e) {
+                                console.error(e);
                             });
-                        }).catch(function (e) {
-                            console.error(e);
-                        });
-                    } else {
-                        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=like_property', {id_property, username})
-                        .then(function (data) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Property added to favorites'
-                            }).then(function() {
-                                location.reload();
+                        } else {
+                            ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=like_property', {id_property, username})
+                            .then(function (data) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Property added to favorites'
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            }).catch(function (e) {
+                                console.error(e);
                             });
-                        }).catch(function (e) {
-                            console.error(e);
-                        });
-                    }
-                }).catch(function (e) {
-                    console.error(e);
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'You must be logged in to add a property to favorites',
-                }).then((result) => {
-                    window.location.href = 'index.php?page=login';
-                });
-            }   
-        }).catch(function(e) {
-            console.error(e);
-        });
-        
+                        }
+                    }).catch(function (e) {
+                        console.error(e);
+                    });
+                }
+            }).catch(function(e) {
+                console.error(e);
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'You must be logged in to add a property to favorites',
+            }).then((result) => {
+                window.location.href = 'index.php?page=login';
+            });
+        }   
     });
 }
 function ajaxForSearch(url, filters_shop,order) {
