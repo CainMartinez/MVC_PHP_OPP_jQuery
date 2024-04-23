@@ -28,7 +28,7 @@ switch ($_GET['op']) {
     case 'like_property':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->like_property($_POST['id'],$_POST['user'['username']]);
+            $Dates_Properties = $daoshop->like_property($_POST['id_property'],$_POST['username']);
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
             } else {
@@ -41,7 +41,7 @@ switch ($_GET['op']) {
     case 'dislike_property':
         try {
             $daoshop = new DAOShop();
-            $Dates_Properties = $daoshop->dislike_property($_POST['id'],$_POST['user'['username']]);
+            $Dates_Properties = $daoshop->dislike_property($_POST['id_property'],$_POST['username']);
             if (!empty($Dates_Properties)) {
                 echo json_encode($Dates_Properties);
             } else {
@@ -51,8 +51,19 @@ switch ($_GET['op']) {
             echo json_encode("error");
         }
         break;
-    case 'list':
-        include('module/shop/view/shop.html');
+        
+        case 'check_like':
+            try {
+                $daoshop = new DAOShop();
+                $Dates_Properties = $daoshop->check_like($_POST['id_property'],$_POST['username']);
+                echo json_encode($Dates_Properties);
+            } catch (Exception $e) {
+                echo json_encode("error");
+            }
+            break;
+        
+        case 'list':
+            include('module/shop/view/shop.html');
         break;
     case 'similar_properties':
         try{

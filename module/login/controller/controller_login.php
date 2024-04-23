@@ -71,7 +71,7 @@
                 echo json_encode("inactivo");
                 exit();
             } else {
-                if ((time() - $_SESSION["tiempo"]) >= 60) { //1 min
+                if ((time() - $_SESSION["tiempo"]) >= 600) { //1 min
                     echo json_encode("inactivo");
                     exit();
                 } else {

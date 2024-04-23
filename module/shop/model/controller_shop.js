@@ -33,6 +33,62 @@ function loadProperties() {
     }
     pagination_shop();
 }
+function likes() {
+    $(document).on("click",".like_button",function(){
+        var id_property = this.getAttribute('id');
+        token = localStorage.getItem('refresh_token');
+        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'refresh_token': token })
+        .then(function(data) {
+            var username = data.username;
+            if (username) {
+                ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=check_like', {id_property, username})
+                .then(function (data) {
+                    data = JSON.parse(data);
+                    if (data == 1) {
+                        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=dislike_property', {id_property, username})
+                        .then(function (data) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Property removed from favorites'
+                            }).then(function() {
+                                location.reload();
+                            });
+                        }).catch(function (e) {
+                            console.error(e);
+                        });
+                    } else {
+                        ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=like_property', {id_property, username})
+                        .then(function (data) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Property added to favorites'
+                            }).then(function() {
+                                location.reload();
+                            });
+                        }).catch(function (e) {
+                            console.error(e);
+                        });
+                    }
+                }).catch(function (e) {
+                    console.error(e);
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'You must be logged in to add a property to favorites',
+                }).then((result) => {
+                    window.location.href = 'index.php?page=login';
+                });
+            }   
+        }).catch(function(e) {
+            console.error(e);
+        });
+        
+    });
+}
 function ajaxForSearch(url, filters_shop,order) {
     console.log(filters_shop);
     if (!localStorage.getItem('currentPage')){
@@ -93,8 +149,8 @@ function ajaxForSearch(url, filters_shop,order) {
                                             <button id='${property.id_property}' class='more_info_list button button-primary button-winona button-md'>More Info</button><br>
                                         </td>
                                         <td>
-                                            <button class="like_button">
-                                                <i class='fas fa-heart'></i> Like
+                                            <button id='${property.id_property}' class="like_button">
+                                                <i class='fas fa-heart'></i>&nbsp;${property.likes}                                            
                                             </button>
                                         </td>
                                     </tr>
@@ -169,30 +225,6 @@ function clicks_shop() {
     });
     $(document).on("click", ".button_homepage", function () {
         remove_pagination();
-    });
-    $(document).on("click",".like_button",function(){
-        var id_property = this.getAttribute('id');
-        var user = localStorage.getItem('access_token');
-        if (user) {
-            ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=like_property&id=' + {id_property, user})
-            .then(function (data) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Property added to favorites'
-                });
-            }).catch(function (e) {
-                console.error(e);
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'You must be logged in to add a property to favorites',
-            }).then((result) => {
-                window.location.href = 'index.php?page=login';
-            });
-        }   
     });
 }
 function loadDetails(id_property) {
@@ -885,5 +917,6 @@ $(document).ready(function () {
     print_filters();
     filters_shop();
     clicks_shop();
+    likes();
 });
 

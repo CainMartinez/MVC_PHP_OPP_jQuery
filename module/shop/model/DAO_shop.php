@@ -13,22 +13,85 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
-	function like_property($id_property, $id_user) {
-		$sql = "INSERT INTO likes (id_property, id_user) VALUES (?, ?)";
-	
-		$conexion = connect::con();
-		$stmt = $conexion->prepare($sql);
-		$stmt->bind_param("ii", $id_property, $id_user);
-		$stmt->execute();
-		connect::close($conexion);
-	}
-	function dislike_property($id_property, $id_user) {
-		$sql = "UPDATE likes SET active = 0 WHERE id_property = ? AND id_user = ?";
+	function like_property($id_property, $username) {
 
 		$conexion = connect::con();
+
+		$sql = "SELECT id_user FROM users WHERE username = ?";
 		$stmt = $conexion->prepare($sql);
-		$stmt->bind_param("ii", $id_property, $id_user);
+		$stmt->bind_param("s", $username);
 		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_assoc();
+
+		if ($user) {
+			$id_user = $user['id_user'];
+
+			$sql = "INSERT INTO likes (id_property, id_user, active) VALUES (?, ?, 1)";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("ii", $id_property, $id_user);
+			$stmt->execute();
+
+			$sql = "UPDATE property SET likes = likes + 1 WHERE id_property = ?";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("i", $id_property);
+			$stmt->execute();
+		}
+
+		connect::close($conexion);
+	}
+	function check_like($id_property,$username){
+		$conexion = connect::con();
+
+		$sql = "SELECT id_user FROM users WHERE username = ?";
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("s", $username);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_assoc();
+
+		if ($user) {
+			$id_user = $user['id_user'];
+
+			$sql = "SELECT * FROM likes WHERE id_property = ? AND id_user = ? AND active = 1";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("ii", $id_property, $id_user);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$like = $result->fetch_assoc();
+
+			connect::close($conexion);
+			return "1";
+		}
+
+		connect::close($conexion);
+		return "0";
+	}
+	function dislike_property($id_property, $username) {
+
+		$conexion = connect::con();
+
+		$sql = "SELECT id_user FROM users WHERE username = ?";
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("s", $username);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_assoc();
+
+		if ($user) {
+			$id_user = $user['id_user'];
+
+			$sql = "UPDATE likes SET active = 0 WHERE id_property = ? AND id_user = ?";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("ii", $id_property, $id_user);
+			$stmt->execute();
+
+			$sql = "UPDATE property SET likes = likes - 1 WHERE id_property = ?";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("i", $id_property);
+			$stmt->execute();
+		}
+
 		connect::close($conexion);
 	}
 	function insertCurrentDate($id_property) {
