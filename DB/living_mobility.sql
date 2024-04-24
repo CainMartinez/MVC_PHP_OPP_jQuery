@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-04-2024 a las 00:19:59
+-- Tiempo de generación: 24-04-2024 a las 12:54:15
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -20,6 +20,23 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `living_mobility`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `like_property` (IN `p_id_property` INT, IN `p_username` VARCHAR(255))   BEGIN
+    DECLARE v_id_user INT;
+
+    SELECT id_user INTO v_id_user FROM users WHERE username = p_username;
+
+    IF v_id_user IS NOT NULL THEN
+        UPDATE likes SET active = 1 WHERE id_property = p_id_property AND id_user = v_id_user;
+        UPDATE property SET likes = likes + 1 WHERE id_property = p_id_property;
+    END IF;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -257,6 +274,16 @@ CREATE TABLE `likes` (
   `active` bit(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Volcado de datos para la tabla `likes`
+--
+
+INSERT INTO `likes` (`id_property`, `id_user`, `active`) VALUES
+(1, 1, b'1'),
+(2, 1, b'1'),
+(3, 1, b'0'),
+(35, 1, b'1');
+
 -- --------------------------------------------------------
 
 --
@@ -302,6 +329,7 @@ CREATE TABLE `property` (
   `update_date` varchar(50) DEFAULT NULL,
   `id_city` int(10) DEFAULT NULL,
   `visits` int(11) DEFAULT 0,
+  `likes` int(11) NOT NULL,
   `currently_date` datetime DEFAULT NULL,
   `latitude` float NOT NULL,
   `longitude` float NOT NULL
@@ -311,22 +339,22 @@ CREATE TABLE `property` (
 -- Volcado de datos para la tabla `property`
 --
 
-INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `id_large_people`, `is_active`, `creation_date`, `update_date`, `id_city`, `visits`, `currently_date`, `latitude`, `longitude`) VALUES
-(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1, 27, '2024-04-19 18:01:13', 38.8167, -0.61667),
-(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2, 12, '2024-04-09 19:00:43', 38.9667, -0.18333),
-(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 3, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3, 15, '2024-03-18 20:38:31', 38.838, -0.51721),
-(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4, 7, '2024-03-26 21:31:14', 38.7054, -0.47432),
-(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5, 36, '2024-04-19 17:28:45', 38.9833, -0.51667),
-(34, 'Sunny Villa', 'CR1', 200, 4, 'A beautiful villa with a sunny garden', 300000, 1, 1, '2022-01-01', '2022-01-01', 1, 0, '2024-03-24 00:11:52', 38.8276, -0.61876),
-(35, 'Modern Loft', 'CR2', 100, 2, 'A modern loft in the city center', 250000, 2, 1, '2022-01-02', '2022-01-02', 2, 1, '2024-03-25 21:20:58', 34.0522, -118.244),
-(36, 'Cozy Cottage', 'CR3', 150, 3, 'A cozy cottage in the countryside', 200000, 3, 1, '2022-01-03', '2022-01-03', 3, 1, '2024-03-25 21:18:27', 51.5074, -0.127758),
-(37, 'Luxury Penthouse', 'CR4', 250, 3, 'A luxury penthouse with a city view', 500000, 2, 1, '2022-01-04', '2022-01-04', 4, 1, '2024-03-25 21:16:47', 48.8566, 2.35222),
-(38, 'Charming Bungalow', 'CR5', 120, 2, 'A charming bungalow near the beach', 220000, 3, 1, '2022-01-05', '2022-01-05', 5, 1, '2024-03-25 21:15:54', 52.52, 13.405),
-(39, 'Elegant Mansion', 'CR6', 400, 5, 'An elegant mansion with a large pool', 800000, 1, 1, '2022-01-06', '2022-01-06', 1, 5, '2024-04-09 17:04:33', 41.9028, 12.4964),
-(40, 'Stylish Studio', 'CR7', 80, 1, 'A stylish studio in the hip neighborhood', 180000, 2, 1, '2022-01-07', '2022-01-07', 2, 3, '2024-03-25 21:14:14', 40.4168, -3.70379),
-(41, 'Classic Townhouse', 'CR8', 200, 3, 'A classic townhouse with a modern interior', 350000, 3, 1, '2022-01-08', '2022-01-08', 3, 9, '2024-04-07 22:08:47', 35.6895, 139.692),
-(42, 'Rustic Cabin', 'CR9', 100, 2, 'A rustic cabin in the woods', 150000, 1, 1, '2022-01-09', '2022-01-09', 4, 1, '2024-03-25 21:09:23', 37.7749, -122.419),
-(43, 'Contemporary Condo', 'CR10', 150, 2, 'A contemporary condo with a spacious balcony', 300000, 1, 1, '2022-01-10', '2022-01-10', 5, 3, '2024-03-25 21:13:43', 43.6532, -79.3832);
+INSERT INTO `property` (`id_property`, `property_name`, `cadastral_reference`, `square_meters`, `number_of_rooms`, `description`, `price`, `id_large_people`, `is_active`, `creation_date`, `update_date`, `id_city`, `visits`, `likes`, `currently_date`, `latitude`, `longitude`) VALUES
+(1, 'Garden\'s John', '12345-67890-A', 100, 3, 'Beautiful house with garden', 200000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 1, 38, 21, '2024-04-24 01:51:30', 38.8167, -0.61667),
+(2, 'The Tower', '23456-78901-B', 80, 2, 'Apartment with sea view', 150000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 2, 12, 12, '2024-04-09 19:00:43', 38.9667, -0.18333),
+(3, 'Sunset View Manor', '34567-89012-C', 120, 4, 'Spacious villa with pool', 300000, 3, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 3, 15, 13, '2024-03-18 20:38:31', 38.838, -0.51721),
+(4, 'Enchanted Hideaway', '45678-90123-D', 60, 1, 'Cozy studio in the city center', 100000, 2, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 4, 7, 0, '2024-03-26 21:31:14', 38.7054, -0.47432),
+(5, 'Harmony Homestead', '56789-01234-E', 90, 2, 'Modern loft with industrial design', 180000, 1, 1, '2024-01-25 02:17:42', '2024-01-25 02:17:42', 5, 36, 0, '2024-04-19 17:28:45', 38.9833, -0.51667),
+(34, 'Sunny Villa', 'CR1', 200, 4, 'A beautiful villa with a sunny garden', 300000, 1, 1, '2022-01-01', '2022-01-01', 1, 0, 0, '2024-03-24 00:11:52', 38.8276, -0.61876),
+(35, 'Modern Loft', 'CR2', 100, 2, 'A modern loft in the city center', 250000, 2, 1, '2022-01-02', '2022-01-02', 2, 2, 1, '2024-04-24 01:29:36', 34.0522, -118.244),
+(36, 'Cozy Cottage', 'CR3', 150, 3, 'A cozy cottage in the countryside', 200000, 3, 1, '2022-01-03', '2022-01-03', 3, 1, 0, '2024-03-25 21:18:27', 51.5074, -0.127758),
+(37, 'Luxury Penthouse', 'CR4', 250, 3, 'A luxury penthouse with a city view', 500000, 2, 1, '2022-01-04', '2022-01-04', 4, 1, 0, '2024-03-25 21:16:47', 48.8566, 2.35222),
+(38, 'Charming Bungalow', 'CR5', 120, 2, 'A charming bungalow near the beach', 220000, 3, 1, '2022-01-05', '2022-01-05', 5, 1, 0, '2024-03-25 21:15:54', 52.52, 13.405),
+(39, 'Elegant Mansion', 'CR6', 400, 5, 'An elegant mansion with a large pool', 800000, 1, 1, '2022-01-06', '2022-01-06', 1, 5, 0, '2024-04-09 17:04:33', 41.9028, 12.4964),
+(40, 'Stylish Studio', 'CR7', 80, 1, 'A stylish studio in the hip neighborhood', 180000, 2, 1, '2022-01-07', '2022-01-07', 2, 3, 0, '2024-03-25 21:14:14', 40.4168, -3.70379),
+(41, 'Classic Townhouse', 'CR8', 200, 3, 'A classic townhouse with a modern interior', 350000, 3, 1, '2022-01-08', '2022-01-08', 3, 9, 0, '2024-04-07 22:08:47', 35.6895, 139.692),
+(42, 'Rustic Cabin', 'CR9', 100, 2, 'A rustic cabin in the woods', 150000, 1, 1, '2022-01-09', '2022-01-09', 4, 1, 0, '2024-03-25 21:09:23', 37.7749, -122.419),
+(43, 'Contemporary Condo', 'CR10', 150, 2, 'A contemporary condo with a spacious balcony', 300000, 1, 1, '2022-01-10', '2022-01-10', 5, 3, 0, '2024-03-25 21:13:43', 43.6532, -79.3832);
 
 -- --------------------------------------------------------
 
