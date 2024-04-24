@@ -36,7 +36,6 @@ function validate_login() {
 
     return error == true ? true : false;
 }
-
 function login() {
     // console.log("login");
     validate_login() == false ? promiseLogin() : undefined;
@@ -57,7 +56,7 @@ function login() {
                     timer: 10000, 
                     buttons: false
                 }).then(() => {
-                    window.location.href = "index.php?page=homepage";
+                    window.location.href = "index.php?page=shop";
                 })
             }
         }).catch(function(e) {

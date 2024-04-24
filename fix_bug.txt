@@ -1,3 +1,4 @@
 Quitar reload en los filtros, hacer un empty y repintar.
 Hacer funcional la paginacion con el filtro del precio y del checkbox.
 Borrar el order de localstorage cada vez que se haga una búsqueda nueva.
+Hacer un load_top cada vez que se abra el details.

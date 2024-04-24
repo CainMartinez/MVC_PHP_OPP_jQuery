@@ -33,10 +33,36 @@ function loadProperties() {
     }
     pagination_shop();
 }
+function highlight_like(id_property) {
+    var token = localStorage.getItem('refresh_token');
+    if (token){
+        ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'refresh_token': token })
+        .then(function(data) {
+            var username = data.username;
+            if (username) {
+                ajaxPromise('POST', 'JSON', 'module/shop/controller/controller_shop.php?op=check_like', {id_property, username})
+                .then(function (data) {
+                    data = JSON.parse(data);
+                    if (data == 1) {
+                        console.log('liked');
+                        $('.like_button').addClass('liked');
+                    }
+                }).catch(function (e) {
+                    console.error(e);
+                });
+            }
+        }).catch(function(e) {
+            console.error(e);
+        });
+    }
+}
+
 function likes() {
     $(document).on("click",".like_button",function(){
         var id_property = this.getAttribute('id');
-        token = localStorage.getItem('refresh_token');
+        localStorage.setItem('id_property', id_property);
+        $(this).addClass('like_button_' + id_property); // Add unique class to the like button
+        var token = localStorage.getItem('refresh_token');
         if (token){
             ajaxPromise('POST', 'JSON','module/login/controller/controller_login.php?op=data_user', { 'refresh_token': token })
             .then(function(data) {
@@ -67,6 +93,7 @@ function likes() {
                                     text: 'Property added to favorites'
                                 }).then(function() {
                                     location.reload();
+                                    highlight_like(id_property); 
                                 });
                             }).catch(function (e) {
                                 console.error(e);
@@ -87,7 +114,7 @@ function likes() {
             }).then((result) => {
                 window.location.href = 'index.php?page=login';
             });
-        }   
+        }
     });
 }
 function ajaxForSearch(url, filters_shop,order) {
@@ -310,26 +337,8 @@ function loadDetails(id_property) {
 
             var likeButton = $("<button></button>")
                 .addClass("like_button")
-                .html("<i class='fas fa-heart'></i> Like")
-                .css({
-                    'background-color': 'red',
-                    'border-radius': '25px',
-                    'border': 'none',
-                    'padding': '10px 20px',
-                    'color': 'white',
-                    'cursor': 'pointer',
-                    'height': '50px',
-                    'text-align': 'center'
-                })
-                .hover(
-                    function () {
-                        $(this).css('background-color', 'green');
-                    },
-                    function () {
-                        $(this).css('background-color', 'red');
-                    }
-                );
-
+                .attr('id', data[0].id_property)
+                .html("<i class='fas fa-heart'></i>&nbsp;" + data[0].likes);
             var backButton = $('<a></a>')
                 .addClass('button button-primary-white')
                 .attr('href', 'index.php?page=shop')
