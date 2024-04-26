@@ -13,34 +13,35 @@ class DAOShop{
 		$stmt->execute();
 		connect::close($conexion);
 	}
-	
-	// function like_property($id_property, $username) {
-	// 	$conexion = connect::con();
-
-	// 	$sql = "SELECT id_user FROM users WHERE username = ?";
-	// 	$stmt = $conexion->prepare($sql);
-	// 	$stmt->bind_param("s", $username);
-	// 	$stmt->execute();
-	// 	$result = $stmt->get_result();
-	// 	$user = $result->fetch_assoc();
-
-	// 	if ($user) {
-	// 		$id_user = $user['id_user'];
-
-	// 		$sql = "UPDATE likes SET active = 1 WHERE id_property = ? AND id_user = ?";
-	// 		$stmt = $conexion->prepare($sql);
-	// 		$stmt->bind_param("ii", $id_property, $id_user);
-	// 		$stmt->execute();
-			
-	// 		$sql = "UPDATE property SET likes = likes + 1 WHERE id_property = ?";
-	// 		$stmt = $conexion->prepare($sql);
-	// 		$stmt->bind_param("i", $id_property);
-	// 		$stmt->execute();
-			
-	// 	}
-	// 	connect::close($conexion);
-	// }
 	function like_property($id_property, $username) {
+		$conexion = connect::con();
+
+		$sql = "SELECT id_user FROM users WHERE username = ?";
+		$stmt = $conexion->prepare($sql);
+		$stmt->bind_param("s", $username);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_assoc();
+
+		if ($user) {
+			$id_user = $user['id_user'];
+
+			$sql = "INSERT INTO likes (id_property, id_user) VALUES (?, ?)";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("ii", $id_property, $id_user);
+			$stmt->execute();
+
+			$sql = "UPDATE property SET likes = likes + 1 WHERE id_property = ?";
+			$stmt = $conexion->prepare($sql);
+			$stmt->bind_param("i", $id_property);
+			$stmt->execute();
+				
+		}
+		connect::close($conexion);
+	}
+	/* Procedure para añadir like, eliminado porque
+	al pasarme a MAC me da error de versiones de MariaDB */
+	/* function like_property($id_property, $username) {
 		$conexion = connect::con();
 
 		$sql = "CALL like_property(?, ?)";
@@ -49,20 +50,20 @@ class DAOShop{
 		$stmt->execute();
 
 		connect::close($conexion);
-		// DELIMITER //
-		// CREATE PROCEDURE like_property(IN p_id_property INT, IN p_username VARCHAR(255))
-		// BEGIN
-		// 	DECLARE v_id_user INT;
+		 /* DELIMITER //
+		CREATE PROCEDURE like_property(IN p_id_property INT, IN p_username VARCHAR(255))
+		 BEGIN
+		 	DECLARE v_id_user INT;
 
-		// 	SELECT id_user INTO v_id_user FROM users WHERE username = p_username;
+		 	SELECT id_user INTO v_id_user FROM users WHERE username = p_username;
 
-		// 	IF v_id_user IS NOT NULL THEN
-		// 		UPDATE likes SET active = 1 WHERE id_property = p_id_property AND id_user = v_id_user;
-		// 		UPDATE property SET likes = likes + 1 WHERE id_property = p_id_property;
-		// 	END IF;
-		// END //
-		// DELIMITER ;
-	}
+			IF v_id_user IS NOT NULL THEN
+		 		UPDATE likes SET active = 1 WHERE id_property = p_id_property AND id_user = v_id_user;
+		 		UPDATE property SET likes = likes + 1 WHERE id_property = p_id_property;
+		 	END IF;
+		 END //
+		 DELIMITER ; 
+	} */
 	function check_like($id_property, $username){
 		$conexion = connect::con();
 
@@ -76,23 +77,18 @@ class DAOShop{
 		if ($user) {
 			$id_user = $user['id_user'];
 
-			$sql = "SELECT * FROM likes WHERE id_property = ? AND id_user = ? AND active = 1";
+			$sql = "SELECT * FROM likes WHERE id_property = ? AND id_user = ?";
 			$stmt = $conexion->prepare($sql);
 			$stmt->bind_param("ii", $id_property, $id_user);
 			$stmt->execute();
 			$result = $stmt->get_result();
 			$like = $result->fetch_assoc();
 
+			connect::close($conexion);
+
 			if ($like) {
-				connect::close($conexion);
 				return "1";
 			} else {
-				$sql = "INSERT INTO likes (id_property, id_user, active) VALUES (?, ?, 0)";
-				$stmt = $conexion->prepare($sql);
-				$stmt->bind_param("ii", $id_property, $id_user);
-				$stmt->execute();
-
-				connect::close($conexion);
 				return "0";
 			}
 		} else {
@@ -114,7 +110,7 @@ class DAOShop{
 		if ($user) {
 			$id_user = $user['id_user'];
 
-			$sql = "UPDATE likes SET active = 0 WHERE id_property = ? AND id_user = ?";
+			$sql = "DELETE FROM likes WHERE id_property = ? AND id_user = ?";
 			$stmt = $conexion->prepare($sql);
 			$stmt->bind_param("ii", $id_property, $id_user);
 			$stmt->execute();

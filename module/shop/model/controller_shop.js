@@ -93,7 +93,7 @@ function likes() {
                                     text: 'Property added to favorites'
                                 }).then(function() {
                                     location.reload();
-                                    highlight_like(id_property); 
+                                    /* highlight_like(id_property);  */
                                 });
                             }).catch(function (e) {
                                 console.error(e);
